@@ -58,7 +58,8 @@ public class TsApplication {
         public void configure(WebSecurity web) throws Exception {
             web.ignoring().mvcMatchers(HttpMethod.OPTIONS, "/**");
             // ignore swagger
-            web.ignoring().mvcMatchers( "/**","/favicon.icon**","/index.html/**", "/configuration/**", "/swagger-resources/**", "/ts-api-docs/**");
+            web.ignoring().mvcMatchers( "/**","/favicon.icon**","/index.html/**",
+                    "/configuration/**", "/swagger-resources/**", "/ts-api-docs/**");
         }
 
 
