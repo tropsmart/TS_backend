@@ -35,6 +35,15 @@ public class TsApplication {
     @Configuration
     class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+
+        @Override
+        public void configure(WebSecurity web) throws Exception {
+            web.ignoring().mvcMatchers(HttpMethod.OPTIONS, "/**");
+            // ignore swagger
+            web.ignoring().mvcMatchers( "/**","/favicon.icon**","/index.html/**", "/configuration/**", "/swagger-resources/**", "/ts-api-docs/**");
+        }
+
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
