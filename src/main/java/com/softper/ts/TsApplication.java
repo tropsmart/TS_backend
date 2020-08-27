@@ -41,8 +41,8 @@ public class TsApplication {
                     .csrf().disable()
                     .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                     .authorizeRequests()
-                    .antMatchers("/").permitAll()
-                    .antMatchers("/favicon.icon").permitAll()
+                    .antMatchers("/**").permitAll()
+                    .antMatchers("/favicon.icon**").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/authentication/**").permitAll()
                     .anyRequest().authenticated();
         }
