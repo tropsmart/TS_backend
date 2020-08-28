@@ -38,7 +38,7 @@ public class AuthenticationController {
         HttpHeaders responseHeaders = new HttpHeaders();
         AuthResponse result = authService.login(signIn.getEmail(), signIn.getPassword());
 
-        responseHeaders.add("Auth-Token", result.getResource().getJwt());
+        responseHeaders.add("Auth-Token", result.getResource().getToken());
 
         //if(!result.success)
             //return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -72,11 +72,11 @@ public class AuthenticationController {
 
     private ResponseEntity<AuthResponse> getAuthResponseResponseEntity(AuthResponse authResponse) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Auth-Token", authResponse.getResource().getJwt());
-        responseHeaders.add("Refresh-Token", authResponse.getResource().getRefreshToken());
+        responseHeaders.add("Auth-Token", authResponse.getResource().getToken());
+        //responseHeaders.add("Refresh-Token", authResponse.getResource().getRefreshToken());
 
-        authResponse.getResource().setRefreshToken(null);
-        authResponse.getResource().setJwt(null);
+        //authResponse.getResource().setRefreshToken(null);
+        authResponse.getResource().setToken(null);
         return new ResponseEntity<>(authResponse,responseHeaders, HttpStatus.OK);
     }
 

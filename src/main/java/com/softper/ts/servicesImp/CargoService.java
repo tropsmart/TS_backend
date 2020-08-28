@@ -20,7 +20,6 @@ public class CargoService implements ICargoService {
     @Autowired
     private ICargoRepository cargoRepository;
 
-
     @Autowired
     private IUserRepository userRepository;
     @Autowired

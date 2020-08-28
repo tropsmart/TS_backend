@@ -22,13 +22,5 @@ public class PaymentMethodController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<PaymentMethodResponse> findPaymentByUserId(@PathVariable(value = "userId")int userId)
-    {
-        PaymentMethodResponse result = paymentMethodService.findPaymentMethodByUserId(userId);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-
 
 }

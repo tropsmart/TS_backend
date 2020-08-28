@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ICustomerService extends ICrudService<Customer>{
     CustomerResponse findCustomerById(int customerId);
-    CustomerResponse findCustomerByUserId(int customerId);
     CustomerResponse findAllCustomers();
     CustomerResponse rechargeCreditsByCustomerId(int customerId, double creditUnits);
 

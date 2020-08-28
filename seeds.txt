@@ -1,0 +1,234 @@
+Auth
+{
+  "firstName": "Carlos Alberto",
+  "lastName": "Mamani Zuñiga",
+  "email": "carlos@gmail.com",
+  "password": "123456",
+  "phone": "4421210",
+  "discriminator": 1
+}
+
+{
+  "firstName": "Marco Antonio",
+  "lastName": "Mamani Zuñiga",
+  "email": "marco@gmail.com",
+  "password": "123456",
+  "phone": "4421210",
+  "discriminator": 1
+}
+
+{
+  "firstName": "Oscar Hugo",
+  "lastName": "Mamani Alcazar",
+  "email": "hugo03@gmail.com",
+  "password": "123456",
+  "phone": "4421210",
+  "discriminator": 2
+}
+
+{
+  "firstName": "Juan",
+  "lastName": "Rivera Huamani",
+  "email": "juan04@gmail.com",
+  "password": "123456",
+  "phone": "4421210",
+  "discriminator": 2
+}
+
+{
+  "firstName": "Natalia",
+  "lastName": "Rivera Aviles",
+  "email": "nata05@gmail.com",
+  "password": "123456",
+  "phone": "4421210",
+  "discriminator": 1
+}
+
+{
+  "firstName": "Hermelinda",
+  "lastName": "Aviles Alcazar",
+  "email": "hemi06@gmail.com",
+  "password": "123456",
+  "phone": "4421210",
+  "discriminator": 1
+}
+
+{
+  "firstName": "Jhonny",
+  "lastName": "Pajuelo",
+  "email": "jhonny07@gmail.com",
+  "password": "123456",
+  "phone": "4421210",
+  "discriminator": 2
+}
+
+{
+  "firstName": "Jose",
+  "lastName": "Huaman",
+  "email": "Jose08@gmail.com",
+  "password": "123456",
+  "phone": "4421210",
+  "discriminator": 2
+}
+
+//PLAN
+{
+  "planName": "Plan Economico",
+  "durationDays": 30,
+  "price": 15
+}
+
+{
+  "planName": "Plan chevere",
+  "durationDays": 60,
+  "price": 12
+}
+
+{
+  "planName": "Plan semestral",
+  "durationDays": 180,
+  "price": 38
+}
+
+{
+  "planName": "Plan Full creditos",
+  "durationDays": 120,
+  "price": 65
+}
+
+{
+  "planName": "Plan Anual",
+  "durationDays": 365,
+  "price": 65
+}
+
+{
+  "planName": "Plan compacto",
+  "durationDays": 730,
+  "price": 120
+}
+
+
+{
+  "planName": "Plan Permanente",
+  "durationDays": 999,
+  "price": 170
+}
+
+//Subscription
+
+{
+  "userId": 3,
+  "planId": 1
+}
+
+{
+  "userId": 4,
+  "planId": 2
+}
+
+{
+  "userId": 8,
+  "planId": 3
+}
+
+//Vehicle
+{
+  "license": "123-456",
+  "brand": "Mercedes Benz",
+  "model": "Accelo 1016 XL",
+  "loadingCapacity": 170,
+  "ownershipCard": "Jose Guevara"
+}
+
+{
+  "license": "123-456",
+  "brand": "Renault",
+  "model": "IX-05",
+  "loadingCapacity": 220,
+  "ownershipCard": "Jhon Doe"
+}
+
+{
+  "license": "123-456",
+  "brand": "Volvo",
+  "model": "FMX",
+  "loadingCapacity": 250,
+  "ownershipCard": "Martin Osorio"
+}
+
+{
+  "license": "123-456",
+  "brand": "Ivecco",
+  "model": "170E22",
+  "loadingCapacity": 230,
+  "ownershipCard": "Martin Osorio"
+}
+
+//Service
+{
+  Add driverId = 1,2,3
+}
+
+//Cargo
+
+customerid=1
+{
+  "weight": 120,
+  "description": "Un caballo de carrera",
+  "servicePrice": 1200,
+  "serviceId": 1
+}
+
+customerid=2
+{
+  "weight": 220,
+  "description": "Cura del covid19",
+  "servicePrice": 500,
+  "serviceId": 2
+}
+
+customerid=3
+{
+  "weight": 100,
+  "description": "Xiaomi calidad-precio",
+  "servicePrice": 1,
+  "serviceId": 3
+}
+
+
+//Reviews
+{
+  "commentary": "Excelente servicio",
+  "calification": 5
+}
+{
+  "commentary": "Entrego el encargo con demora",
+  "calification": 3
+}
+{
+  "commentary": "No llego el encargo",
+  "calification": 0
+}
+
+
+//PaymentMethod
+
+{
+  "bankName": "Scotiabank",
+  "swiftCode": 4823,
+  "accountNumber": 827372812,
+  "billingAdress": "9758237"
+}
+{
+  "bankName": "Interbank",
+  "swiftCode": 1234,
+  "accountNumber": 234352232,
+  "billingAdress": "2345234"
+}
+{
+  "bankName": "BCP",
+  "swiftCode": 5682,
+  "accountNumber": 213243542,
+  "billingAdress": "8783245"
+}

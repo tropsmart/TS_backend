@@ -1,9 +1,11 @@
 package com.softper.ts.controllers;
 
 import com.softper.ts.resources.comunications.ConfigurationResponse;
+import com.softper.ts.resources.comunications.PaymentMethodResponse;
 import com.softper.ts.resources.inputs.ConfigurationInput;
 import com.softper.ts.resources.inputs.PaymentMethodInput;
 import com.softper.ts.servicesImp.ConfigurationService;
+import com.softper.ts.servicesImp.PaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,9 @@ public class ConfigurationsController {
 
     @Autowired
     private ConfigurationService configurationService;
+
+    @Autowired
+    private PaymentMethodService paymentMethodService;
 
     @GetMapping
     public ResponseEntity<ConfigurationResponse> findAllConfigurations()
@@ -38,6 +43,14 @@ public class ConfigurationsController {
 
         if(!result.success)
             return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{userId}/payment-method")
+    public ResponseEntity<PaymentMethodResponse> findPaymentMethodsByUserId(@PathVariable(value = "userId")int userId)
+    {
+        PaymentMethodResponse result = paymentMethodService.findPaymentMethodByUserId(userId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

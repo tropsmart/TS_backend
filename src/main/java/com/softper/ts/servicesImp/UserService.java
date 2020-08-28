@@ -1,18 +1,12 @@
 package com.softper.ts.servicesImp;
 
 import com.softper.ts.exception.ResourceNotFoundException;
-import com.softper.ts.models.Block;
-import com.softper.ts.models.Favorite;
-import com.softper.ts.models.User;
+import com.softper.ts.models.*;
 import com.softper.ts.repositories.IBlockRepository;
 import com.softper.ts.repositories.IFavoriteRepository;
 import com.softper.ts.repositories.IUserRepository;
-import com.softper.ts.resources.comunications.BlockedResponse;
-import com.softper.ts.resources.comunications.FavoriteResponse;
-import com.softper.ts.resources.comunications.UserResponse;
-import com.softper.ts.resources.outputs.BlockedOutput;
-import com.softper.ts.resources.outputs.FavoriteOutput;
-import com.softper.ts.resources.outputs.UserOutput;
+import com.softper.ts.resources.comunications.*;
+import com.softper.ts.resources.outputs.*;
 import com.softper.ts.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -361,6 +355,39 @@ public class UserService implements IUserService {
         catch (Exception e)
         {
             return new UserResponse("An error ocurred while updating the user"+e.getMessage());
+        }
+    }
+
+    @Override
+    public CustomerResponse findCustomerByUserId(int userId) {
+        try
+        {
+            User getUser = userRepository.findById(userId)
+                    .orElseThrow(()->new ResourceNotFoundException("userId","user",userId));
+            Customer getCustomer = getUser.getPerson().getCustomer();
+            return new CustomerResponse(new CustomerOutput(getCustomer.getId(),getCustomer.getPerson().getFirstName(),getCustomer.getPerson().getLastName(),getCustomer.getCredits()));
+        }
+        catch (Exception e)
+        {
+            return new CustomerResponse("An error ocurred while getting customer: "+e.getMessage());
+        }
+    }
+
+    @Override
+    public DriverResponse findDriverByUserId(int userId) {
+        try
+        {
+            User getUser = userRepository.findById(userId)
+                    .orElseThrow(()-> new ResourceNotFoundException("Id","user",userId));
+
+            Driver getDriver = getUser.getPerson().getDriver();
+            return new DriverResponse(new DriverOutput(getDriver.getId(),getDriver.getPerson().getFirstName(),getDriver.getPerson().getLastName(),getDriver.getLicense()));
+
+        }
+        catch (Exception e)
+        {
+            return new DriverResponse("An error ocurred while getting driver: "+e.getMessage());
+
         }
     }
 

@@ -65,23 +65,6 @@ public class DriverService implements IDriverService {
         }
     }
 
-    @Override
-    public DriverResponse findDriverByUserId(int userId) {
-        try
-        {
-            User getUser = userRepository.findById(userId)
-                    .orElseThrow(()-> new ResourceNotFoundException("Id","user",userId));
-
-            Driver getDriver = getUser.getPerson().getDriver();
-            return new DriverResponse(new DriverOutput(getDriver.getId(),getDriver.getPerson().getFirstName(),getDriver.getPerson().getLastName(),getDriver.getLicense()));
-
-        }
-        catch (Exception e)
-        {
-            return new DriverResponse("An error ocurred while getting driver: "+e.getMessage());
-
-        }
-    }
 
     @Override
     public DriverResponse findAllDrivers() {

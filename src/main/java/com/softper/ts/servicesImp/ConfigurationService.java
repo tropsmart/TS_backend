@@ -58,6 +58,7 @@ public class ConfigurationService implements IConfigurationService {
             getConfigurationOutput.setLastName(getUser.getPerson().getLastName());
             getConfigurationOutput.setLanguage(getUser.getConfiguration().getLanguage().toString());
             getConfigurationOutput.setPaymentCurrency(getUser.getConfiguration().getPaymentCurrency().toString());
+            getConfigurationOutput.setPhone(getUser.getPerson().getPhone());
             return new ConfigurationResponse(getConfigurationOutput);
         }
         catch (Exception e)

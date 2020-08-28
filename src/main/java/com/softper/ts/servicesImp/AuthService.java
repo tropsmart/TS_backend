@@ -161,6 +161,11 @@ public class AuthService implements IAuthService {
                     getPerson.getLastName(),
                     getPerson.getPersonType());
 
+            if(getPerson.getPersonType()==1)
+                authenticatedOutput.setRoleId(getPerson.getCustomer().getId());
+            if(getPerson.getPersonType()==2)
+                authenticatedOutput.setRoleId(getPerson.getDriver().getId());
+
             //String jwt = jwtProvider.generateJwtToken(authentication);
             //authenticatedOutput.setJwt(jwt);
             //authenticatedOutput.setRefreshToken(jwtProvider.generateRefreshToken(getUser, jwt, refreshTokenService));
@@ -184,7 +189,7 @@ public class AuthService implements IAuthService {
                             secretKey.getBytes()).compact();
 
             String r = "Bearer "+token;
-            authenticatedOutput.setJwt(r);
+            authenticatedOutput.setToken(r);
             return new AuthResponse(authenticatedOutput);
         }
         catch (Exception e)

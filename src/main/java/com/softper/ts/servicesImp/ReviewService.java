@@ -95,7 +95,6 @@ public class ReviewService implements IReviewService {
         {
             return new ReviewResponse("An error ocurred while getting the review list : "+e.getMessage());
         }
-
     }
 
     @Override

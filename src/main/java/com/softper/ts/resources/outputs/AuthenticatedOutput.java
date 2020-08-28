@@ -12,8 +12,9 @@ public class AuthenticatedOutput {
     private String firstName;
     private String lastName;
     private int role;
-    private String jwt;
-    private String refreshToken;
+    private int roleId;
+    private String token;
+    //private String refreshToken;
 
     public AuthenticatedOutput(int id, String email, String password, String firstName, String lastName, int role) {
         this.id = id;

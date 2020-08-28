@@ -1,8 +1,8 @@
 package com.softper.ts.controllers;
 
-import com.softper.ts.resources.comunications.BlockedResponse;
-import com.softper.ts.resources.comunications.FavoriteResponse;
-import com.softper.ts.resources.comunications.UserResponse;
+import com.softper.ts.resources.comunications.*;
+import com.softper.ts.servicesImp.CustomerService;
+import com.softper.ts.servicesImp.DriverService;
 import com.softper.ts.servicesImp.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,8 +27,8 @@ public class UsersController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
-    @PostMapping("{userId}/favourites/{userfavouritedId}")
-    public ResponseEntity<FavoriteResponse> setUserFavourited(@PathVariable(value = "userId")int userId, @PathVariable(value = "userfavouritedId")int userFavouritedId)
+    @PostMapping("{userId}/favourites/{userfavoritedId}")
+    public ResponseEntity<FavoriteResponse> setUserFavourited(@PathVariable(value = "userId")int userId, @PathVariable(value = "userfavoritedId")int userFavouritedId)
     {
         FavoriteResponse result = userService.setFavourited(userId, userFavouritedId);
 
@@ -49,8 +49,8 @@ public class UsersController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/favourites")
-    public ResponseEntity<FavoriteResponse> findFavouritesByUserId(@PathVariable(value = "userId")int userId)
+    @GetMapping("/{userId}/favorites")
+    public ResponseEntity<FavoriteResponse> findFavoritesByUserId(@PathVariable(value = "userId")int userId)
     {
         FavoriteResponse result = userService.findFavoritesByUserId(userId);
 
@@ -71,7 +71,7 @@ public class UsersController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
-    @GetMapping("/favourites")
+    @GetMapping("/favorites")
     public ResponseEntity<FavoriteResponse> findAllFavourites()
     {
         FavoriteResponse result = userService.findAllFavourites();
@@ -92,5 +92,22 @@ public class UsersController {
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
+
+    @GetMapping("/{userId}/customers")
+    public ResponseEntity<CustomerResponse> findCustomerByUserId(@PathVariable(value = "userId")int userId)
+    {
+        CustomerResponse result = userService.findCustomerByUserId(userId);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/drivers")
+    public ResponseEntity<DriverResponse> findDriverByUserId(@PathVariable(value = "userId")int userId)
+    {
+        DriverResponse result = userService.findDriverByUserId(userId);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 
 }

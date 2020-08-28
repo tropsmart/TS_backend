@@ -27,6 +27,21 @@ public class TsApplication {
         SpringApplication.run(TsApplication.class, args);
     }
 
+    /*
+    * Desplegar Springboot en heroku
+    * 1.- Abrir heroku login
+    * 2.- heroku create <APP NAME>
+    * 3.- inicializar git
+    * 4.- git remote add heroku <HEROKU APP REPOSITORY>
+    * 5.- git add .
+    * 6.- git commit -m "n verison"
+    * 7.- git push heroku master
+    * 8.- heroku config:set DATABASE_URL=' <ADDON URI> '
+    *
+    *
+    * Se utilizo servicio de clevercloud para Base de datos MySql
+    * */
+
     @Bean
     public ModelMapper modelMapper() {return new ModelMapper();}
 
@@ -70,20 +85,18 @@ public class TsApplication {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http
+            /*http
                     .csrf().disable()
                     .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                     .authorizeRequests()
-                    .antMatchers("/index.html**",
-                            "/ts-api-docs",
-                            "/v2/api-docs",
-                            "/configuration/ui",
-                            "/swagger-resources/**",
-                            "/configuration/**",
-                            "/swagger-ui/**",
-                            "/webjars/**").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/authentication/**").permitAll()
                     .anyRequest().authenticated();
+             */
+            http
+                    .csrf().disable()
+                    .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                    .authorizeRequests().
+                    anyRequest().permitAll();
         }
     }
 

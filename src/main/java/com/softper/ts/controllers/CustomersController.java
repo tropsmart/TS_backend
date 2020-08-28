@@ -1,6 +1,8 @@
 package com.softper.ts.controllers;
 
+import com.softper.ts.resources.comunications.CargoResponse;
 import com.softper.ts.resources.comunications.CustomerResponse;
+import com.softper.ts.servicesImp.CargoService;
 import com.softper.ts.servicesImp.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,9 @@ public class CustomersController {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private CargoService cargoService;
 
     @GetMapping
     public ResponseEntity<CustomerResponse> findAllCustomers()
@@ -33,6 +38,14 @@ public class CustomersController {
 
         if(!result.success)
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/{customerId}/cargoes")
+    public ResponseEntity<CargoResponse> getCargoesByCustomerId(@PathVariable(value = "customerId")int customerId)
+    {
+        CargoResponse result = cargoService.findCargoesByCustomerId(customerId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
