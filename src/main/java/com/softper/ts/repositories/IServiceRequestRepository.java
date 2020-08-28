@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface IServiceRequestRepository extends JpaRepository<ServiceRequest, Integer> {
     @Query("select s from ServiceRequest s where s.driver.id = (:driverId)")
     ServiceRequest findServiceByDriverId(@Param("driverId")int driverId);
+
+
 }

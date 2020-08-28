@@ -52,7 +52,7 @@ public class UsersController {
     @GetMapping("/{userId}/favourites")
     public ResponseEntity<FavoriteResponse> findFavouritesByUserId(@PathVariable(value = "userId")int userId)
     {
-        FavoriteResponse result = userService.findFavouritesByUserId(userId);
+        FavoriteResponse result = userService.findFavoritesByUserId(userId);
 
         if(!result.success)
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);

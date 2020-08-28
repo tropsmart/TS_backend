@@ -61,6 +61,10 @@ public class User implements Serializable {
     private List<Benefit> claimedBenefits = new ArrayList<>();
 
     @OneToOne
+    @JoinColumn(name = "person_id")
+    private Person person;
+
+    @OneToOne
     @JoinColumn(name = "configuration_id")
     private Configuration configuration;
 
@@ -68,8 +72,6 @@ public class User implements Serializable {
     @JoinColumn(name = "balance_id")
     private Balance balance;
 
-    @OneToOne
-    @JoinColumn(name = "person_id")
-    private Person person;
+
 
 }

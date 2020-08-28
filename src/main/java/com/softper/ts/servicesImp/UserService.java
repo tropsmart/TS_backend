@@ -29,7 +29,7 @@ public class UserService implements IUserService {
     private IUserRepository userRepository;
 
     @Autowired
-    private IFavoriteRepository favouriteRepository;
+    private IFavoriteRepository favoriteRepository;
 
     @Autowired
     private IBlockRepository blockRepository;
@@ -54,7 +54,7 @@ public class UserService implements IUserService {
             newFavourite.setFavorited(getUserFavourite);
             newFavourite.setCreatedAt(new Date());
 
-            newFavourite = favouriteRepository.save(newFavourite);
+            newFavourite = favoriteRepository.save(newFavourite);
 
             FavoriteOutput newFavouriteOutput = new FavoriteOutput();
             newFavouriteOutput.setUser(newFavourite.getUser().getPerson().getFirstName()+" "+newFavourite.getUser().getPerson().getLastName());
@@ -125,16 +125,12 @@ public class UserService implements IUserService {
         }
     }
 
-    @Override
-    public UserResponse findAllUsersDrivers() {
-        return null;
-    }
 
     @Override
-    public FavoriteResponse findFavouritesByUserId(int userId) {
+    public FavoriteResponse findFavoritesByUserId(int userId) {
         try
         {
-            List<Favorite> favoriteList = favouriteRepository.findFavouritesByUserId(userId);
+            List<Favorite> favoriteList = favoriteRepository.findFavouritesByUserId(userId);
             List<FavoriteOutput> favouriteOutputList = new ArrayList<>();
             for (Favorite f:favoriteList) {
                 FavoriteOutput newFavouriteOutput = new FavoriteOutput();
@@ -178,7 +174,7 @@ public class UserService implements IUserService {
     public FavoriteResponse findAllFavourites() {
         try
         {
-            List<Favorite> favoriteList = favouriteRepository.findAll();
+            List<Favorite> favoriteList = favoriteRepository.findAll();
             List<FavoriteOutput> favoriteOutputList = new ArrayList<>();
             for (Favorite f:favoriteList) {
                 FavoriteOutput newFavouriteOutput = new FavoriteOutput();
@@ -218,10 +214,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public FavoriteResponse findFavouriteByUserIdAndFavouriteId(int userId, int favouriteId) {
+    public FavoriteResponse findFavoriteByUserIdAndFavoriteId(int userId, int favouriteId) {
         try
         {
-            Favorite getFavourite = favouriteRepository.findFavouriteByUserAndFavouriteId(userId, favouriteId);
+            Favorite getFavourite = favoriteRepository.findFavouriteByUserAndFavouriteId(userId, favouriteId);
             FavoriteOutput newFavouriteOutput = new FavoriteOutput();
             newFavouriteOutput.setUser(getFavourite.getUser().getPerson().getFirstName()+" "+getFavourite.getUser().getPerson().getLastName());
             newFavouriteOutput.setFavourited(getFavourite.getFavorited().getPerson().getFirstName()+" "+getFavourite.getFavorited().getPerson().getLastName());
@@ -252,7 +248,71 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserResponse findByEmail(String email) {
+    public UserResponse findAllUsersDrivers() {
+
+        try{
+            List<User> userList = userRepository.findAll();
+            List<UserOutput> userOutputList = new ArrayList<>();
+            for (User u:userList) {
+                if(u.getPerson().getPersonType()==2) {
+                    UserOutput newUserOutput = new UserOutput();
+                    newUserOutput.setEmail(u.getEmail());
+                    newUserOutput.setFirstName(u.getPerson().getFirstName());
+                    newUserOutput.setLastName(u.getPerson().getLastName());
+                    newUserOutput.setPassword(u.getPassword());
+                    userOutputList.add(newUserOutput);
+                }
+
+            }
+            return new UserResponse(userOutputList);
+        }
+        catch (Exception e)
+        {
+            return new UserResponse("An error ocurred while getting the user : "+e.getMessage());
+        }
+
+
+    }
+
+
+    @Override
+    public FavoriteResponse deleteFavoriteByUserIdAndFavoriteId(int userId, int favoriteId) {
+        try
+        {
+            Favorite getFavorite = favoriteRepository.findFavouriteByUserAndFavouriteId(userId, favoriteId);
+            favoriteRepository.deleteById(getFavorite.getId());
+            FavoriteOutput newFavouriteOutput = new FavoriteOutput();
+            newFavouriteOutput.setUser(getFavorite.getUser().getPerson().getFirstName()+" "+getFavorite.getUser().getPerson().getLastName());
+            newFavouriteOutput.setFavourited(getFavorite.getFavorited().getPerson().getFirstName()+" "+getFavorite.getFavorited().getPerson().getLastName());
+            newFavouriteOutput.setSince(getFavorite.getCreatedAt());
+            return new FavoriteResponse(newFavouriteOutput);
+        }
+        catch (Exception e)
+        {
+            return new FavoriteResponse("An error ocurred while deleting the favourite relation : "+e.getMessage());
+        }
+    }
+
+    @Override
+    public BlockedResponse deleteBlockByUserIdAndBlockId(int userId, int blockedId) {
+        try
+        {
+            Block getBlock = blockRepository.findBlockByUserAndBlockedId(userId, blockedId);
+            blockRepository.deleteById(getBlock.getId());
+            BlockedOutput newBlockedOutput = new BlockedOutput();
+            newBlockedOutput.setUser(getBlock.getUser().getPerson().getFirstName()+" "+getBlock.getUser().getPerson().getLastName());
+            newBlockedOutput.setBlocked(getBlock.getBlocked().getPerson().getFirstName()+" "+getBlock.getBlocked().getPerson().getLastName());
+            newBlockedOutput.setSince(getBlock.getCreatedAt());
+            return new BlockedResponse(newBlockedOutput);
+        }
+        catch (Exception e)
+        {
+            return new BlockedResponse("An error ocurred while deleting the blocked relation : "+e.getMessage());
+        }
+    }
+
+    @Override
+    public UserResponse findUserByEmail(String email) {
         try
         {
             User getUser = userRepository.findPersonByEmail(email)
@@ -304,25 +364,6 @@ public class UserService implements IUserService {
         }
     }
 
-    @Override
-    public FavoriteResponse findFavouritesByActiveUser(int userId) {
-        return null;
-    }
-
-    @Override
-    public FavoriteResponse findFavouritesByPassiveUser(int userId) {
-        return null;
-    }
-
-    @Override
-    public BlockedResponse findBlockedsByActiveUser(int userId) {
-        return null;
-    }
-
-    @Override
-    public BlockedResponse findBlockedsByPassiveUser(int userId) {
-        return null;
-    }
 
     @Override
     public User save(User user) throws Exception {
@@ -343,4 +384,6 @@ public class UserService implements IUserService {
     public List<User> findAll() throws Exception {
         return userRepository.findAll();
     }
+
+
 }

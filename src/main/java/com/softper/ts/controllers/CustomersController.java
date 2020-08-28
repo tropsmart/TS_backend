@@ -18,7 +18,7 @@ public class CustomersController {
     @GetMapping
     public ResponseEntity<CustomerResponse> findAllCustomers()
     {
-        CustomerResponse result = customerService.getAllCustomers();
+        CustomerResponse result = customerService.findAllCustomers();
 
         if(!result.success)
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);

@@ -21,7 +21,7 @@ public class PlansController {
     @GetMapping
     public ResponseEntity<PlanResponse> findAllPlans()
     {
-        PlanResponse result =  planService.getAllPlans();
+        PlanResponse result =  planService.findAllPlans();
 
         if(!result.success)
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);

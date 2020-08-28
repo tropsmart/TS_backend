@@ -17,7 +17,7 @@ public class SubscriptionsController {
     @GetMapping
     public ResponseEntity<SubscriptionResponse> findAllSubscriptions()
     {
-        SubscriptionResponse result = subscriptionService.getAllSubscriptions();
+        SubscriptionResponse result = subscriptionService.findAllSubscriptions();
 
         if(!result.success)
             return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
@@ -39,7 +39,7 @@ public class SubscriptionsController {
     @PostMapping("/users/{userId}/plans/{planId}")
     public ResponseEntity<SubscriptionResponse> suscribeDriver(@PathVariable(value = "userId")int userId, @PathVariable(value = "planId")int planId)
     {
-        SubscriptionResponse result = subscriptionService.suscribe(userId, planId);
+        SubscriptionResponse result = subscriptionService.subscribe(userId, planId);
 
         if(!result.success)
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);

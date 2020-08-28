@@ -54,13 +54,19 @@ public class TsApplication {
             return new CorsFilter(source);
         }
 
+
+
+
         @Override
         public void configure(WebSecurity web) throws Exception {
-            web.ignoring().mvcMatchers(HttpMethod.OPTIONS, "/**");
-            // ignore swagger
-            web.ignoring().mvcMatchers( "/**","/favicon.icon**","/index.html/**", "/configuration/**", "/swagger-resources/**", "/ts-api-docs/**");
+            web.ignoring().antMatchers("/index.html","/ts-api-docs","/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**", "/swagger-ui**", "/webjars/**");
         }
 
+
+        /*
+        * Ya esta configurado en httsecurity http
+        * solo falta la configuracion web de swagger
+        * */
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -68,8 +74,14 @@ public class TsApplication {
                     .csrf().disable()
                     .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                     .authorizeRequests()
-                    .antMatchers("/**").permitAll()
-                    .antMatchers("/favicon.icon**").permitAll()
+                    .antMatchers("/index.html**",
+                            "/ts-api-docs",
+                            "/v2/api-docs",
+                            "/configuration/ui",
+                            "/swagger-resources/**",
+                            "/configuration/**",
+                            "/swagger-ui/**",
+                            "/webjars/**").permitAll()
                     .antMatchers(HttpMethod.POST, "/api/authentication/**").permitAll()
                     .anyRequest().authenticated();
         }

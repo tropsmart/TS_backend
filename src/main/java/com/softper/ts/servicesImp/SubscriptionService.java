@@ -47,7 +47,7 @@ public class SubscriptionService implements ISubscriptionService {
     }
 
     @Override
-    public SubscriptionResponse suscribe(int userId, int planId) {
+    public SubscriptionResponse subscribe(int userId, int planId) {
         try
         {
             Plan getPlan = planRepository.findById(planId).get();
@@ -56,11 +56,19 @@ public class SubscriptionService implements ISubscriptionService {
             Subscription newSubscription = new Subscription();
             newSubscription.setPlan(getPlan);
             newSubscription.setUser(getUser);
-            newSubscription.setSubscriptionState("Active");
+            newSubscription.setSubscriptionState("Actived");
             newSubscription.setStartTime(Calendar.getInstance().getTime());
             newSubscription.setFinishTime(Calendar.getInstance().getTime());
 
+            List<Subscription> subscriptionList = subscriptionRepository.getSubscriptionsByUserId(userId);
+
+            for (Subscription s: subscriptionList) {
+                s.setSubscriptionState("Disabled");
+            }
+
+            subscriptionRepository.saveAll(subscriptionList);
             newSubscription = subscriptionRepository.save(newSubscription);
+
             return new SubscriptionResponse(new SubscriptionOutput(newSubscription.getId(),
                     newSubscription.getUser().getPerson().getFirstName(),newSubscription.getUser().
                     getPerson().getLastName(),newSubscription.getUser().getEmail(),newSubscription.getPlan().
@@ -98,7 +106,7 @@ public class SubscriptionService implements ISubscriptionService {
     }
 
     @Override
-    public SubscriptionResponse getAllSubscriptions() {
+    public SubscriptionResponse findAllSubscriptions() {
         try
         {
             List<Subscription> subscriptionList = subscriptionRepository.findAll();
@@ -131,6 +139,33 @@ public class SubscriptionService implements ISubscriptionService {
                     getSubscription.getUser().getPerson().getFirstName(),getSubscription.getUser().
                     getPerson().getLastName(),getSubscription.getUser().getEmail(),getSubscription.getPlan().
                     getName(),getSubscription.getPlan().getPrice().getTotalPrice(),getSubscription.getSubscriptionState()));
+        }
+        catch (Exception e)
+        {
+            return new SubscriptionResponse("An error ocurred while getting the subscription : "+e.getMessage());
+        }
+    }
+
+    @Override
+    public SubscriptionResponse enableSubscriptionById(int subscriptionId) {
+        try
+        {
+            Subscription getSubscription = subscriptionRepository.findById(subscriptionId)
+                    .orElseThrow(()->new ResourceNotFoundException("Id","subscription", subscriptionId));
+
+            List<Subscription> subscriptionList = subscriptionRepository.getSubscriptionsByUserId(getSubscription.getUser().getId());
+            for (Subscription s: subscriptionList) {
+                if(s.getId()!=subscriptionId)
+                    s.setSubscriptionState("Disabled");
+                else
+                    s.setSubscriptionState("Actived");
+            }
+
+            return new SubscriptionResponse(new SubscriptionOutput(getSubscription.getId(),
+                    getSubscription.getUser().getPerson().getFirstName(),getSubscription.getUser().
+                    getPerson().getLastName(),getSubscription.getUser().getEmail(),getSubscription.getPlan().
+                    getName(),getSubscription.getPlan().getPrice().getTotalPrice(),getSubscription.getSubscriptionState()));
+
         }
         catch (Exception e)
         {

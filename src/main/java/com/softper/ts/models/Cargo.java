@@ -39,17 +39,18 @@ public class Cargo implements Serializable {
     @JoinColumn(name = "price")
     private Price price;
 
+    @Column(name = "cargo_status")
+    private String cargoStatus;
+
     @Column(name = "cargo_type")
     private String cargoType;
 
-    @Column(name = "cargo_status")
-    private String cargoStatus;
+    @OneToOne(mappedBy = "cargo", cascade = CascadeType.ALL)
+    private Review review;
 
     @OneToOne(mappedBy = "cargo")
     private Location location;
 
-    @OneToOne(mappedBy = "cargo", cascade = CascadeType.ALL)
-    private Review review;
 
 
 }

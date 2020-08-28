@@ -26,22 +26,15 @@ public class PaymentMethod implements Serializable {
     @Column(name = "swift_code", nullable = false)
     private int swiftCode;
 
-    @Column(name = "bank_account_type", nullable = false)
-    private String bankAccountType;
-
     @Column(name = "account_number", nullable = false)
     private long accountNumber;
-
-    @Column(name = "dni", nullable = false)
-    private int dni;
 
     @Column(name = "billing_adress", nullable = false)
     private String billingAdress;
 
-    @Column(name = "full_name", nullable = false)
-    private String fullName;
-
-    @OneToOne
+    @ManyToOne()
     @JoinColumn(name = "configuration_id")
-    public Configuration configuration;
+    Configuration configuration;
+
+
 }

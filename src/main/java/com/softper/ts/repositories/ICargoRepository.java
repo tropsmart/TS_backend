@@ -16,4 +16,5 @@ public interface ICargoRepository extends JpaRepository<Cargo , Integer> {
     List<Cargo> findCargoesByCustomerId(@Param("uid") Integer customerId);
 
 
+
 }

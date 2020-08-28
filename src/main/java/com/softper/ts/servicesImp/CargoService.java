@@ -19,6 +19,8 @@ public class CargoService implements ICargoService {
 
     @Autowired
     private ICargoRepository cargoRepository;
+
+
     @Autowired
     private IUserRepository userRepository;
     @Autowired
@@ -29,8 +31,14 @@ public class CargoService implements ICargoService {
     private IBalanceRepository balanceRepository;
     @Autowired
     private IServiceRepository serviceRepository;
+
+    @Autowired
+    private IServiceRequestRepository serviceRequestRepository;
+
     @Autowired
     private ILocationRepository locationRepository;
+
+
 
 
     @Override
@@ -204,6 +212,7 @@ public class CargoService implements ICargoService {
         }
     }
 
+
     @Override
     public CargoResponse setCargoDelivered(int cargoId) {
         try
@@ -215,7 +224,7 @@ public class CargoService implements ICargoService {
             Balance getBalance = getUser.getBalance();
 
 
-            getCargo.setCargoStatus("Received");
+            getCargo.setCargoStatus("Servicio terminado");
 
 
             getCargo = cargoRepository.save(getCargo);
@@ -239,4 +248,181 @@ public class CargoService implements ICargoService {
             return new CargoResponse("An error ocurred while getting the cargo list: "+e.getMessage());
         }
     }
+
+    @Override
+    public CargoResponse findCargoesByDriverId(int driverId) {
+        try
+        {
+            ServiceRequest getServiceRequest = serviceRequestRepository.findServiceByDriverId(driverId);
+            List<CargoOutput> cargoOutputList = new ArrayList<>();
+
+            for (com.softper.ts.models.Service s:getServiceRequest.getServicesList()) {
+                for(Cargo c:s.getCargoList())
+                {
+                    CargoOutput newCargoOutput = new CargoOutput();
+                    newCargoOutput.setCargoStatus(c.getCargoStatus());
+                    newCargoOutput.setCargoType(c.getCargoType());
+                    newCargoOutput.setCustomer(c.getCustomer().getPerson().getFirstName()+" "+c.getCustomer().getPerson().getLastName());
+                    newCargoOutput.setDescription(c.getDescription());
+                    newCargoOutput.setDriver(c.getService().getServicesRequest().getDriver().getPerson().getFirstName()+" "+
+                            c.getService().getServicesRequest().getDriver().getPerson().getLastName());
+                    newCargoOutput.setFinishTime(c.getService().getFinishTime());
+                    newCargoOutput.setStartTime(c.getService().getStartTime());
+                    newCargoOutput.setServicePrice(c.getPrice().getTotalPrice());
+                    newCargoOutput.setWeight(c.getWeight());
+                    cargoOutputList.add(newCargoOutput);
+                }
+            }
+            return new CargoResponse(cargoOutputList);
+        }
+        catch (Exception e)
+        {
+            return new CargoResponse("An error ocurred while getting the cargo list : "+e.getMessage());
+        }
+    }
+
+    @Override
+    public CargoResponse findRequestedCargoesByDriverId(int driverId) {
+        try
+        {
+            ServiceRequest getServiceRequest = serviceRequestRepository.findServiceByDriverId(driverId);
+            List<CargoOutput> cargoOutputList = new ArrayList<>();
+
+            for (com.softper.ts.models.Service s:getServiceRequest.getServicesList()) {
+                for(Cargo c:s.getCargoList())
+                {
+                    if(c.getCargoStatus().equals("Esperando confirmacion"))
+                    {
+                        CargoOutput newCargoOutput = new CargoOutput();
+                        newCargoOutput.setCargoStatus(c.getCargoStatus());
+                        newCargoOutput.setCargoType(c.getCargoType());
+                        newCargoOutput.setCustomer(c.getCustomer().getPerson().getFirstName()+" "+c.getCustomer().getPerson().getLastName());
+                        newCargoOutput.setDescription(c.getDescription());
+                        newCargoOutput.setDriver(c.getService().getServicesRequest().getDriver().getPerson().getFirstName()+" "+
+                                c.getService().getServicesRequest().getDriver().getPerson().getLastName());
+                        newCargoOutput.setFinishTime(c.getService().getFinishTime());
+                        newCargoOutput.setStartTime(c.getService().getStartTime());
+                        newCargoOutput.setServicePrice(c.getPrice().getTotalPrice());
+                        newCargoOutput.setWeight(c.getWeight());
+                        cargoOutputList.add(newCargoOutput);
+                    }
+
+                }
+            }
+            return new CargoResponse(cargoOutputList);
+        }
+        catch (Exception e)
+        {
+            return new CargoResponse("An error ocurred while getting the cargo list : "+e.getMessage());
+        }
+    }
+
+    @Override
+    public CargoResponse findConfirmedCargoesByDriverId(int driverId) {
+        try
+        {
+            ServiceRequest getServiceRequest = serviceRequestRepository.findServiceByDriverId(driverId);
+            List<CargoOutput> cargoOutputList = new ArrayList<>();
+
+            for (com.softper.ts.models.Service s:getServiceRequest.getServicesList()) {
+                for(Cargo c:s.getCargoList())
+                {
+                    if(c.getCargoStatus().equals("Servicio en proceso"))
+                    {
+                        CargoOutput newCargoOutput = new CargoOutput();
+                        newCargoOutput.setCargoStatus(c.getCargoStatus());
+                        newCargoOutput.setCargoType(c.getCargoType());
+                        newCargoOutput.setCustomer(c.getCustomer().getPerson().getFirstName()+" "+c.getCustomer().getPerson().getLastName());
+                        newCargoOutput.setDescription(c.getDescription());
+                        newCargoOutput.setDriver(c.getService().getServicesRequest().getDriver().getPerson().getFirstName()+" "+
+                                c.getService().getServicesRequest().getDriver().getPerson().getLastName());
+                        newCargoOutput.setFinishTime(c.getService().getFinishTime());
+                        newCargoOutput.setStartTime(c.getService().getStartTime());
+                        newCargoOutput.setServicePrice(c.getPrice().getTotalPrice());
+                        newCargoOutput.setWeight(c.getWeight());
+                        cargoOutputList.add(newCargoOutput);
+                    }
+
+                }
+            }
+            return new CargoResponse(cargoOutputList);
+        }
+        catch (Exception e)
+        {
+            return new CargoResponse("An error ocurred while getting the cargo list : "+e.getMessage());
+        }
+    }
+
+    @Override
+    public CargoResponse findFinishedCargoesByDriverId(int driverId) {
+        try
+        {
+            ServiceRequest getServiceRequest = serviceRequestRepository.findServiceByDriverId(driverId);
+            List<CargoOutput> cargoOutputList = new ArrayList<>();
+
+            for (com.softper.ts.models.Service s:getServiceRequest.getServicesList()) {
+                for(Cargo c:s.getCargoList())
+                {
+                    if(c.getCargoStatus().equals("Servicio terminado"))
+                    {
+                        CargoOutput newCargoOutput = new CargoOutput();
+                        newCargoOutput.setCargoStatus(c.getCargoStatus());
+                        newCargoOutput.setCargoType(c.getCargoType());
+                        newCargoOutput.setCustomer(c.getCustomer().getPerson().getFirstName()+" "+c.getCustomer().getPerson().getLastName());
+                        newCargoOutput.setDescription(c.getDescription());
+                        newCargoOutput.setDriver(c.getService().getServicesRequest().getDriver().getPerson().getFirstName()+" "+
+                                c.getService().getServicesRequest().getDriver().getPerson().getLastName());
+                        newCargoOutput.setFinishTime(c.getService().getFinishTime());
+                        newCargoOutput.setStartTime(c.getService().getStartTime());
+                        newCargoOutput.setServicePrice(c.getPrice().getTotalPrice());
+                        newCargoOutput.setWeight(c.getWeight());
+                        cargoOutputList.add(newCargoOutput);
+                    }
+
+                }
+            }
+            return new CargoResponse(cargoOutputList);
+        }
+        catch (Exception e)
+        {
+            return new CargoResponse("An error ocurred while getting the cargo list : "+e.getMessage());
+        }
+    }
+
+    @Override
+    public CargoResponse confirmCargoRequest(int cargoId) {
+        try
+        {
+            Cargo getCargo = cargoRepository.findById(cargoId).get();
+            User getUser = userRepository.findUserByPersonId(getCargo.getCustomer().getPerson().getId())
+                    .orElseThrow(()->new ResourceNotFoundException("user","id",cargoId));
+            Customer getCustomer = getCargo.getCustomer();
+            Balance getBalance = getUser.getBalance();
+
+
+            getCargo.setCargoStatus("Servicio en proceso");
+
+
+            getCargo = cargoRepository.save(getCargo);
+
+            CargoOutput newCargoOutput = new CargoOutput();
+
+            newCargoOutput.setWeight(getCargo.getWeight());
+            newCargoOutput.setCustomer(getCargo.getCustomer().getPerson().getFirstName()+" "+getCargo.getCustomer().getPerson().getFirstName());
+            newCargoOutput.setDriver(getCargo.getService().getServicesRequest().getDriver().getPerson().getFirstName()+" "+getCargo.getService().getServicesRequest().getDriver().getPerson().getLastName());
+            newCargoOutput.setStartTime(getCargo.getService().getStartTime());
+            newCargoOutput.setFinishTime(getCargo.getService().getFinishTime());
+            newCargoOutput.setServicePrice(getCargo.getPrice().getTotalPrice());
+            newCargoOutput.setDescription(getCargo.getDescription());
+            newCargoOutput.setCargoType(getCargo.getCargoType().toString());
+            newCargoOutput.setCargoStatus(getCargo.getCargoStatus());
+
+            return new CargoResponse(newCargoOutput);
+        }
+        catch (Exception e)
+        {
+            return new CargoResponse("An error ocurred while getting the cargo list: "+e.getMessage());
+        }
+    }
+
 }

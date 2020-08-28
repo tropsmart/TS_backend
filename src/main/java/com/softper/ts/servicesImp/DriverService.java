@@ -1,8 +1,11 @@
 package com.softper.ts.servicesImp;
 
+import com.softper.ts.exception.ResourceNotFoundException;
 import com.softper.ts.models.Driver;
 import com.softper.ts.models.Location;
+import com.softper.ts.models.User;
 import com.softper.ts.repositories.IDriverRepository;
+import com.softper.ts.repositories.IUserRepository;
 import com.softper.ts.resources.comunications.DriverResponse;
 import com.softper.ts.resources.outputs.DriverOutput;
 import com.softper.ts.services.IDriverService;
@@ -18,6 +21,9 @@ public class DriverService implements IDriverService {
 
     @Autowired
     IDriverRepository driverRepository;
+
+    @Autowired
+    IUserRepository userRepository;
 
 
     @Override
@@ -60,7 +66,25 @@ public class DriverService implements IDriverService {
     }
 
     @Override
-    public DriverResponse getAllDrivers() {
+    public DriverResponse findDriverByUserId(int userId) {
+        try
+        {
+            User getUser = userRepository.findById(userId)
+                    .orElseThrow(()-> new ResourceNotFoundException("Id","user",userId));
+
+            Driver getDriver = getUser.getPerson().getDriver();
+            return new DriverResponse(new DriverOutput(getDriver.getId(),getDriver.getPerson().getFirstName(),getDriver.getPerson().getLastName(),getDriver.getLicense()));
+
+        }
+        catch (Exception e)
+        {
+            return new DriverResponse("An error ocurred while getting driver: "+e.getMessage());
+
+        }
+    }
+
+    @Override
+    public DriverResponse findAllDrivers() {
         try
         {
             List<Driver> drivers = driverRepository.findAll();

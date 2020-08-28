@@ -5,8 +5,9 @@ import com.softper.ts.resources.comunications.SubscriptionResponse;
 
 public interface ISubscriptionService extends ICrudService<Subscription> {
     SubscriptionResponse findSubscriptionById(int subscriptionId);
-    SubscriptionResponse suscribe(int userId, int planId);
+    SubscriptionResponse subscribe(int userId, int planId);
     SubscriptionResponse findSubscriptionsByUserId(int userId);
-    SubscriptionResponse getAllSubscriptions();
+    SubscriptionResponse findAllSubscriptions();
     SubscriptionResponse cancelSubscription(int subscriptionId);
+    SubscriptionResponse enableSubscriptionById(int subscriptionId);
 }

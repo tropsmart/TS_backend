@@ -2,9 +2,11 @@ package com.softper.ts.servicesImp;
 
 import com.softper.ts.models.Configuration;
 import com.softper.ts.models.PaymentMethod;
+import com.softper.ts.models.Person;
 import com.softper.ts.models.User;
 import com.softper.ts.repositories.IConfigurationRepository;
 import com.softper.ts.repositories.IPaymentMethodRepository;
+import com.softper.ts.repositories.IPersonRepository;
 import com.softper.ts.repositories.IUserRepository;
 import com.softper.ts.resources.comunications.ConfigurationResponse;
 import com.softper.ts.resources.inputs.ConfigurationInput;
@@ -28,7 +30,42 @@ public class ConfigurationService implements IConfigurationService {
     IUserRepository userRepository;
 
     @Autowired
+    IPersonRepository personRepository;
+
+    @Autowired
     IPaymentMethodRepository paymentMethodRepository;
+
+
+
+
+
+    @Override
+    public ConfigurationResponse addPaymentMethod(int userId, PaymentMethodInput paymentMethodInput) {
+        try
+        {
+            User getUser = userRepository.findById(userId).get();
+            PaymentMethod newPaymentMethod = new PaymentMethod();
+            newPaymentMethod.setAccountNumber(paymentMethodInput.getAccountNumber());
+            newPaymentMethod.setBankName(paymentMethodInput.getBankName());
+            newPaymentMethod.setBillingAdress(paymentMethodInput.getBillingAdress());
+            newPaymentMethod.setSwiftCode(paymentMethodInput.getSwiftCode());
+            newPaymentMethod.setConfiguration(getUser.getConfiguration());
+
+            newPaymentMethod = paymentMethodRepository.save(newPaymentMethod);
+
+            ConfigurationOutput getConfigurationOutput = new ConfigurationOutput();
+            getConfigurationOutput.setFirstName(getUser.getPerson().getFirstName());
+            getConfigurationOutput.setLastName(getUser.getPerson().getLastName());
+            getConfigurationOutput.setLanguage(getUser.getConfiguration().getLanguage().toString());
+            getConfigurationOutput.setPaymentCurrency(getUser.getConfiguration().getPaymentCurrency().toString());
+            return new ConfigurationResponse(getConfigurationOutput);
+        }
+        catch (Exception e)
+        {
+            return new ConfigurationResponse("An error ocurred while getting a configuration");
+        }
+    }
+
 
     @Override
     public ConfigurationResponse findAllConfigurations() {
@@ -39,7 +76,8 @@ public class ConfigurationService implements IConfigurationService {
             for(Configuration c:configurationList)
             {
                 ConfigurationOutput newConfigurationOutput = new ConfigurationOutput();
-                newConfigurationOutput.setUserName(c.getUser().getPerson().getFirstName()+" "+c.getUser().getPerson().getLastName());
+                newConfigurationOutput.setFirstName(c.getUser().getPerson().getFirstName());
+                newConfigurationOutput.setLastName(c.getUser().getPerson().getLastName());
                 newConfigurationOutput.setLanguage(c.getLanguage().toString());
                 newConfigurationOutput.setPaymentCurrency(c.getPaymentCurrency().toString());
                 configurationOutputList.add(newConfigurationOutput);
@@ -52,45 +90,18 @@ public class ConfigurationService implements IConfigurationService {
         }
     }
 
+
     @Override
     public ConfigurationResponse findConfigurationByUserId(int userId) {
         try
         {
             User getUser = userRepository.findById(userId).get();
             ConfigurationOutput newConfigurationOutput = new ConfigurationOutput();
-            newConfigurationOutput.setUserName(getUser.getPerson().getFirstName()+" "+getUser.getPerson().getLastName());
+            newConfigurationOutput.setFirstName(getUser.getPerson().getFirstName());
+            newConfigurationOutput.setLastName(getUser.getPerson().getLastName());
             newConfigurationOutput.setPaymentCurrency(getUser.getConfiguration().getPaymentCurrency().toString());
             newConfigurationOutput.setLanguage(getUser.getConfiguration().getLanguage().toString());
             return new ConfigurationResponse(newConfigurationOutput);
-        }
-        catch (Exception e)
-        {
-            return new ConfigurationResponse("An error ocurred while getting a configuration");
-        }
-    }
-
-    @Override
-    public ConfigurationResponse addPaymentMethod(int userId, PaymentMethodInput paymentMethodInput) {
-        try
-        {
-            User getUser = userRepository.findById(userId).get();
-            PaymentMethod newPaymentMethod = new PaymentMethod();
-            newPaymentMethod.setAccountNumber(paymentMethodInput.getAccountNumber());
-            newPaymentMethod.setBankAccountType("");
-            newPaymentMethod.setBankName(paymentMethodInput.getBankName());
-            newPaymentMethod.setBillingAdress("6666");
-            newPaymentMethod.setDni(paymentMethodInput.getDni());
-            newPaymentMethod.setFullName(getUser.getPerson().getFirstName()+" "+getUser.getPerson().getLastName());
-            newPaymentMethod.setSwiftCode(paymentMethodInput.getSwiftCode());
-            newPaymentMethod.setConfiguration(getUser.getConfiguration());
-
-            newPaymentMethod = paymentMethodRepository.save(newPaymentMethod);
-
-            ConfigurationOutput getConfigurationOutput = new ConfigurationOutput();
-            getConfigurationOutput.setUserName(getUser.getPerson().getFirstName()+" "+getUser.getPerson().getLastName());
-            getConfigurationOutput.setLanguage(getUser.getConfiguration().getLanguage().toString());
-            getConfigurationOutput.setPaymentCurrency(getUser.getConfiguration().getPaymentCurrency().toString());
-            return new ConfigurationResponse(getConfigurationOutput);
         }
         catch (Exception e)
         {
@@ -103,15 +114,21 @@ public class ConfigurationService implements IConfigurationService {
         try
         {
             User getUser = userRepository.findById(userId).get();
+            Person getPerson = getUser.getPerson();
             Configuration getConfiguration = getUser.getConfiguration();
             getConfiguration.setLanguage(configurationInput.getLanguage());
             getConfiguration.setPaymentCurrency(configurationInput.getPaymentCurrency());
+            getPerson.setFirstName(configurationInput.getFirstName());
+            getPerson.setLastName(configurationInput.getLastName());
+            getPerson.setPhone(configurationInput.getPhone());
+            getPerson = personRepository.save(getPerson);
             getConfiguration = configurationRepository.save(getConfiguration);
 
             ConfigurationOutput newConfigurationOutput = new ConfigurationOutput();
             newConfigurationOutput.setPaymentCurrency(getConfiguration.getPaymentCurrency());
             newConfigurationOutput.setLanguage(getConfiguration.getLanguage());
-            newConfigurationOutput.setUserName(getUser.getPerson().getFirstName()+" "+getUser.getPerson().getLastName());
+            newConfigurationOutput.setFirstName(getConfiguration.getUser().getPerson().getFirstName());
+            newConfigurationOutput.setLastName(getConfiguration.getUser().getPerson().getLastName());
 
             return new ConfigurationResponse(newConfigurationOutput);
         }

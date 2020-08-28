@@ -69,7 +69,22 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public CustomerResponse getAllCustomers() {
+    public CustomerResponse findCustomerByUserId(int userId) {
+        try
+        {
+            User getUser = userRepository.findById(userId)
+                    .orElseThrow(()->new ResourceNotFoundException("userId","user",userId));
+            Customer getCustomer = getUser.getPerson().getCustomer();
+            return new CustomerResponse(new CustomerOutput(getCustomer.getId(),getCustomer.getPerson().getFirstName(),getCustomer.getPerson().getLastName(),getCustomer.getCredits()));
+        }
+        catch (Exception e)
+        {
+            return new CustomerResponse("An error ocurred while getting customer: "+e.getMessage());
+        }
+    }
+
+    @Override
+    public CustomerResponse findAllCustomers() {
         try
         {
             List<Customer> customerList = customerRepository.findAll();

@@ -12,4 +12,6 @@ import java.util.List;
 public interface ISubscriptionRepository extends JpaRepository<Subscription, Integer> {
     @Query("select s from Subscription s where s.user.id = (:uid)")
     List<Subscription> getSubscriptionsByUserId(@Param("uid") Integer userId);
+
+
 }

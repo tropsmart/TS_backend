@@ -9,16 +9,37 @@ import com.softper.ts.resources.comunications.PaymentMethodResponse;
 import com.softper.ts.resources.outputs.PaymentMethodOutput;
 import com.softper.ts.services.IPaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class PaymentMethodService implements IPaymentMethodService {
 
     @Autowired
     IPaymentMethodRepository paymentMethodRepository;
     @Autowired
     IUserRepository userRepository;
+
+    @Override
+    public PaymentMethodResponse findAllPaymentMethod() {
+        try
+        {
+            List<PaymentMethod> paymentMethodList = paymentMethodRepository.findAll();
+            List<PaymentMethodOutput> paymentMethodOutputList = new ArrayList<>();
+            for (PaymentMethod p:paymentMethodList) {
+                paymentMethodOutputList.add(new PaymentMethodOutput(p.getBankName(),
+                        p.getSwiftCode(),p.getAccountNumber()));
+            }
+            return new PaymentMethodResponse(paymentMethodOutputList);
+        }
+        catch (Exception e)
+        {
+            return new PaymentMethodResponse("An error ocurred while getting paymentMethod: "+e.getMessage());
+        }
+    }
 
     @Override
     public PaymentMethodResponse findPaymentMethodById(int paymentMethodId) {
@@ -28,7 +49,7 @@ public class PaymentMethodService implements IPaymentMethodService {
                     .orElseThrow(()->new ResourceNotFoundException("paymentMethod","id",paymentMethodId));
 
             return new PaymentMethodResponse(new PaymentMethodOutput(getPaymentMethod.getBankName(),
-                    getPaymentMethod.getSwiftCode(),getPaymentMethod.getAccountNumber(),getPaymentMethod.getDni()));
+                    getPaymentMethod.getSwiftCode(),getPaymentMethod.getAccountNumber()));
 
         }
         catch (Exception e)
@@ -41,13 +62,14 @@ public class PaymentMethodService implements IPaymentMethodService {
     public PaymentMethodResponse findPaymentMethodByUserId(int userId) {
         try
         {
-            User getUser = userRepository.findById(userId)
-                    .orElseThrow(()->new ResourceNotFoundException("User","Id",userId));
-            PaymentMethod getPaymentMethod = paymentMethodRepository.findById(getUser.getConfiguration().getPaymentMethod().getId())
-                    .orElseThrow(()->new ResourceNotFoundException("Payment Method","Id",userId));
+            List<PaymentMethod> paymentMethodList = paymentMethodRepository.findPaymentMethodByUserId(userId);
+            List<PaymentMethodOutput> paymentMethodOutputList = new ArrayList<>();
+            for (PaymentMethod p:paymentMethodList) {
+                paymentMethodOutputList.add(new PaymentMethodOutput(p.getBankName(),
+                        p.getSwiftCode(),p.getAccountNumber()));
+            }
 
-            return new PaymentMethodResponse(new PaymentMethodOutput(getPaymentMethod.getBankName(),
-                    getPaymentMethod.getSwiftCode(),getPaymentMethod.getAccountNumber(),getPaymentMethod.getDni()));
+            return new PaymentMethodResponse(paymentMethodOutputList);
         }
         catch (Exception e)
         {

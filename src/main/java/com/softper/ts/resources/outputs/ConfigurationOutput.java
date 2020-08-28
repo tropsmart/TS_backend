@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ConfigurationOutput {
-    private String userName;
+    private String firstName;
+    private String lastName;
+    private String Phone;
     private String language;
     private String paymentCurrency;
 }

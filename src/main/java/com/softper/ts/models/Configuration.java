@@ -5,6 +5,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Configurations")
@@ -30,6 +32,6 @@ public class Configuration implements Serializable {
     @Column(name="payment_currency")
     private String paymentCurrency;
 
-    @OneToOne(mappedBy = "configuration", cascade = CascadeType.ALL)
-    private PaymentMethod paymentMethod;
+    @OneToMany(mappedBy = "configuration")
+    private List<PaymentMethod> paymentMethod = new ArrayList<>();
 }

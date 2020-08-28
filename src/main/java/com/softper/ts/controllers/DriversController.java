@@ -18,7 +18,7 @@ public class DriversController {
     @GetMapping
     public ResponseEntity<DriverResponse> findAllDrivers()
     {
-        DriverResponse result = driverService.getAllDrivers();
+        DriverResponse result = driverService.findAllDrivers();
 
         if(!result.success)
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);

@@ -1,9 +1,5 @@
 package com.softper.ts.security;
 
-import com.softper.ts.models.RefreshToken;
-import com.softper.ts.models.User;
-
-import com.softper.ts.services.IRefreshTokenService;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

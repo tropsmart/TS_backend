@@ -14,8 +14,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class Qualification implements Serializable {
-
-
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
     private static final long serialVersionUID = 1L;

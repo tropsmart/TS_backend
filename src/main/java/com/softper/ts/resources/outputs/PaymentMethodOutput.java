@@ -9,13 +9,10 @@ public class PaymentMethodOutput {
     private String bankName;
     private int swiftCode;
     private long accountNumber;
-    private int dni;
 
-
-    public PaymentMethodOutput(String bankName, int swiftCode, long accountNumber, int dni) {
+    public PaymentMethodOutput(String bankName, int swiftCode, long accountNumber) {
         this.bankName = bankName;
         this.swiftCode = swiftCode;
         this.accountNumber = accountNumber;
-        this.dni = dni;
     }
 }

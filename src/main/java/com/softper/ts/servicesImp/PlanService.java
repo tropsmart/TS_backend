@@ -95,7 +95,7 @@ public class PlanService implements IPlanService {
     }
 
     @Override
-    public PlanResponse getAllPlans() {
+    public PlanResponse findAllPlans() {
         try
         {
             List<Plan> plans = planRepository.findAll();
@@ -166,6 +166,11 @@ public class PlanService implements IPlanService {
             return new PlanResponse("An error ocurred while getting the plan : "+e.getMessage());
         }
 
+    }
+
+    @Override
+    public PlanResponse deletePlanById(int planId) {
+        return null;
     }
 
     @Override

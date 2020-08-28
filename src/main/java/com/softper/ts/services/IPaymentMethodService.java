@@ -4,6 +4,7 @@ import com.softper.ts.models.PaymentMethod;
 import com.softper.ts.resources.comunications.PaymentMethodResponse;
 
 public interface IPaymentMethodService extends ICrudService<PaymentMethod> {
+    PaymentMethodResponse findAllPaymentMethod();
     PaymentMethodResponse findPaymentMethodById(int paymentMethodId);
     PaymentMethodResponse findPaymentMethodByUserId(int userId);
 }
