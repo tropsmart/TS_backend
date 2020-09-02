@@ -21,8 +21,8 @@ public class UsersController {
     {
         UserResponse result = userService.findAllUsers();
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -32,8 +32,8 @@ public class UsersController {
     {
         FavoriteResponse result = userService.setFavourited(userId, userFavouritedId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -43,8 +43,8 @@ public class UsersController {
     {
         BlockedResponse result = userService.setBlocked(userId, userBlockedId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -54,8 +54,8 @@ public class UsersController {
     {
         FavoriteResponse result = userService.findFavoritesByUserId(userId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -65,8 +65,8 @@ public class UsersController {
     {
         BlockedResponse result = userService.findBlockedsByUserId(userId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -76,8 +76,8 @@ public class UsersController {
     {
         FavoriteResponse result = userService.findAllFavourites();
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -87,8 +87,8 @@ public class UsersController {
     {
         BlockedResponse result = userService.findAllBlockeds();
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

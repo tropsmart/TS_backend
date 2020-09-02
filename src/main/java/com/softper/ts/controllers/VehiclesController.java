@@ -21,8 +21,8 @@ public class VehiclesController {
     {
         VehicleResponse result = vehicleService.findAllVehicles();
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -32,8 +32,8 @@ public class VehiclesController {
     {
         VehicleResponse result = vehicleService.findVehicleById(vehicleId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -42,8 +42,10 @@ public class VehiclesController {
     public ResponseEntity<VehicleResponse> addVehicleByUserId(@PathVariable(value = "driverId")int driverId, @RequestBody VehicleInput vehicleInput)
     {
         VehicleResponse result = vehicleService.addVehicleByUserId(driverId, vehicleInput);
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
+
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
+
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
@@ -52,8 +54,8 @@ public class VehiclesController {
     {
         VehicleResponse result = vehicleService.findVehiclesByDriverId(driverId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

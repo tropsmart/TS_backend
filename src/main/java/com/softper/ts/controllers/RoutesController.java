@@ -20,8 +20,8 @@ public class RoutesController {
     {
         RouteResponse result = routeService.findAllRoutes();
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -31,8 +31,8 @@ public class RoutesController {
     {
         RouteResponse result = routeService.findRouteById(routeId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

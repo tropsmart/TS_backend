@@ -23,8 +23,8 @@ public class CargoesController {
     {
         CargoResponse result = cargoService.findAllCargoes();
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -34,8 +34,8 @@ public class CargoesController {
     {
         CargoResponse result = cargoService.findCargoById(cargoId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -45,8 +45,8 @@ public class CargoesController {
     {
         CargoResponse result = cargoService.findCargoesByCustomerId(customerId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -56,8 +56,8 @@ public class CargoesController {
     {
         CargoResponse result = cargoService.setCargoDelivered(cargoId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -66,8 +66,8 @@ public class CargoesController {
     public ResponseEntity<CargoResponse> postCargo(@PathVariable(value = "customerId")int customerId, @Valid @RequestBody CargoInput cargoInput)
     {
         CargoResponse result = cargoService.addCargoByCustomerId(customerId,cargoInput);
-        if(!result.success)
-            return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

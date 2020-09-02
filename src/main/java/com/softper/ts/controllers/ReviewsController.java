@@ -55,8 +55,9 @@ public class ReviewsController {
     public ResponseEntity<ReviewResponse> findReviewById(@PathVariable(value = "reviewId")int reviewId)
     {
         ReviewResponse result = reviewService.findReviewById(reviewId);
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -66,8 +67,8 @@ public class ReviewsController {
     {
         ReviewResponse result = reviewService.addReviewByCargoId(cargoId, reviewInput);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

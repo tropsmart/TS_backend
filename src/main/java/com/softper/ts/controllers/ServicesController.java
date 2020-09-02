@@ -19,8 +19,8 @@ public class ServicesController {
     {
         ServiceResponse result = serviceService.findAllServices();
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -30,8 +30,8 @@ public class ServicesController {
     {
         ServiceResponse result = serviceService.createService(driverId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -41,8 +41,8 @@ public class ServicesController {
     {
         ServiceResponse result = serviceService.findServicesByDriverId(driverId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

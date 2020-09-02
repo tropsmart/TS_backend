@@ -60,8 +60,8 @@ public class ConfigurationsController {
     {
         ConfigurationResponse result = configurationService.addPaymentMethod(userId, paymentMethodInput);
 
-        if(!result.success)
-            return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -71,8 +71,8 @@ public class ConfigurationsController {
     {
         ConfigurationResponse result = configurationService.updateConfiguration(userId, configurationInput);
 
-        if(!result.success)
-            return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

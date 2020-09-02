@@ -80,7 +80,7 @@ public class UserService implements IUserService {
             newBlock = blockRepository.save(newBlock);
 
             BlockedOutput newBlockedOutput = new BlockedOutput();
-            newBlockedOutput.setUser(newBlock.getUser().getPerson().getFirstName()+" "+newBlock.getUser().getPerson().getLastName());
+            newBlockedOutput.setUser(newBlock.getUser().getPerson().getFirstName()+" "+newBlock.getBlocked().getPerson().getLastName());
             newBlockedOutput.setBlocked(newBlock.getBlocked().getPerson().getFirstName()+" "+newBlock.getBlocked().getPerson().getLastName());
             newBlockedOutput.setSince(newBlock.getCreatedAt());
             return new BlockedResponse(newBlockedOutput);

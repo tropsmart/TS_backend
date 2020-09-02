@@ -19,8 +19,8 @@ public class PricesController {
     {
         PriceResponse result = priceService.findAllPrices();
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

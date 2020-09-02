@@ -37,7 +37,7 @@ public class SubscriptionsController {
     }
 
     @PostMapping("/users/{userId}/plans/{planId}")
-    public ResponseEntity<SubscriptionResponse> suscribeDriver(@PathVariable(value = "userId")int userId, @PathVariable(value = "planId")int planId)
+    public ResponseEntity<SubscriptionResponse> subscribeDriver(@PathVariable(value = "userId")int userId, @PathVariable(value = "planId")int planId)
     {
         SubscriptionResponse result = subscriptionService.subscribe(userId, planId);
 
@@ -47,13 +47,21 @@ public class SubscriptionsController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
-    @PutMapping("{subscriptionId}")
+    @PutMapping("{subscriptionId}/disable")
     public ResponseEntity<SubscriptionResponse> cancelSubscription(@PathVariable(value = "subscriptionId")int subscriptionId)
     {
         SubscriptionResponse result = subscriptionService.cancelSubscription(subscriptionId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PutMapping("{subscriptionId}/enable")
+    public ResponseEntity<SubscriptionResponse> enableSubscription(@PathVariable(value = "subscriptionId")int subscriptionId)
+    {
+        SubscriptionResponse result = subscriptionService.enableSubscriptionById(subscriptionId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

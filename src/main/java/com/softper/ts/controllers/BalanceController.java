@@ -20,8 +20,8 @@ public class BalanceController {
     {
         BalanceResponse result = balanceService.findAllBalances();
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -31,8 +31,8 @@ public class BalanceController {
     {
         BalanceResponse result =  balanceService.findBalanceById(balanceId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
