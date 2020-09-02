@@ -1,5 +1,6 @@
 package com.softper.ts.controllers;
 
+import com.softper.ts.models.PaymentMethod;
 import com.softper.ts.resources.comunications.PaymentMethodResponse;
 import com.softper.ts.servicesImp.PaymentMethodService;
 import io.swagger.models.Response;
@@ -22,5 +23,11 @@ public class PaymentMethodController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping("users/{userId}")
+    public ResponseEntity<PaymentMethodResponse> findPaymentMethodsByUser(@PathVariable(value = "userId")int userId)
+    {
+        PaymentMethodResponse result = paymentMethodService.findPaymentMethodByUserId(userId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
 }
