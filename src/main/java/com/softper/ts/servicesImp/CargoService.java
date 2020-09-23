@@ -213,6 +213,32 @@ public class CargoService implements ICargoService {
 
 
     @Override
+    public CargoResponse findAllCargoesFixed() {
+        try
+        {
+            List<Cargo> cargoes = cargoRepository.findAll();
+            List<CargoOutput> cargoOutputList = new ArrayList<>();
+            for (Cargo c:cargoes) {
+                CargoOutput newCargoOutput = new CargoOutput();
+                newCargoOutput.setWeight(c.getWeight());
+                newCargoOutput.setCustomer(c.getCustomer().getPerson().getFirstName()+" "+c.getCustomer().getPerson().getFirstName());
+                newCargoOutput.setDriver(c.getService().getServicesRequest().getDriver().getPerson().getFirstName()+" "+c.getService().getServicesRequest().getDriver().getPerson().getLastName());
+                newCargoOutput.setServicePrice(c.getPrice().getTotalPrice());
+                newCargoOutput.setDescription(c.getDescription());
+                newCargoOutput.setCargoType(c.getCargoType().toString());
+                newCargoOutput.setCargoStatus(c.getCargoStatus());
+                cargoOutputList.add(newCargoOutput);
+            }
+            return new CargoResponse(cargoOutputList);
+        }
+        catch (Exception e)
+        {
+            return new CargoResponse("An error ocurred while getting the cargo list: "+e.getMessage());
+        }
+    }
+
+
+    @Override
     public CargoResponse setCargoDelivered(int cargoId) {
         try
         {

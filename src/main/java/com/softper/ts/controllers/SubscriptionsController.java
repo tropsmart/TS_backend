@@ -19,8 +19,8 @@ public class SubscriptionsController {
     {
         SubscriptionResponse result = subscriptionService.findAllSubscriptions();
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -30,8 +30,8 @@ public class SubscriptionsController {
     {
         SubscriptionResponse result = subscriptionService.findSubscriptionsByUserId(userId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
@@ -41,8 +41,8 @@ public class SubscriptionsController {
     {
         SubscriptionResponse result = subscriptionService.subscribe(userId, planId);
 
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }

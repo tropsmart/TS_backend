@@ -170,6 +170,11 @@ Auth
   Add driverId = 1,2,3
 }
 
+
+//Recharge
+
+Customer -> Recharge 1, 2, 3, 4
+
 //Cargo
 
 customerid=1

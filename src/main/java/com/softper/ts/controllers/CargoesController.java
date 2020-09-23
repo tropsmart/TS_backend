@@ -29,6 +29,17 @@ public class CargoesController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<CargoResponse> findAllCargoesFixed()
+    {
+        CargoResponse result = cargoService.findAllCargoesFixed();
+
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @GetMapping("/{cargoId}")
     public ResponseEntity<CargoResponse> findCargoById(@PathVariable(value = "cargoId")int cargoId)
     {

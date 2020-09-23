@@ -29,8 +29,8 @@ public class PeopleController {
     public ResponseEntity<PersonResponse> findPersonById(@PathVariable(value = "personId")int personId)
     {
         PersonResponse result = personService.findPeopleById(personId);
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        //if(!result.success)
+        //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
