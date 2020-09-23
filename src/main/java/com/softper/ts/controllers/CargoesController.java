@@ -29,7 +29,7 @@ public class CargoesController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/fixed")
     public ResponseEntity<CargoResponse> findAllCargoesFixed()
     {
         CargoResponse result = cargoService.findAllCargoesFixed();
