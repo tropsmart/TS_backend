@@ -7,7 +7,7 @@ public interface IUserService extends ICrudService<User>{
     FavoriteResponse setFavourited(int userId, int favoriteId);
     BlockedResponse setBlocked(int userId, int blockedId);
     UserResponse findAllUsers();
-    UserResponse findAllUsersDrivers();
+    UserResponse findAllUsersByType(int userType);
     FavoriteResponse findFavoritesByUserId(int userId);
     BlockedResponse findBlockedsByUserId(int userId);
     FavoriteResponse findAllFavourites();

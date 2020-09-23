@@ -1,5 +1,6 @@
 package com.softper.ts.controllers;
 
+import com.softper.ts.models.ServiceRequest;
 import com.softper.ts.resources.comunications.ServiceResponse;
 import com.softper.ts.servicesImp.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,14 @@ public class ServicesController {
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
+    @GetMapping("/drivers/{driverId}/some")
+    public ResponseEntity<ServiceResponse> findServiceByDriverId(@PathVariable(value = "driverId")int driverId)
+    {
+        ServiceResponse result = serviceService.findSomeServiceByDriverId(driverId);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/drivers/{driverId}")

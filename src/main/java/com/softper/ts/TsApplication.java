@@ -42,7 +42,9 @@ public class TsApplication {
     * Se utilizo servicio de clevercloud para Base de datos MySql
     * */
 
-
+    /**
+     * run springboot: ./mvnw spring-boot:run
+     */
 
 
     @Bean

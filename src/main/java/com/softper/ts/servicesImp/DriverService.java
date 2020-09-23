@@ -57,7 +57,7 @@ public class DriverService implements IDriverService {
         try
         {
             Driver getDriver = driverRepository.findById(driverId).get();
-            return new DriverResponse(new DriverOutput(getDriver.getId(),getDriver.getPerson().getFirstName(),getDriver.getPerson().getLastName(),getDriver.getLicense()));
+            return new DriverResponse(new DriverOutput(getDriver.getPerson().getUser().getId(),getDriver.getPerson().getFirstName(),getDriver.getPerson().getLastName(),getDriver.getLicense(),getDriver.getPerson().getUser().getEmail(),getDriver.getPerson().getPersonType(),getDriver.getId()));
         }
         catch (Exception e)
         {
@@ -72,8 +72,8 @@ public class DriverService implements IDriverService {
         {
             List<Driver> drivers = driverRepository.findAll();
             List<DriverOutput> driverOutputList = new ArrayList<>();
-            for (Driver d:drivers) {
-                driverOutputList.add(new DriverOutput(d.getId(),d.getPerson().getFirstName(),d.getPerson().getLastName(),d.getLicense()));
+            for (Driver getDriver:drivers) {
+                driverOutputList.add(new DriverOutput(getDriver.getPerson().getUser().getId(),getDriver.getPerson().getFirstName(),getDriver.getPerson().getLastName(),getDriver.getLicense(),getDriver.getPerson().getUser().getEmail(),getDriver.getPerson().getPersonType(),getDriver.getId()));
             }
             return new DriverResponse(driverOutputList);
         }

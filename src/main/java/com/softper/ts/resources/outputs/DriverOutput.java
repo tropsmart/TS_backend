@@ -7,14 +7,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DriverOutput {
     private int id;
-    private String FirstName;
-    private String LastName;
-    private String License;
+    private String firstName;
+    private String lastName;
+    private String license;
+    private String email;
+    private int role;
+    private int roleId;
 
-    public DriverOutput(int id, String firstName, String lastName, String license) {
+    public DriverOutput(int id, String firstName, String lastName, String license, String email, int role, int roleId) {
         this.id = id;
-        FirstName = firstName;
-        LastName = lastName;
-        License = license;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.license = license;
+        this.email = email;
+        this.role = role;
+        this.roleId = roleId;
     }
 }

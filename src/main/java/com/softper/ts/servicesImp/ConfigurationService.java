@@ -80,6 +80,7 @@ public class ConfigurationService implements IConfigurationService {
                 newConfigurationOutput.setFirstName(c.getUser().getPerson().getFirstName());
                 newConfigurationOutput.setLastName(c.getUser().getPerson().getLastName());
                 newConfigurationOutput.setLanguage(c.getLanguage().toString());
+                newConfigurationOutput.setPhone(c.getUser().getPerson().getPhone());
                 newConfigurationOutput.setPaymentCurrency(c.getPaymentCurrency().toString());
                 configurationOutputList.add(newConfigurationOutput);
             }
@@ -102,6 +103,7 @@ public class ConfigurationService implements IConfigurationService {
             newConfigurationOutput.setLastName(getUser.getPerson().getLastName());
             newConfigurationOutput.setPaymentCurrency(getUser.getConfiguration().getPaymentCurrency().toString());
             newConfigurationOutput.setLanguage(getUser.getConfiguration().getLanguage().toString());
+            newConfigurationOutput.setPhone(getUser.getPerson().getPhone());
             return new ConfigurationResponse(newConfigurationOutput);
         }
         catch (Exception e)
@@ -128,6 +130,7 @@ public class ConfigurationService implements IConfigurationService {
             ConfigurationOutput newConfigurationOutput = new ConfigurationOutput();
             newConfigurationOutput.setPaymentCurrency(getConfiguration.getPaymentCurrency());
             newConfigurationOutput.setLanguage(getConfiguration.getLanguage());
+            newConfigurationOutput.setPhone(getConfiguration.getUser().getPerson().getPhone());
             newConfigurationOutput.setFirstName(getConfiguration.getUser().getPerson().getFirstName());
             newConfigurationOutput.setLastName(getConfiguration.getUser().getPerson().getLastName());
 

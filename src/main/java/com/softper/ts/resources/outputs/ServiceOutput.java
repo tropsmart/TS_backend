@@ -13,4 +13,5 @@ public class ServiceOutput {
     private Date startedTime;
     private Date finishTime;
     private String serviceState;
+    private int id;
 }

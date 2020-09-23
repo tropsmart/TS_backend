@@ -35,6 +35,32 @@ public class ServiceService implements IServiceService {
 
 
     @Override
+    public ServiceResponse findSomeServiceByDriverId(int driverId) {
+        try{
+            List<com.softper.ts.models.Service> services = serviceRepository.findServicesByDriverId(driverId);
+            if(services.size()==0)
+            {
+                return this.createService(driverId);
+            }
+            else
+            {
+                ServiceOutput newServiceOutput = new ServiceOutput();
+                newServiceOutput.setId(services.get(0).getId());
+                newServiceOutput.setFirstName(services.get(0).getServicesRequest().getDriver().getPerson().getFirstName());
+                newServiceOutput.setLastName(services.get(0).getServicesRequest().getDriver().getPerson().getLastName());
+                newServiceOutput.setStartedTime(services.get(0).getStartTime());
+                newServiceOutput.setFinishTime(services.get(0).getFinishTime());
+                newServiceOutput.setServiceState(services.get(0).getServiceState());
+                return new ServiceResponse(newServiceOutput);
+            }
+        }
+        catch (Exception e)
+        {
+            return new ServiceResponse("An error ocurred while getting the service list : "+e.getMessage());
+        }
+    }
+
+    @Override
     public ServiceResponse findServicesByDriverId(int driverId) {
         try
         {
@@ -42,6 +68,7 @@ public class ServiceService implements IServiceService {
             List<ServiceOutput> serviceOutputList = new ArrayList<>();
             for (com.softper.ts.models.Service s:services) {
                 ServiceOutput newServiceOutput = new ServiceOutput();
+                newServiceOutput.setId(services.get(0).getId());
                 newServiceOutput.setFirstName(s.getServicesRequest().getDriver().getPerson().getFirstName());
                 newServiceOutput.setLastName(s.getServicesRequest().getDriver().getPerson().getLastName());
                 newServiceOutput.setStartedTime(s.getStartTime());
@@ -66,6 +93,7 @@ public class ServiceService implements IServiceService {
             List<ServiceOutput> serviceOutputList = new ArrayList<>();
             for (com.softper.ts.models.Service s:services) {
                 ServiceOutput newServiceOutput = new ServiceOutput();
+                newServiceOutput.setId(services.get(0).getId());
                 newServiceOutput.setFirstName(s.getServicesRequest().getDriver().getPerson().getFirstName());
                 newServiceOutput.setLastName(s.getServicesRequest().getDriver().getPerson().getLastName());
                 newServiceOutput.setStartedTime(s.getStartTime());
@@ -104,6 +132,7 @@ public class ServiceService implements IServiceService {
             newService = serviceRepository.save(newService);
 
             ServiceOutput newServiceOutput = new ServiceOutput();
+            newServiceOutput.setId(newService.getId());
             newServiceOutput.setFirstName(getDriver.getPerson().getFirstName());
             newServiceOutput.setLastName(getDriver.getPerson().getLastName());
             newServiceOutput.setStartedTime(newService.getStartTime());

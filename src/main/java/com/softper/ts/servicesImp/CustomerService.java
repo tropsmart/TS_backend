@@ -59,7 +59,7 @@ public class CustomerService implements ICustomerService {
         try
         {
             Customer getCustomer = customerRepository.findById(customerId).get();
-            return new CustomerResponse(new CustomerOutput(getCustomer.getId(),getCustomer.getPerson().getFirstName(),getCustomer.getPerson().getLastName(),getCustomer.getCredits()));
+            return new CustomerResponse(new CustomerOutput(getCustomer.getPerson().getUser().getId(),getCustomer.getPerson().getFirstName(),getCustomer.getPerson().getLastName(),getCustomer.getCredits(),getCustomer.getPerson().getUser().getEmail(), getCustomer.getPerson().getPersonType(),getCustomer.getId()));
         }
         catch (Exception e)
         {
@@ -74,9 +74,9 @@ public class CustomerService implements ICustomerService {
         {
             List<Customer> customerList = customerRepository.findAll();
             List<CustomerOutput> customerOutputList = new ArrayList<>();
-            for (Customer c:customerList) {
-                Person getPerson = personRepository.findById(c.getId()).get();
-                customerOutputList.add(new CustomerOutput(c.getId(),getPerson.getFirstName(),getPerson.getLastName(),c.getCredits()));
+            for (Customer getCustomer:customerList) {
+                Person getPerson = personRepository.findById(getCustomer.getId()).get();
+                customerOutputList.add(new CustomerOutput(getCustomer.getPerson().getUser().getId(),getPerson.getFirstName(),getPerson.getLastName(),getCustomer.getCredits(),getCustomer.getPerson().getUser().getEmail(), getCustomer.getPerson().getPersonType(),getCustomer.getId()));
             }
             return new CustomerResponse(customerOutputList);
         }
@@ -105,7 +105,7 @@ public class CustomerService implements ICustomerService {
 
             getCustomer = customerRepository.save(getCustomer);
 
-            return new CustomerResponse(new CustomerOutput(getCustomer.getId(),getUser.getPerson().getFirstName(),getUser.getPerson().getLastName(),getCustomer.getCredits()));
+            return new CustomerResponse(new CustomerOutput(getCustomer.getPerson().getUser().getId(),getCustomer.getPerson().getFirstName(),getCustomer.getPerson().getLastName(),getCustomer.getCredits(),getCustomer.getPerson().getUser().getEmail(), getCustomer.getPerson().getPersonType(),getCustomer.getId()));
 
         }
         catch (Exception e)

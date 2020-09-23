@@ -40,7 +40,7 @@ public class UserService implements IUserService {
             User getUserFavourite = userRepository.findById(favouriteId)
                     .orElseThrow(()->new ResourceNotFoundException("id","User",favouriteId));
 
-            if(getUser.getPerson().getPersonType()!=1 || getUserFavourite.getPerson().getPersonType()!=2)
+            if(getUser.getPerson().getPersonType()==2 || getUserFavourite.getPerson().getPersonType()==1)
                 return new FavoriteResponse("Only customers can add driver as favourite");
 
             Favorite newFavourite = new Favorite();
@@ -242,18 +242,22 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserResponse findAllUsersDrivers() {
+    public UserResponse findAllUsersByType(int userType) {
 
         try{
             List<User> userList = userRepository.findAll();
             List<UserOutput> userOutputList = new ArrayList<>();
             for (User u:userList) {
-                if(u.getPerson().getPersonType()==2) {
+                if(u.getPerson().getPersonType()==userType) {
                     UserOutput newUserOutput = new UserOutput();
                     newUserOutput.setEmail(u.getEmail());
                     newUserOutput.setFirstName(u.getPerson().getFirstName());
                     newUserOutput.setLastName(u.getPerson().getLastName());
                     newUserOutput.setPassword(u.getPassword());
+                    if(u.getPerson().getPersonType()==1)
+                        newUserOutput.setRole("Customer");
+                    else
+                        newUserOutput.setRole("Driver");
                     userOutputList.add(newUserOutput);
                 }
 
@@ -264,8 +268,6 @@ public class UserService implements IUserService {
         {
             return new UserResponse("An error ocurred while getting the user : "+e.getMessage());
         }
-
-
     }
 
 
@@ -365,7 +367,7 @@ public class UserService implements IUserService {
             User getUser = userRepository.findById(userId)
                     .orElseThrow(()->new ResourceNotFoundException("userId","user",userId));
             Customer getCustomer = getUser.getPerson().getCustomer();
-            return new CustomerResponse(new CustomerOutput(getCustomer.getId(),getCustomer.getPerson().getFirstName(),getCustomer.getPerson().getLastName(),getCustomer.getCredits()));
+            return new CustomerResponse(new CustomerOutput(getCustomer.getPerson().getUser().getId(),getCustomer.getPerson().getFirstName(),getCustomer.getPerson().getLastName(),getCustomer.getCredits(),getCustomer.getPerson().getUser().getEmail(), getCustomer.getPerson().getPersonType(), getCustomer.getId()));
         }
         catch (Exception e)
         {
@@ -381,7 +383,7 @@ public class UserService implements IUserService {
                     .orElseThrow(()-> new ResourceNotFoundException("Id","user",userId));
 
             Driver getDriver = getUser.getPerson().getDriver();
-            return new DriverResponse(new DriverOutput(getDriver.getId(),getDriver.getPerson().getFirstName(),getDriver.getPerson().getLastName(),getDriver.getLicense()));
+            return new DriverResponse(new DriverOutput(getDriver.getId(),getDriver.getPerson().getFirstName(),getDriver.getPerson().getLastName(),getDriver.getLicense(),getDriver.getPerson().getUser().getEmail(),getDriver.getPerson().getPersonType(), getDriver.getId()));
 
         }
         catch (Exception e)

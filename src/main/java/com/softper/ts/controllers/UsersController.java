@@ -27,8 +27,8 @@ public class UsersController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
-    @PostMapping("{userId}/favourites/{userfavoritedId}")
-    public ResponseEntity<FavoriteResponse> setUserFavourited(@PathVariable(value = "userId")int userId, @PathVariable(value = "userfavoritedId")int userFavouritedId)
+    @PostMapping("{userId}/favorites/{userfavoritedId}")
+    public ResponseEntity<FavoriteResponse> setUserFavorited(@PathVariable(value = "userId")int userId, @PathVariable(value = "userfavoritedId")int userFavouritedId)
     {
         FavoriteResponse result = userService.setFavourited(userId, userFavouritedId);
 
@@ -48,6 +48,9 @@ public class UsersController {
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
+
+
+    //========================================================================
 
     @GetMapping("/{userId}/favorites")
     public ResponseEntity<FavoriteResponse> findFavoritesByUserId(@PathVariable(value = "userId")int userId)
@@ -109,5 +112,30 @@ public class UsersController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping("/type/{userType}")
+    public ResponseEntity<UserResponse> findUsersTypeCustomers(@PathVariable(value="userType")int userType)
+    {
+        UserResponse result = userService.findAllUsersByType(userType);
 
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    //====================================================================
+
+    @DeleteMapping("{userId}/favorites/{userFavoritedId}")
+    public ResponseEntity<FavoriteResponse> deleteFavoriteByUserIdAndUserFavoritedId(@PathVariable(value="userId")int userId, @PathVariable(value = "userFavorited")int userFavoritedId)
+    {
+        FavoriteResponse result = userService.deleteFavoriteByUserIdAndFavoriteId(userId, userFavoritedId);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+
+    }
+
+    @DeleteMapping("{userId}/blockeds/{userBlockedId}")
+    public ResponseEntity<BlockedResponse> deleteBlockedByUserIdAndBlockedId(@PathVariable(value = "userId")int userId, @PathVariable(value = "userBlockedId")int userBlockedId)
+    {
+        BlockedResponse result = userService.deleteBlockByUserIdAndBlockId(userId, userBlockedId);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }
