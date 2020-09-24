@@ -219,11 +219,7 @@ public class CargoService implements ICargoService {
             List<CargoOutputFixed> cargoOutputList = new ArrayList<>();
             for (Cargo c:cargoes) {
                 CargoOutputFixed newCargoOutputFixed = new CargoOutputFixed();
-                newCargoOutputFixed.setCustomer(c.getCustomer().getPerson().getFirstName()+" "+c.getCustomer().getPerson().getFirstName());
-                newCargoOutputFixed.setDriver(c.getService().getServicesRequest().getDriver().getPerson().getFirstName()+" "+c.getService().getServicesRequest().getDriver().getPerson().getLastName());
-                newCargoOutputFixed.setWeight(c.getWeight());
                 newCargoOutputFixed.setDescription(c.getDescription());
-                newCargoOutputFixed.setServicePrice(c.getPrice().getTotalPrice());
                 cargoOutputList.add(newCargoOutputFixed);
             }
             return new CargoResponseFixed(cargoOutputList);
