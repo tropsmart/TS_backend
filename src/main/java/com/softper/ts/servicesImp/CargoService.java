@@ -4,8 +4,10 @@ import com.softper.ts.exception.ResourceNotFoundException;
 import com.softper.ts.models.*;
 import com.softper.ts.repositories.*;
 import com.softper.ts.resources.comunications.CargoResponse;
+import com.softper.ts.resources.comunications.CargoResponseFixed;
 import com.softper.ts.resources.inputs.CargoInput;
 import com.softper.ts.resources.outputs.CargoOutput;
+import com.softper.ts.resources.outputs.CargoOutputFixed;
 import com.softper.ts.services.ICargoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,10 +32,8 @@ public class CargoService implements ICargoService {
     private IBalanceRepository balanceRepository;
     @Autowired
     private IServiceRepository serviceRepository;
-
     @Autowired
-    private IServiceRequestRepository serviceRequestRepository;
-
+    private IServiceRequestRepository serviceRequestRepository; 
     @Autowired
     private ILocationRepository locationRepository;
 
@@ -192,13 +192,13 @@ public class CargoService implements ICargoService {
             List<CargoOutput> cargoOutputList = new ArrayList<>();
             for (Cargo c:cargoes) {
                 CargoOutput newCargoOutput = new CargoOutput();
-                newCargoOutput.setWeight(c.getWeight());
                 newCargoOutput.setCustomer(c.getCustomer().getPerson().getFirstName()+" "+c.getCustomer().getPerson().getFirstName());
                 newCargoOutput.setDriver(c.getService().getServicesRequest().getDriver().getPerson().getFirstName()+" "+c.getService().getServicesRequest().getDriver().getPerson().getLastName());
                 newCargoOutput.setStartTime(c.getService().getStartTime());
                 newCargoOutput.setFinishTime(c.getService().getFinishTime());
-                newCargoOutput.setServicePrice(c.getPrice().getTotalPrice());
+                newCargoOutput.setWeight(c.getWeight());
                 newCargoOutput.setDescription(c.getDescription());
+                newCargoOutput.setServicePrice(c.getPrice().getTotalPrice());
                 newCargoOutput.setCargoType(c.getCargoType().toString());
                 newCargoOutput.setCargoStatus(c.getCargoStatus());
                 cargoOutputList.add(newCargoOutput);
@@ -211,32 +211,28 @@ public class CargoService implements ICargoService {
         }
     }
 
-
     @Override
-    public CargoResponse findAllCargoesFixed() {
+    public CargoResponseFixed findAllCargoesFixed() {
         try
         {
             List<Cargo> cargoes = cargoRepository.findAll();
-            List<CargoOutput> cargoOutputList = new ArrayList<>();
+            List<CargoOutputFixed> cargoOutputList = new ArrayList<>();
             for (Cargo c:cargoes) {
-                CargoOutput newCargoOutput = new CargoOutput();
-                newCargoOutput.setWeight(c.getWeight());
-                newCargoOutput.setCustomer(c.getCustomer().getPerson().getFirstName()+" "+c.getCustomer().getPerson().getFirstName());
-                newCargoOutput.setDriver(c.getService().getServicesRequest().getDriver().getPerson().getFirstName()+" "+c.getService().getServicesRequest().getDriver().getPerson().getLastName());
-                newCargoOutput.setServicePrice(c.getPrice().getTotalPrice());
-                newCargoOutput.setDescription(c.getDescription());
-                newCargoOutput.setCargoType(c.getCargoType().toString());
-                newCargoOutput.setCargoStatus(c.getCargoStatus());
-                cargoOutputList.add(newCargoOutput);
+                CargoOutputFixed newCargoOutputFixed = new CargoOutputFixed();
+                newCargoOutputFixed.setCustomer(c.getCustomer().getPerson().getFirstName()+" "+c.getCustomer().getPerson().getFirstName());
+                newCargoOutputFixed.setDriver(c.getService().getServicesRequest().getDriver().getPerson().getFirstName()+" "+c.getService().getServicesRequest().getDriver().getPerson().getLastName());
+                newCargoOutputFixed.setWeight(c.getWeight());
+                newCargoOutputFixed.setDescription(c.getDescription());
+                newCargoOutputFixed.setServicePrice(c.getPrice().getTotalPrice());
+                cargoOutputList.add(newCargoOutputFixed);
             }
-            return new CargoResponse(cargoOutputList);
+            return new CargoResponseFixed(cargoOutputList);
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while getting the cargo list: "+e.getMessage());
+            return new CargoResponseFixed("An error ocurred while getting the cargo list: "+e.getMessage());
         }
     }
-
 
     @Override
     public CargoResponse setCargoDelivered(int cargoId) {

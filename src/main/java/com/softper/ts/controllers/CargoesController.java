@@ -1,6 +1,7 @@
 package com.softper.ts.controllers;
 
 import com.softper.ts.resources.comunications.CargoResponse;
+import com.softper.ts.resources.comunications.CargoResponseFixed;
 import com.softper.ts.resources.inputs.CargoInput;
 import com.softper.ts.services.ICargoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,9 @@ public class CargoesController {
     }
 
     @GetMapping("/fixed")
-    public ResponseEntity<CargoResponse> findAllCargoesFixed()
+    public ResponseEntity<CargoResponseFixed> findAllCargoesFixed()
     {
-        CargoResponse result = cargoService.findAllCargoesFixed();
+        CargoResponseFixed result = cargoService.findAllCargoesFixed();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);

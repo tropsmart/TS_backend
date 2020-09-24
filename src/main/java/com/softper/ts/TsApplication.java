@@ -45,8 +45,7 @@ public class TsApplication {
     /**
      * run springboot: ./mvnw spring-boot:run
      */
-
-
+    
     @Bean
     public ModelMapper modelMapper() {return new ModelMapper();}
 
