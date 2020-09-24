@@ -7,5 +7,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class CargoOutputFixed {
+    private String customer;
+    private String driver;
     private String description;
 }
