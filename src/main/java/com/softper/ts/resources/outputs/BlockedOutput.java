@@ -10,5 +10,5 @@ import java.util.Date;
 public class BlockedOutput {
     private String user;
     private String blocked;
-    public Date Since;
+    public Date since;
 }
