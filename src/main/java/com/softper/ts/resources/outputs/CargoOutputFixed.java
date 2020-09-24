@@ -9,5 +9,7 @@ import java.util.Date;
 public class CargoOutputFixed {
     private String customer;
     private String driver;
+    private double weight;
     private String description;
+    private double servicePrice;
 }
