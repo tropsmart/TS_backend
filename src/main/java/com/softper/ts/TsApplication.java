@@ -36,7 +36,8 @@ public class TsApplication {
     * 5.- git add .
     * 6.- git commit -m "n verison"
     * 7.- git push heroku master
-    * 8.- heroku config:set DATABASE_URL=' <ADDON URI> '
+    * 8.- heroku config:set DATABASE_URL='mysql://ueu35yi8gtvogkeu:LNOJKsZvSOqNhAcfJA4t@bqhh75ibqyxemcgdz60f-mysql.services.clever-cloud.com:3306/bqhh75ibqyxemcgdz60f'
+
     *
     *
     * Se utilizo servicio de clevercloud para Base de datos MySql
@@ -46,6 +47,8 @@ public class TsApplication {
      * run springboot: ./mvnw spring-boot:run
      */
     
+
+
     @Bean
     public ModelMapper modelMapper() {return new ModelMapper();}
 
