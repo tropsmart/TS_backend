@@ -39,7 +39,7 @@ public class TsApplication {
     * 8.- heroku config:set DATABASE_URL='mysql://ueu35yi8gtvogkeu:LNOJKsZvSOqNhAcfJA4t@bqhh75ibqyxemcgdz60f-mysql.services.clever-cloud.com:3306/bqhh75ibqyxemcgdz60f'
 
     *
-    *
+    *a
     * Se utilizo servicio de clevercloud para Base de datos MySql
     * */
 
