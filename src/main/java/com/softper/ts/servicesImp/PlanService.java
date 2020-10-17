@@ -37,6 +37,7 @@ public class PlanService implements IPlanService {
                 newPlanOutput.setDurationDays(p.getDuration());
                 newPlanOutput.setPrice(p.getPrice().getTotalPrice());
                 newPlanOutput.setTax(p.getPrice().getTax());
+                newPlanOutput.setPlanName(p.getName());
                 planOutputList.add(newPlanOutput);
             }
             return new PlanResponse(planOutputList);
@@ -60,6 +61,7 @@ public class PlanService implements IPlanService {
                 newPlanOutput.setDurationDays(p.getDuration());
                 newPlanOutput.setPrice(p.getPrice().getTotalPrice());
                 newPlanOutput.setTax(p.getPrice().getTax());
+                newPlanOutput.setPlanName(p.getName());
                 planOutputList.add(newPlanOutput);
             }
             return new PlanResponse(planOutputList);
@@ -83,6 +85,7 @@ public class PlanService implements IPlanService {
                 newPlanOutput.setDurationDays(p.getDuration());
                 newPlanOutput.setPrice(p.getPrice().getTotalPrice());
                 newPlanOutput.setTax(p.getPrice().getTax());
+                newPlanOutput.setPlanName(p.getName());
                 planOutputList.add(newPlanOutput);
             }
             return new PlanResponse(planOutputList);
@@ -106,6 +109,7 @@ public class PlanService implements IPlanService {
                 newPlanOutput.setDurationDays(p.getDuration());
                 newPlanOutput.setPrice(p.getPrice().getTotalPrice());
                 newPlanOutput.setTax(p.getPrice().getTax());
+                newPlanOutput.setPlanName(p.getName());
                 planOutputList.add(newPlanOutput);
             }
             return new PlanResponse(planOutputList);
@@ -158,6 +162,7 @@ public class PlanService implements IPlanService {
             newPlanOutput.setDurationDays(getPlan.getDuration());
             newPlanOutput.setPrice(getPlan.getPrice().getTotalPrice());
             newPlanOutput.setTax(getPlan.getPrice().getTax());
+            newPlanOutput.setPlanName(getPlan.getName());
 
             return new PlanResponse(newPlanOutput);
         }

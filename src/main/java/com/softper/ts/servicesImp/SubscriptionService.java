@@ -37,6 +37,10 @@ public class SubscriptionService implements ISubscriptionService {
             newSubscriptionOutput.setFirstName(getSubscription.getUser().getPerson().getFirstName());
             newSubscriptionOutput.setLastName(getSubscription.getUser().getPerson().getLastName());
             newSubscriptionOutput.setEmail(getSubscription.getUser().getEmail());
+            newSubscriptionOutput.setPlan(getSubscription.getPlan().getName());
+            newSubscriptionOutput.setId(getSubscription.getId());
+            newSubscriptionOutput.setState(getSubscription.getSubscriptionState());
+            newSubscriptionOutput.setPrice(getSubscription.getPlan().getPrice().getTotalPrice());
             return new SubscriptionResponse(newSubscriptionOutput);
         }
         catch (Exception e)
@@ -93,6 +97,10 @@ public class SubscriptionService implements ISubscriptionService {
                 newSubscriptionOutput.setFirstName(s.getUser().getPerson().getFirstName());
                 newSubscriptionOutput.setLastName(s.getUser().getPerson().getLastName());
                 newSubscriptionOutput.setEmail(s.getUser().getEmail());
+                newSubscriptionOutput.setPlan(s.getPlan().getName());
+                newSubscriptionOutput.setId(s.getId());
+                newSubscriptionOutput.setState(s.getSubscriptionState());
+                newSubscriptionOutput.setPrice(s.getPlan().getPrice().getTotalPrice());
                 subscriptionOutputList.add(newSubscriptionOutput);
             }
             return new SubscriptionResponse(subscriptionOutputList);
@@ -116,6 +124,10 @@ public class SubscriptionService implements ISubscriptionService {
                 newSubscriptionOutput.setFirstName(s.getUser().getPerson().getFirstName());
                 newSubscriptionOutput.setLastName(s.getUser().getPerson().getLastName());
                 newSubscriptionOutput.setEmail(s.getUser().getEmail());
+                newSubscriptionOutput.setPlan(s.getPlan().getName());
+                newSubscriptionOutput.setId(s.getId());
+                newSubscriptionOutput.setState(s.getSubscriptionState());
+                newSubscriptionOutput.setPrice(s.getPlan().getPrice().getTotalPrice());
                 subscriptionOutputList.add(newSubscriptionOutput);
             }
             return new SubscriptionResponse(subscriptionOutputList);
@@ -159,6 +171,7 @@ public class SubscriptionService implements ISubscriptionService {
                     s.setSubscriptionState("Disabled");
                 else
                     s.setSubscriptionState("Actived");
+                s = subscriptionRepository.save(s);
             }
 
             return new SubscriptionResponse(new SubscriptionOutput(getSubscription.getId(),
@@ -166,6 +179,23 @@ public class SubscriptionService implements ISubscriptionService {
                     getPerson().getLastName(),getSubscription.getUser().getEmail(),getSubscription.getPlan().
                     getName(),getSubscription.getPlan().getPrice().getTotalPrice(),getSubscription.getSubscriptionState()));
 
+        }
+        catch (Exception e)
+        {
+            return new SubscriptionResponse("An error ocurred while getting the subscription : "+e.getMessage());
+        }
+    }
+
+    @Override
+    public SubscriptionResponse deleteSubscriptionBySubscriptionId(int subscriptionId) {
+        try{
+            Subscription getSubscription = subscriptionRepository.findById(subscriptionId)
+                    .orElseThrow(()-> new ResourceNotFoundException("Id","subscription",subscriptionId));
+            subscriptionRepository.deleteById(subscriptionId);
+            return new SubscriptionResponse(new SubscriptionOutput(getSubscription.getId(),
+                    getSubscription.getUser().getPerson().getFirstName(),getSubscription.getUser().
+                    getPerson().getLastName(),getSubscription.getUser().getEmail(),getSubscription.getPlan().
+                    getName(),getSubscription.getPlan().getPrice().getTotalPrice(),getSubscription.getSubscriptionState()));
         }
         catch (Exception e)
         {

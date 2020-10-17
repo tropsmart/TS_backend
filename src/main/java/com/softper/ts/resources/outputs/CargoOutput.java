@@ -8,6 +8,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class CargoOutput {
+    private int id;
     private String customer;
     private String driver;
     private int serviceId;

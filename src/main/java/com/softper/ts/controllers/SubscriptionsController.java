@@ -36,6 +36,7 @@ public class SubscriptionsController {
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
+
     @PostMapping("/users/{userId}/plans/{planId}")
     public ResponseEntity<SubscriptionResponse> subscribeDriver(@PathVariable(value = "userId")int userId, @PathVariable(value = "planId")int planId)
     {
@@ -65,4 +66,13 @@ public class SubscriptionsController {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @DeleteMapping("{subscriptionId}")
+    public ResponseEntity<SubscriptionResponse> deleteSubscriptionBySubscriptionId(@PathVariable(value = "subscriptionId")int subscriptionId)
+    {
+        SubscriptionResponse result = subscriptionService.deleteSubscriptionBySubscriptionId(subscriptionId);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 }

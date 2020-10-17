@@ -31,9 +31,9 @@ public class CargoesController {
     }
 
     @GetMapping("/fixed")
-    public ResponseEntity<CargoResponseFixed> findAllCargoesFixed()
+    public ResponseEntity<CargoResponse> findAllCargoesFixed()
     {
-        CargoResponseFixed result = cargoService.findAllCargoesFixed();
+        CargoResponse result = cargoService.findAllCargoesFixed();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -63,6 +63,14 @@ public class CargoesController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @PutMapping("{cargoId}/confirms")
+    public ResponseEntity<CargoResponse> setCargoConfirmed(@PathVariable(value = "cargoId")int cargoId)
+    {
+        CargoResponse result = cargoService.confirmCargoRequest(cargoId);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @PutMapping("{cargoId}/deliver")
     public ResponseEntity<CargoResponse> setCargoDelivered(@PathVariable(value="cargoId")int cargoId)
     {
@@ -70,6 +78,14 @@ public class CargoesController {
 
         //if(!result.success)
         //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PutMapping("{cargoId}/reject")
+    public ResponseEntity<CargoResponse> setCargoRejected(@PathVariable(value = "cargoId")int cargoId)
+    {
+        CargoResponse result = cargoService.rejectCargoById(cargoId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -83,4 +99,6 @@ public class CargoesController {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+
 }
