@@ -48,6 +48,7 @@ public class UserService implements IUserService {
             newFavourite.setFavorited(getUserFavourite);
             newFavourite.setCreatedAt(new Date());
 
+
             newFavourite = favoriteRepository.save(newFavourite);
 
             FavoriteOutput newFavouriteOutput = new FavoriteOutput();
@@ -98,18 +99,7 @@ public class UserService implements IUserService {
             List<User> userList = userRepository.findAll();
             List<UserOutput> userOutputList = new ArrayList<>();
             for (User u:userList) {
-                UserOutput newUserOutput = new UserOutput();
-                newUserOutput.setEmail(u.getEmail());
-                newUserOutput.setFirstName(u.getPerson().getFirstName());
-                newUserOutput.setLastName(u.getPerson().getLastName());
-                newUserOutput.setPassword(u.getPassword());
-
-                if(u.getPerson().getPersonType()==1)
-                    newUserOutput.setRole("Customer");
-                else if(u.getPerson().getPersonType()==2)
-                    newUserOutput.setRole("Driver");
-
-                userOutputList.add(newUserOutput);
+                userOutputList.add(toUserOutput(u));
             }
             return new UserResponse(userOutputList);
         }
@@ -249,16 +239,7 @@ public class UserService implements IUserService {
             List<UserOutput> userOutputList = new ArrayList<>();
             for (User u:userList) {
                 if(u.getPerson().getPersonType()==userType) {
-                    UserOutput newUserOutput = new UserOutput();
-                    newUserOutput.setEmail(u.getEmail());
-                    newUserOutput.setFirstName(u.getPerson().getFirstName());
-                    newUserOutput.setLastName(u.getPerson().getLastName());
-                    newUserOutput.setPassword(u.getPassword());
-                    if(u.getPerson().getPersonType()==1)
-                        newUserOutput.setRole("Customer");
-                    else
-                        newUserOutput.setRole("Driver");
-                    userOutputList.add(newUserOutput);
+                    userOutputList.add(toUserOutput(u));
                 }
 
             }
@@ -340,19 +321,7 @@ public class UserService implements IUserService {
         {
             User getUser = userRepository.findById(userId)
                     .orElseThrow(()->new ResourceNotFoundException("User","id",userId));
-            UserOutput newUserOutput = new UserOutput();
-            newUserOutput.setEmail(getUser.getEmail());
-            newUserOutput.setFirstName(getUser.getPerson().getFirstName());
-            newUserOutput.setLastName(getUser.getPerson().getLastName());
-            newUserOutput.setPassword(getUser.getPassword());
-
-            if(getUser.getPerson().getPersonType()==1)
-                newUserOutput.setRole("Customer");
-            else if(getUser.getPerson().getPersonType()==2)
-                newUserOutput.setRole("Driver");
-
-            return new UserResponse(newUserOutput);
-
+            return new UserResponse(toUserOutput(getUser));
         }
         catch (Exception e)
         {
@@ -404,6 +373,7 @@ public class UserService implements IUserService {
         userRepository.deleteById(id);
     }
 
+
     @Override
     public Optional<User> findById(Integer id) throws Exception {
         return userRepository.findById(id);
@@ -414,5 +384,23 @@ public class UserService implements IUserService {
         return userRepository.findAll();
     }
 
+    public UserOutput toUserOutput(User user){
+        UserOutput newUserOutput = new UserOutput();
+        newUserOutput.setEmail(user.getEmail());
+        newUserOutput.setFirstName(user.getPerson().getFirstName());
+        newUserOutput.setLastName(user.getPerson().getLastName());
+        newUserOutput.setPassword(user.getPassword());
 
+        if(user.getPerson().getPersonType()==1)
+            newUserOutput.setRole("Customer");
+        else if(user.getPerson().getPersonType()==2)
+            newUserOutput.setRole("Driver");
+
+        if(user.getPerson().getPersonType()==1)
+            newUserOutput.setRoleId(user.getPerson().getCustomer().getId());
+        if(user.getPerson().getPersonType()==2)
+            newUserOutput.setRoleId(user.getPerson().getDriver().getId());
+
+        return newUserOutput;
+    }
 }
