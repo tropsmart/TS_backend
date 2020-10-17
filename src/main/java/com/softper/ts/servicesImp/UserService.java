@@ -47,15 +47,9 @@ public class UserService implements IUserService {
             newFavourite.setUser(getUser);
             newFavourite.setFavorited(getUserFavourite);
             newFavourite.setCreatedAt(new Date());
-
-
             newFavourite = favoriteRepository.save(newFavourite);
 
-            FavoriteOutput newFavouriteOutput = new FavoriteOutput();
-            newFavouriteOutput.setUser(newFavourite.getUser().getPerson().getFirstName()+" "+newFavourite.getUser().getPerson().getLastName());
-            newFavouriteOutput.setFavourited(newFavourite.getFavorited().getPerson().getFirstName()+" "+newFavourite.getFavorited().getPerson().getLastName());
-            newFavouriteOutput.setSince(newFavourite.getCreatedAt());
-            return new FavoriteResponse(newFavouriteOutput);
+            return new FavoriteResponse(toFavoriteOutput(newFavourite));
         }
         catch (Exception e)
         {
@@ -79,12 +73,7 @@ public class UserService implements IUserService {
             newBlock.setCreatedAt(new Date());
 
             newBlock = blockRepository.save(newBlock);
-
-            BlockedOutput newBlockedOutput = new BlockedOutput();
-            newBlockedOutput.setUser(newBlock.getUser().getPerson().getFirstName()+" "+newBlock.getBlocked().getPerson().getLastName());
-            newBlockedOutput.setBlocked(newBlock.getBlocked().getPerson().getFirstName()+" "+newBlock.getBlocked().getPerson().getLastName());
-            newBlockedOutput.setSince(newBlock.getCreatedAt());
-            return new BlockedResponse(newBlockedOutput);
+            return new BlockedResponse(toBlockedOutput(newBlock));
         }
         catch (Exception e)
         {
@@ -117,11 +106,7 @@ public class UserService implements IUserService {
             List<Favorite> favoriteList = favoriteRepository.findFavouritesByUserId(userId);
             List<FavoriteOutput> favouriteOutputList = new ArrayList<>();
             for (Favorite f:favoriteList) {
-                FavoriteOutput newFavouriteOutput = new FavoriteOutput();
-                newFavouriteOutput.setUser(f.getUser().getPerson().getFirstName()+" "+f.getUser().getPerson().getLastName());
-                newFavouriteOutput.setFavourited(f.getFavorited().getPerson().getFirstName()+" "+f.getFavorited().getPerson().getLastName());
-                newFavouriteOutput.setSince(f.getCreatedAt());
-                favouriteOutputList.add(newFavouriteOutput);
+                favouriteOutputList.add(toFavoriteOutput(f));
             }
             return new FavoriteResponse(favouriteOutputList);
         }
@@ -139,11 +124,7 @@ public class UserService implements IUserService {
             List<Block> blockList = blockRepository.findBlockedsByUserId(userId);
             List<BlockedOutput> blockedOutputList = new ArrayList<>();
             for (Block b:blockList) {
-                BlockedOutput newBlockedOutput = new BlockedOutput();
-                newBlockedOutput.setUser(b.getUser().getPerson().getFirstName()+" "+b.getUser().getPerson().getLastName());
-                newBlockedOutput.setBlocked(b.getBlocked().getPerson().getFirstName()+" "+b.getBlocked().getPerson().getLastName());
-                newBlockedOutput.setSince(b.getCreatedAt());
-                blockedOutputList.add(newBlockedOutput);
+                blockedOutputList.add(toBlockedOutput(b));
             }
             return new BlockedResponse(blockedOutputList);
         }
@@ -161,11 +142,7 @@ public class UserService implements IUserService {
             List<Favorite> favoriteList = favoriteRepository.findAll();
             List<FavoriteOutput> favoriteOutputList = new ArrayList<>();
             for (Favorite f:favoriteList) {
-                FavoriteOutput newFavouriteOutput = new FavoriteOutput();
-                newFavouriteOutput.setUser(f.getUser().getPerson().getFirstName()+" "+f.getUser().getPerson().getLastName());
-                newFavouriteOutput.setFavourited(f.getFavorited().getPerson().getFirstName()+" "+f.getFavorited().getPerson().getLastName());
-                newFavouriteOutput.setSince(f.getCreatedAt());
-                favoriteOutputList.add(newFavouriteOutput);
+                favoriteOutputList.add(toFavoriteOutput(f));
             }
             return new FavoriteResponse(favoriteOutputList);
         }
@@ -183,11 +160,7 @@ public class UserService implements IUserService {
             List<Block> blockList = blockRepository.findAll();
             List<BlockedOutput> blockedOutputList = new ArrayList<>();
             for (Block b:blockList) {
-                BlockedOutput newBlockedOutput = new BlockedOutput();
-                newBlockedOutput.setUser(b.getUser().getPerson().getFirstName()+" "+b.getUser().getPerson().getLastName());
-                newBlockedOutput.setBlocked(b.getBlocked().getPerson().getFirstName()+" "+b.getBlocked().getPerson().getLastName());
-                newBlockedOutput.setSince(b.getCreatedAt());
-                blockedOutputList.add(newBlockedOutput);
+                blockedOutputList.add(toBlockedOutput(b));
             }
             return new BlockedResponse(blockedOutputList);
         }
@@ -202,11 +175,7 @@ public class UserService implements IUserService {
         try
         {
             Favorite getFavourite = favoriteRepository.findFavouriteByUserAndFavouriteId(userId, favouriteId);
-            FavoriteOutput newFavouriteOutput = new FavoriteOutput();
-            newFavouriteOutput.setUser(getFavourite.getUser().getPerson().getFirstName()+" "+getFavourite.getUser().getPerson().getLastName());
-            newFavouriteOutput.setFavourited(getFavourite.getFavorited().getPerson().getFirstName()+" "+getFavourite.getFavorited().getPerson().getLastName());
-            newFavouriteOutput.setSince(getFavourite.getCreatedAt());
-            return new FavoriteResponse(new FavoriteOutput());
+            return new FavoriteResponse(toFavoriteOutput(getFavourite));
         }
         catch (Exception e)
         {
@@ -219,11 +188,7 @@ public class UserService implements IUserService {
         try
         {
             Block getBlock = blockRepository.findBlockByUserAndBlockedId(userId, blockedId);
-            BlockedOutput newBlockedOutput = new BlockedOutput();
-            newBlockedOutput.setUser(getBlock.getUser().getPerson().getFirstName()+" "+getBlock.getUser().getPerson().getLastName());
-            newBlockedOutput.setBlocked(getBlock.getBlocked().getPerson().getFirstName()+" "+getBlock.getBlocked().getPerson().getLastName());
-            newBlockedOutput.setSince(getBlock.getCreatedAt());
-            return new BlockedResponse(newBlockedOutput);
+            return new BlockedResponse(toBlockedOutput(getBlock));
         }
         catch (Exception e)
         {
@@ -258,11 +223,7 @@ public class UserService implements IUserService {
         {
             Favorite getFavorite = favoriteRepository.findFavouriteByUserAndFavouriteId(userId, favoriteId);
             favoriteRepository.deleteById(getFavorite.getId());
-            FavoriteOutput newFavouriteOutput = new FavoriteOutput();
-            newFavouriteOutput.setUser(getFavorite.getUser().getPerson().getFirstName()+" "+getFavorite.getUser().getPerson().getLastName());
-            newFavouriteOutput.setFavourited(getFavorite.getFavorited().getPerson().getFirstName()+" "+getFavorite.getFavorited().getPerson().getLastName());
-            newFavouriteOutput.setSince(getFavorite.getCreatedAt());
-            return new FavoriteResponse(newFavouriteOutput);
+            return new FavoriteResponse(toFavoriteOutput(getFavorite));
         }
         catch (Exception e)
         {
@@ -276,11 +237,7 @@ public class UserService implements IUserService {
         {
             Block getBlock = blockRepository.findBlockByUserAndBlockedId(userId, blockedId);
             blockRepository.deleteById(getBlock.getId());
-            BlockedOutput newBlockedOutput = new BlockedOutput();
-            newBlockedOutput.setUser(getBlock.getUser().getPerson().getFirstName()+" "+getBlock.getUser().getPerson().getLastName());
-            newBlockedOutput.setBlocked(getBlock.getBlocked().getPerson().getFirstName()+" "+getBlock.getBlocked().getPerson().getLastName());
-            newBlockedOutput.setSince(getBlock.getCreatedAt());
-            return new BlockedResponse(newBlockedOutput);
+            return new BlockedResponse(toBlockedOutput(getBlock));
         }
         catch (Exception e)
         {
@@ -295,18 +252,7 @@ public class UserService implements IUserService {
             User getUser = userRepository.findPersonByEmail(email)
                     .orElseThrow(()->new ResourceNotFoundException("email","user",email));
 
-            UserOutput newUserOutput = new UserOutput();
-            newUserOutput.setEmail(getUser.getEmail());
-            newUserOutput.setFirstName(getUser.getPerson().getFirstName());
-            newUserOutput.setLastName(getUser.getPerson().getLastName());
-            newUserOutput.setPassword(getUser.getPassword());
-
-            if(getUser.getPerson().getPersonType()==1)
-                newUserOutput.setRole("Customer");
-            else if(getUser.getPerson().getPersonType()==2)
-                newUserOutput.setRole("Driver");
-
-            return new UserResponse(newUserOutput);
+            return new UserResponse(toUserOutput(getUser));
         }
         catch (Exception e)
         {
@@ -402,5 +348,23 @@ public class UserService implements IUserService {
             newUserOutput.setRoleId(user.getPerson().getDriver().getId());
 
         return newUserOutput;
+    }
+
+    public FavoriteOutput toFavoriteOutput(Favorite favorite)
+    {
+        FavoriteOutput newFavouriteOutput = new FavoriteOutput();
+        newFavouriteOutput.setUser(favorite.getUser().getPerson().getFirstName()+" "+favorite.getUser().getPerson().getLastName());
+        newFavouriteOutput.setFavourited(favorite.getFavorited().getPerson().getFirstName()+" "+favorite.getFavorited().getPerson().getLastName());
+        newFavouriteOutput.setSince(favorite.getCreatedAt());
+        return newFavouriteOutput;
+    }
+
+    public BlockedOutput toBlockedOutput(Block block)
+    {
+        BlockedOutput newBlockedOutput = new BlockedOutput();
+        newBlockedOutput.setUser(block.getUser().getPerson().getFirstName()+" "+block.getBlocked().getPerson().getLastName());
+        newBlockedOutput.setBlocked(block.getBlocked().getPerson().getFirstName()+" "+block.getBlocked().getPerson().getLastName());
+        newBlockedOutput.setSince(block.getCreatedAt());
+        return newBlockedOutput;
     }
 }
