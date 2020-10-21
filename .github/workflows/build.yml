@@ -34,7 +34,10 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.HEROKU_BACKEND_APP }}
           heroku_email: $ {{ secrets.HEROKU_EMAIL }}
-      - run: git config remote.heroku.push +HEAD:refs/heads/master
+          justlogin: true
+      - run:
+          - git remote add https://git.heroku.com/ts-opensource-be.git
+          - git push heroku master
 
   continuous-deployment:
     needs: build
@@ -45,4 +48,5 @@ jobs:
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.HEROKU_BACKEND_APP }}
-          heroku_email: $ {{ secrets.HEROKU_EMAIL }} 
+          heroku_email: $ {{ secrets.HEROKU_EMAIL }}
+
