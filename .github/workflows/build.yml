@@ -36,7 +36,7 @@ jobs:
           heroku_email: $ {{ secrets.HEROKU_EMAIL }}
           justlogin: true
       - run: git remote add heroku https://git.heroku.com/ts-opensource-be.git
-
+      - run: git push heroku master
   continuous-deployment:
     needs: build
     runs-on: ubuntu-latest
