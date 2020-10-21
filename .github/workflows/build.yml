@@ -35,7 +35,7 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_BACKEND_APP }}
           heroku_email: $ {{ secrets.HEROKU_EMAIL }}
           justlogin: true
-      - run: git remote add https://git.heroku.com/ts-opensource-be.git
+      - run: git remote add heroku https://git.heroku.com/ts-opensource-be.git
 
   continuous-deployment:
     needs: build
