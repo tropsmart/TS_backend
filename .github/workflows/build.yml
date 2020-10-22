@@ -35,3 +35,4 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_BACKEND_APP }}
           heroku_email: $ {{ secrets.HEROKU_EMAIL }}
           branch: master
+          justlogin: true
