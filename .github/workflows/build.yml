@@ -36,7 +36,6 @@ jobs:
           heroku_email: $ {{ secrets.HEROKU_EMAIL }}
           branch: master
           justlogin: true
-      - run: heroku container:branch
 
         
         
