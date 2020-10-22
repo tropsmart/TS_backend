@@ -28,11 +28,15 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: deploy to heroku
-        uses: akhileshns/heroku-deploy@master
-        with:
+      - name: Login with heroku
+        env:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.HEROKU_BACKEND_APP }}
           heroku_email: $ {{ secrets.HEROKU_EMAIL }}
           branch: master
-          justlogin: true
+        run: heroku container:login
+      - name: Build and push
+        env:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:push -a  ${{ secrets.HEROKU_BACKEND_APP }} master
+        
