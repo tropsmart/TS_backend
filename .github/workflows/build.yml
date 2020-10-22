@@ -29,10 +29,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: deploy to heroku
-        uses: akhileshns/heroku-deploy@v3.5.6
+      - uses: CDNievas/heroku-action@v1.0 # This is the action
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.HEROKU_BACKEND_APP }}
           heroku_email: $ {{ secrets.HEROKU_EMAIL }}
-          justlogin: true
         
