@@ -8,6 +8,7 @@ import com.softper.ts.repositories.IPlanRepository;
 import com.softper.ts.repositories.ISubscriptionRepository;
 import com.softper.ts.repositories.IUserRepository;
 import com.softper.ts.resources.comunications.SubscriptionResponse;
+import com.softper.ts.resources.outputs.BlockedOutput;
 import com.softper.ts.resources.outputs.SubscriptionOutput;
 import com.softper.ts.services.ISubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +34,7 @@ public class SubscriptionService implements ISubscriptionService {
     public SubscriptionResponse findSubscriptionById(int subscriptionId) {
         try{
             Subscription getSubscription = subscriptionRepository.findById(subscriptionId).get();
-            SubscriptionOutput newSubscriptionOutput = new SubscriptionOutput();
-            newSubscriptionOutput.setFirstName(getSubscription.getUser().getPerson().getFirstName());
-            newSubscriptionOutput.setLastName(getSubscription.getUser().getPerson().getLastName());
-            newSubscriptionOutput.setEmail(getSubscription.getUser().getEmail());
-            newSubscriptionOutput.setPlan(getSubscription.getPlan().getName());
-            newSubscriptionOutput.setId(getSubscription.getId());
-            newSubscriptionOutput.setState(getSubscription.getSubscriptionState());
-            newSubscriptionOutput.setPrice(getSubscription.getPlan().getPrice().getTotalPrice());
-            return new SubscriptionResponse(newSubscriptionOutput);
+            return new SubscriptionResponse(toSubscriptionOutput(getSubscription));
         }
         catch (Exception e)
         {
@@ -73,10 +66,7 @@ public class SubscriptionService implements ISubscriptionService {
             subscriptionRepository.saveAll(subscriptionList);
             newSubscription = subscriptionRepository.save(newSubscription);
 
-            return new SubscriptionResponse(new SubscriptionOutput(newSubscription.getId(),
-                    newSubscription.getUser().getPerson().getFirstName(),newSubscription.getUser().
-                    getPerson().getLastName(),newSubscription.getUser().getEmail(),newSubscription.getPlan().
-                    getName(),newSubscription.getPlan().getPrice().getTotalPrice(),newSubscription.getSubscriptionState()));
+            return new SubscriptionResponse(toSubscriptionOutput(newSubscription));
 
         }
         catch (Exception e)
@@ -90,18 +80,14 @@ public class SubscriptionService implements ISubscriptionService {
     public SubscriptionResponse findSubscriptionsByUserId(int userId) {
         try
         {
+            User getUser = userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("user","id",userId));
+            if(getUser.getPerson().getPersonType() == 1)
+                return new SubscriptionResponse("Subscriptions are only available to drivers");
             List<Subscription> subscriptionList = subscriptionRepository.getSubscriptionsByUserId(userId);
+            System.out.print("subscription list : "+ subscriptionList.size());
             List<SubscriptionOutput> subscriptionOutputList = new ArrayList<>();
             for (Subscription s:subscriptionList) {
-                SubscriptionOutput newSubscriptionOutput = new SubscriptionOutput();
-                newSubscriptionOutput.setFirstName(s.getUser().getPerson().getFirstName());
-                newSubscriptionOutput.setLastName(s.getUser().getPerson().getLastName());
-                newSubscriptionOutput.setEmail(s.getUser().getEmail());
-                newSubscriptionOutput.setPlan(s.getPlan().getName());
-                newSubscriptionOutput.setId(s.getId());
-                newSubscriptionOutput.setState(s.getSubscriptionState());
-                newSubscriptionOutput.setPrice(s.getPlan().getPrice().getTotalPrice());
-                subscriptionOutputList.add(newSubscriptionOutput);
+                subscriptionOutputList.add(toSubscriptionOutput(s));
             }
             return new SubscriptionResponse(subscriptionOutputList);
         }
@@ -120,15 +106,7 @@ public class SubscriptionService implements ISubscriptionService {
             List<Subscription> subscriptionList = subscriptionRepository.findAll();
             List<SubscriptionOutput> subscriptionOutputList = new ArrayList<>();
             for (Subscription s:subscriptionList) {
-                SubscriptionOutput newSubscriptionOutput = new SubscriptionOutput();
-                newSubscriptionOutput.setFirstName(s.getUser().getPerson().getFirstName());
-                newSubscriptionOutput.setLastName(s.getUser().getPerson().getLastName());
-                newSubscriptionOutput.setEmail(s.getUser().getEmail());
-                newSubscriptionOutput.setPlan(s.getPlan().getName());
-                newSubscriptionOutput.setId(s.getId());
-                newSubscriptionOutput.setState(s.getSubscriptionState());
-                newSubscriptionOutput.setPrice(s.getPlan().getPrice().getTotalPrice());
-                subscriptionOutputList.add(newSubscriptionOutput);
+                subscriptionOutputList.add(toSubscriptionOutput(s));
             }
             return new SubscriptionResponse(subscriptionOutputList);
         }
@@ -147,10 +125,7 @@ public class SubscriptionService implements ISubscriptionService {
             getSubscription.setSubscriptionState("Canceled");
             getSubscription = subscriptionRepository.save(getSubscription);
 
-            return new SubscriptionResponse(new SubscriptionOutput(getSubscription.getId(),
-                    getSubscription.getUser().getPerson().getFirstName(),getSubscription.getUser().
-                    getPerson().getLastName(),getSubscription.getUser().getEmail(),getSubscription.getPlan().
-                    getName(),getSubscription.getPlan().getPrice().getTotalPrice(),getSubscription.getSubscriptionState()));
+            return new SubscriptionResponse(toSubscriptionOutput(getSubscription));
         }
         catch (Exception e)
         {
@@ -174,10 +149,7 @@ public class SubscriptionService implements ISubscriptionService {
                 s = subscriptionRepository.save(s);
             }
 
-            return new SubscriptionResponse(new SubscriptionOutput(getSubscription.getId(),
-                    getSubscription.getUser().getPerson().getFirstName(),getSubscription.getUser().
-                    getPerson().getLastName(),getSubscription.getUser().getEmail(),getSubscription.getPlan().
-                    getName(),getSubscription.getPlan().getPrice().getTotalPrice(),getSubscription.getSubscriptionState()));
+            return new SubscriptionResponse(toSubscriptionOutput(getSubscription));
 
         }
         catch (Exception e)
@@ -192,10 +164,7 @@ public class SubscriptionService implements ISubscriptionService {
             Subscription getSubscription = subscriptionRepository.findById(subscriptionId)
                     .orElseThrow(()-> new ResourceNotFoundException("Id","subscription",subscriptionId));
             subscriptionRepository.deleteById(subscriptionId);
-            return new SubscriptionResponse(new SubscriptionOutput(getSubscription.getId(),
-                    getSubscription.getUser().getPerson().getFirstName(),getSubscription.getUser().
-                    getPerson().getLastName(),getSubscription.getUser().getEmail(),getSubscription.getPlan().
-                    getName(),getSubscription.getPlan().getPrice().getTotalPrice(),getSubscription.getSubscriptionState()));
+            return new SubscriptionResponse(toSubscriptionOutput(getSubscription));
         }
         catch (Exception e)
         {
@@ -221,5 +190,17 @@ public class SubscriptionService implements ISubscriptionService {
     @Override
     public List<Subscription> findAll() throws Exception {
         return subscriptionRepository.findAll();
+    }
+
+    public SubscriptionOutput toSubscriptionOutput (Subscription subscription) {
+        SubscriptionOutput newSubscriptionOutput = new SubscriptionOutput();
+        newSubscriptionOutput.setFirstName(subscription.getUser().getPerson().getFirstName());
+        newSubscriptionOutput.setLastName(subscription.getUser().getPerson().getLastName());
+        newSubscriptionOutput.setEmail(subscription.getUser().getEmail());
+        newSubscriptionOutput.setPlan(subscription.getPlan().getName());
+        newSubscriptionOutput.setId(subscription.getId());
+        newSubscriptionOutput.setState(subscription.getSubscriptionState());
+        newSubscriptionOutput.setPrice(subscription.getPlan().getPrice().getTotalPrice());
+        return newSubscriptionOutput;
     }
 }

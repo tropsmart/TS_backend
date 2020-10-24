@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UserOutput {
+    private int id;
     private String email;
     private String password;
     private String firstName;

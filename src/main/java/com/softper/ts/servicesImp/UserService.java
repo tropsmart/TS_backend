@@ -332,6 +332,7 @@ public class UserService implements IUserService {
 
     public UserOutput toUserOutput(User user){
         UserOutput newUserOutput = new UserOutput();
+        newUserOutput.setId(user.getId());
         newUserOutput.setEmail(user.getEmail());
         newUserOutput.setFirstName(user.getPerson().getFirstName());
         newUserOutput.setLastName(user.getPerson().getLastName());
