@@ -9,7 +9,7 @@ on:
       - 'master'
 
 jobs:
-  build:
+  continuous-integration:
     runs-on: ubuntu-latest
     steps:
 #      checkout
@@ -23,7 +23,20 @@ jobs:
         run: mvn test
 
   continuous-delivery:
-    needs: build
+    needs: continuous-integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: deploy to heroku dev
+        uses: akhileshns/heroku-deploy@v3.5.6
+        with:
+          heroku_api_key: "53083cb5-e9d1-400f-9741-54fc664d0784"
+          heroku_app_name: "ts-opensource-dev"
+          heroku_email: "tropsmart18@gmail.com"
+
+  continuous-deployment:
+    needs: continuous-integration
     runs-on: ubuntu-latest
     steps:
       - name: checkout
