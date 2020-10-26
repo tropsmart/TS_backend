@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: deploy to heroku dev
+      - name: deploy to heroku development entiroment
         uses: akhileshns/heroku-deploy@v3.5.6
         with:
           heroku_api_key: "53083cb5-e9d1-400f-9741-54fc664d0784"
@@ -41,7 +41,7 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: deploy to heroku
+      - name: deploy to heroku production enviroment
         uses: akhileshns/heroku-deploy@v3.5.6
         with:
           heroku_api_key: "26e9942e-8c58-4c0f-a37c-c10936bf7835"
