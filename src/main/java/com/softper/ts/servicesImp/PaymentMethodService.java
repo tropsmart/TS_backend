@@ -88,6 +88,9 @@ public class PaymentMethodService implements IPaymentMethodService {
             newPaymentMethod.setBillingAdress(paymentMethodInput.getBillingAdress());
             newPaymentMethod.setSwiftCode(paymentMethodInput.getSwiftCode());
             newPaymentMethod.setConfiguration(getUser.getConfiguration());
+
+            newPaymentMethod = paymentMethodRepository.save(newPaymentMethod);
+
             return new PaymentMethodResponse(toPaymentMethodOutput(newPaymentMethod));
         }
         catch (Exception e)
