@@ -6,6 +6,7 @@ import com.softper.ts.models.User;
 import com.softper.ts.repositories.IPaymentMethodRepository;
 import com.softper.ts.repositories.IUserRepository;
 import com.softper.ts.resources.comunications.PaymentMethodResponse;
+import com.softper.ts.resources.inputs.PaymentMethodInput;
 import com.softper.ts.resources.outputs.PaymentMethodOutput;
 import com.softper.ts.services.IPaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,24 @@ public class PaymentMethodService implements IPaymentMethodService {
     }
 
     @Override
+    public PaymentMethodResponse addPaymentMethodByUserId(int userId, PaymentMethodInput paymentMethodInput) {
+        try{
+            User getUser = userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("id","user",userId));
+            PaymentMethod newPaymentMethod = new PaymentMethod();
+            newPaymentMethod.setAccountNumber(paymentMethodInput.getAccountNumber());
+            newPaymentMethod.setBankName(paymentMethodInput.getBankName());
+            newPaymentMethod.setBillingAdress(paymentMethodInput.getBillingAdress());
+            newPaymentMethod.setSwiftCode(paymentMethodInput.getSwiftCode());
+            newPaymentMethod.setConfiguration(getUser.getConfiguration());
+            return new PaymentMethodResponse(toPaymentMethodOutput(newPaymentMethod));
+        }
+        catch (Exception e)
+        {
+            return new PaymentMethodResponse("An error ocurred while getting paymentMethod: "+e.getMessage());
+        }
+    }
+
+    @Override
     public PaymentMethod save(PaymentMethod paymentMethod) throws Exception {
         return paymentMethodRepository.save(paymentMethod);
     }
@@ -95,5 +114,11 @@ public class PaymentMethodService implements IPaymentMethodService {
     @Override
     public List<PaymentMethod> findAll() throws Exception {
         return paymentMethodRepository.findAll();
+    }
+
+    public PaymentMethodOutput toPaymentMethodOutput(PaymentMethod paymentMethod)
+    {
+        return new PaymentMethodOutput(paymentMethod.getBankName(),
+            paymentMethod.getSwiftCode(),paymentMethod.getAccountNumber());
     }
 }
