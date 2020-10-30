@@ -143,6 +143,47 @@ public class ConfigurationService implements IConfigurationService {
     }
 
     @Override
+    public ConfigurationResponse generateConfiguration(int userId) {
+        try{
+            User getUser = userRepository.findById(userId).get();
+            if(getUser.getConfiguration()== null)
+            {
+                Configuration newConfiguration = new Configuration();
+                newConfiguration.setLanguage("Spanish");
+                newConfiguration.setPaymentCurrency("Soles");
+
+                newConfiguration = configurationRepository.save(newConfiguration);
+
+                getUser.setConfiguration(newConfiguration);
+                getUser = userRepository.save(getUser);
+
+                ConfigurationOutput newConfigurationOutput = new ConfigurationOutput();
+                newConfigurationOutput.setPaymentCurrency(newConfiguration.getPaymentCurrency());
+                newConfigurationOutput.setLanguage(newConfiguration.getLanguage());
+                newConfigurationOutput.setPhone(newConfiguration.getUser().getPerson().getPhone());
+                newConfigurationOutput.setFirstName(newConfiguration.getUser().getPerson().getFirstName());
+                newConfigurationOutput.setLastName(newConfiguration.getUser().getPerson().getLastName());
+                return new ConfigurationResponse(newConfigurationOutput);
+
+            }
+            else{
+                Configuration getConfiguration = getUser.getConfiguration();
+                ConfigurationOutput newConfigurationOutput = new ConfigurationOutput();
+                newConfigurationOutput.setPaymentCurrency(getConfiguration.getPaymentCurrency());
+                newConfigurationOutput.setLanguage(getConfiguration.getLanguage());
+                newConfigurationOutput.setPhone(getConfiguration.getUser().getPerson().getPhone());
+                newConfigurationOutput.setFirstName(getConfiguration.getUser().getPerson().getFirstName());
+                newConfigurationOutput.setLastName(getConfiguration.getUser().getPerson().getLastName());
+
+                return new ConfigurationResponse(newConfigurationOutput);
+            }
+        }catch (Exception e)
+        {
+            return new ConfigurationResponse("An error ocurred while getting a configuration");
+        }
+    }
+
+    @Override
     public Configuration save(Configuration configuration) throws Exception {
         return configurationRepository.save(configuration);
     }

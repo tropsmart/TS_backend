@@ -10,5 +10,5 @@ public interface IConfigurationService extends ICrudService<Configuration> {
     ConfigurationResponse findConfigurationByUserId(int userId);
     ConfigurationResponse addPaymentMethod(int userId, PaymentMethodInput paymentMethodInput);
     ConfigurationResponse updateConfiguration(int userId, ConfigurationInput configurationInput);
-
+    ConfigurationResponse generateConfiguration(int userId);
 }

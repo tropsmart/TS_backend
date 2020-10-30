@@ -27,6 +27,16 @@ public class TsApplication {
         SpringApplication.run(TsApplication.class, args);
     }
 
+    /*Setting SQLServer database
+    * https://www.youtube.com/watch?v=LVlxBEB1EF4
+    *  Commands:
+    *   mvn install:install-file -Dfile=C:/sqljdbc_6.0/enu/jre7/sqljdbc41.jar -DgroupId=com.microsoft.sqlserver -DartifactId=sqljdbc4 -Dversion=4.0-
+            Dpackaging=packaging.jar
+    *
+    *   mvn install:install-file -Dfile=C:/sqljdbc_6.0/enu/jre7/sqljdbc41.jar -DpomFile=C:/Users/51931/IdeaProjects/ts-opensource-be/pom.xml
+    *
+    * */
+
     /*
     * Desplegar Springboot en heroku
     * 1.- Abrir heroku login
