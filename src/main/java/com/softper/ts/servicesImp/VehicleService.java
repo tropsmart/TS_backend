@@ -136,7 +136,7 @@ public class VehicleService implements IVehicleService {
         }
         catch (Exception e)
         {
-            return new VehicleResponse("An error ocurred while getting the vehicle list : "+e.getMessage());
+            return new VehicleResponse("An error ocurred while getting the vehicles list : "+e.getMessage());
         }
     }
 
