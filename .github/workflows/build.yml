@@ -35,9 +35,9 @@ jobs:
       - name: deploy to heroku development enviroment
         uses: akhileshns/heroku-deploy@v3.5.6
         with:
-          heroku_api_key: ${ secrets.HEROKU_DEVELOP_API_KEY }
-          heroku_app_name: ${ secrets.HEROKU_DEVELOP_BACKEND }
-          heroku_email: ${ secrets.HEROKU_DEVELOP_EMAIL }
+          heroku_api_key: "53083cb5-e9d1-400f-9741-53fc664d0784"
+          heroku_app_name: "ts-opensource-dev"
+          heroku_email: "tropsmart18@gmail.com"
 
   continuous-deployment:
     needs: continuous-integration
@@ -50,8 +50,8 @@ jobs:
       - name: deploy to heroku production enviroment
         uses: akhileshns/heroku-deploy@v3.5.6
         with:
-          heroku_api_key: ${ secrets.HEROKU_PROD_API_KEY }
-          heroku_app_name: ${ secrets.HEROKU_PROD_BACKEND }
-          heroku_email: ${ secrets.HEROKU_PROD_EMAIL }
+          heroku_api_key: "26e9942e-8c58-4c0f-a37c-c10936bf7835"
+          heroku_app_name: "ts-opensource-be"
+          heroku_email: "digihazard18@gmail.com"
         
         
