@@ -63,6 +63,14 @@ public class CargoesController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping("drivers/{driverId}")
+    public ResponseEntity<CargoResponse> findCargoesByDriverId(@PathVariable(value="driverId")int driverId)
+    {
+        CargoResponse result = cargoService.findCargoesByDriverId(driverId);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @PutMapping("{cargoId}/confirms")
     public ResponseEntity<CargoResponse> setCargoConfirmed(@PathVariable(value = "cargoId")int cargoId)
     {
@@ -90,8 +98,8 @@ public class CargoesController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping("customers/{customerId}")
-    public ResponseEntity<CargoResponse> postCargo(@PathVariable(value = "customerId")int customerId, @Valid @RequestBody CargoInput cargoInput)
+    @PostMapping("/customers/{customerId}")
+    public ResponseEntity<CargoResponse> postCargo(@PathVariable(value = "customerId")int customerId, @RequestBody CargoInput cargoInput)
     {
         CargoResponse result = cargoService.addCargoByCustomerId(customerId,cargoInput);
         //if(!result.success)
@@ -99,6 +107,8 @@ public class CargoesController {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+
 
 
 }

@@ -15,6 +15,8 @@ public interface ICargoRepository extends JpaRepository<Cargo , Integer> {
     @Query("select s from Cargo s where s.customer.id = (:uid)")
     List<Cargo> findCargoesByCustomerId(@Param("uid") Integer customerId);
 
+    @Query("select s from Cargo s where s.service.servicesRequest.driver = (:uid)")
+    List<Cargo> findCargoesByDriverId(@Param("uid") Integer customerId);
 
 
 }
