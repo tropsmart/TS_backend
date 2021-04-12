@@ -14,16 +14,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import lombok.Data;
 
 @Entity
 @Table(name="users")
-@EntityListeners(AuditingEntityListener.class)
 @Data
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 public class User implements Serializable {
 
     @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
+    //@Setter(AccessLevel.PRIVATE)
     private static final long serialVersionUID = 1L;
 
     @Id

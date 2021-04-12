@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Service implements Serializable {
     @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
+    //@Setter(AccessLevel.PRIVATE)
     private static final long serialVersionUID = 1L;
 
     @Id

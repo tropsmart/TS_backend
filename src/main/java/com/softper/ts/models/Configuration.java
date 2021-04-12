@@ -16,7 +16,7 @@ import java.util.List;
 public class Configuration implements Serializable {
 
     @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
+    //@Setter(AccessLevel.PRIVATE)
     private static final long  serialVersionUID = 1L;
 
     @Id
