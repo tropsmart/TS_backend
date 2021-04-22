@@ -30,6 +30,21 @@ public class AuthenticationController {
     private AuthService authService;
 
 
+    @PostMapping(value = "/sign-in-fixed")
+    public ResponseEntity<AuthResponse> SignInFixed(@Valid @RequestBody SignIn signIn) throws Exception {
+        if(signIn == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        AuthResponse result = authService.loginFixed(signIn.getEmail(), signIn.getPassword());
+
+        //responseHeaders.add("Auth-Token", result.getResource().getToken());
+
+        //if(!result.success)
+            //return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(result, responseHeaders,HttpStatus.OK);
+    }
+
     @PostMapping(value = "/sign-in")
     public ResponseEntity<AuthResponse> SignIn(@Valid @RequestBody SignIn signIn) throws Exception {
         if(signIn == null)
@@ -80,24 +95,4 @@ public class AuthenticationController {
         return new ResponseEntity<>(authResponse,responseHeaders, HttpStatus.OK);
     }
 
-    private String getJWTToken(String username) {
-        String secretKey = "mySecretKey";
-        List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-                .commaSeparatedStringToAuthorityList("ROLE_USER");
-
-        String token = Jwts
-                .builder()
-                .setId("softtekJWT")
-                .setSubject(username)
-                .claim("authorities",
-                        grantedAuthorities.stream()
-                                .map(GrantedAuthority::getAuthority)
-                                .collect(Collectors.toList()))
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 600000))
-                .signWith(SignatureAlgorithm.HS512,
-                        secretKey.getBytes()).compact();
-
-        return "Bearer " + token;
-    }
 }

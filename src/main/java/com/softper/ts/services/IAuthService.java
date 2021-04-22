@@ -7,5 +7,6 @@ import com.softper.ts.resources.inputs.SignUp;
 public interface IAuthService {
     AuthResponse registerComplete(SignUp signUp);
     AuthResponse login(String email, String password);
+    AuthResponse loginFixed(String email, String password);
     //AuthResponse refresh(RefreshInput refreshInput) throws Exception;
 }

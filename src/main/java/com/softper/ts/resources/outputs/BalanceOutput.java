@@ -1,5 +1,8 @@
 package com.softper.ts.resources.outputs;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class BalanceOutput {
     private String user;
     private String email;

@@ -10,6 +10,7 @@ import java.util.List;
 public abstract class BaseResponse<T> {
     public boolean success;
     public String message;
+    public Integer status;
     public T resource;
     public List<T> resourceList;
 
@@ -18,6 +19,7 @@ public abstract class BaseResponse<T> {
         this.resource = resource;
         this.success = true;
         this.message = "Success";
+        this.status = 0;
     }
 
     public BaseResponse(List<T> resource)
@@ -25,11 +27,14 @@ public abstract class BaseResponse<T> {
         this.resourceList = resource;
         this.success = true;
         this.message = "Success";
+        this.status = 0;
     }
 
     public BaseResponse(String message)
     {
         this.success = false;
         this.message = message;
+        this.status = 0;
     }
+
 }

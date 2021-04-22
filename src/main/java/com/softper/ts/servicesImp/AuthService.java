@@ -1,5 +1,6 @@
 package com.softper.ts.servicesImp;
 
+import com.google.common.base.Strings;
 import com.softper.ts.exception.ResourceNotFoundException;
 import com.softper.ts.models.*;
 import com.softper.ts.repositories.*;
@@ -11,6 +12,8 @@ import com.softper.ts.security.JwtProvider;
 import com.softper.ts.services.IAuthService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hibernate.validator.cfg.GenericConstraintDef;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,10 +27,16 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+
 
 @Service
 public class AuthService implements IAuthService {
+
+	private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+
 
     @Autowired
     private IPersonRepository personRepository;
@@ -71,75 +80,92 @@ public class AuthService implements IAuthService {
     public AuthResponse registerComplete(SignUp signUp) {
         try
         {
+            AuthResponse response = new AuthResponse();
+            logger.info("signUp");
+            Optional<User> result = userRepository.findByEmail(signUp.getEmail());
+            if(result.isPresent()) {
+                logger.info("Correo registrado : "+result.get().getEmail());
+                response.setMessage("El correo ya se encuentra registrado");
+                response.setStatus(0);
+                return response;
+            } else {
+                logger.info("Correo no registrado");
+                
+                Person newPerson = new Person();
+                newPerson.setFirstName(signUp.getFirstName());
+                newPerson.setLastName(signUp.getLastName());
+                newPerson.setPhone(signUp.getPhone());
+                newPerson.setPersonType(signUp.getDiscriminator());
+                newPerson = personRepository.save(newPerson);
+
+
+                Configuration newConfiguration = new Configuration();
+                newConfiguration.setLanguage("Spanish");
+                newConfiguration.setPaymentCurrency("Soles");
+    
+                newConfiguration = configurationRepository.save(newConfiguration);
+    
+                Balance newBalance = new Balance();
+                newBalance.setSpentMoney(0);
+                newBalance.setAddedMoney(0);
+    
+                newBalance = balanceRepository.save(newBalance);
+    
+    
+                User user = new User();
+                user.setEmail(signUp.getEmail());
+                user.setPerson(newPerson);
+    
+                //user.setPassword(encoder.encode((signUp.getPassword())));
+                user.setPassword(signUp.getPassword());
+                user.setCreatedAt(Calendar.getInstance().getTime());
+                user.setConfiguration(newConfiguration);
+                user.setBalance(newBalance);
+    
+                user = userRepository.save(user);
+    
+    
+                if(signUp.getDiscriminator() == 1) {
+                    Customer newCustomer = new Customer();
+                    newCustomer.setCredits(0.0);
+                    newCustomer.setPerson(newPerson);
+                    newPerson.setCustomer(newCustomer);
+                    customerRepository.save(newCustomer);
+                }
+                else
+                {
+                    Driver newDriver = new Driver();
+                    newDriver.setLicense("000-123");
+                    newDriver.setPerson(newPerson);
+                    newPerson.setDriver(newDriver);
+    
+                    Qualification newQualication = new Qualification();
+                    newQualication.setDriver(newDriver);
+    
+                    ServiceRequest newServiceRequest = new ServiceRequest();
+                    newServiceRequest.setDriver(newDriver);
+    
+                    qualificationRepository.save(newQualication);
+                    serviceRequestRepository.save(newServiceRequest);
+                    driverRepository.save(newDriver);
+                }
+    
+                response.setResource(new AuthenticatedOutput(user.getId(),user.getEmail(),user.getPassword(),signUp.getFirstName(),signUp.getLastName(),signUp.getDiscriminator()));
+                response.setStatus(1);
+                
+                return response;
+            }
             //NestedFactory nestedFactory = new NestedFactory();
             //User user = (User)(nestedFactory.create(signUp.getDiscriminator(), signUp));
 
 
-            Person newPerson = new Person();
-            newPerson.setFirstName(signUp.getFirstName());
-            newPerson.setLastName(signUp.getLastName());
-            newPerson.setPhone(signUp.getPhone());
-            newPerson.setPersonType(signUp.getDiscriminator());
-            newPerson = personRepository.save(newPerson);
-
-
-
-            Configuration newConfiguration = new Configuration();
-            newConfiguration.setLanguage("Spanish");
-            newConfiguration.setPaymentCurrency("Soles");
-
-            newConfiguration = configurationRepository.save(newConfiguration);
-
-            Balance newBalance = new Balance();
-            newBalance.setSpentMoney(0);
-            newBalance.setAddedMoney(0);
-
-            newBalance = balanceRepository.save(newBalance);
-
-
-            User user = new User();
-            user.setEmail(signUp.getEmail());
-            user.setPerson(newPerson);
-
-            //user.setPassword(encoder.encode((signUp.getPassword())));
-            user.setPassword(signUp.getPassword());
-            user.setCreatedAt(Calendar.getInstance().getTime());
-            user.setConfiguration(newConfiguration);
-            user.setBalance(newBalance);
-
-            user = userRepository.save(user);
-
-
-            if(signUp.getDiscriminator() == 1) {
-                Customer newCustomer = new Customer();
-                newCustomer.setCredits(0.0);
-                newCustomer.setPerson(newPerson);
-                newPerson.setCustomer(newCustomer);
-                customerRepository.save(newCustomer);
-            }
-            else
-            {
-                Driver newDriver = new Driver();
-                newDriver.setLicense("000-123");
-                newDriver.setPerson(newPerson);
-                newPerson.setDriver(newDriver);
-
-                Qualification newQualication = new Qualification();
-                newQualication.setDriver(newDriver);
-
-                ServiceRequest newServiceRequest = new ServiceRequest();
-                newServiceRequest.setDriver(newDriver);
-
-                qualificationRepository.save(newQualication);
-                serviceRequestRepository.save(newServiceRequest);
-                driverRepository.save(newDriver);
-            }
-
-            return new AuthResponse(new AuthenticatedOutput(user.getId(),user.getEmail(),user.getPassword(),signUp.getFirstName(),signUp.getLastName(),signUp.getDiscriminator()));
-        }
+           }
         catch (Exception e)
         {
-            return new AuthResponse("An error ocurred while register the user: "+e.getMessage());
+            AuthResponse response = new AuthResponse();
+            response.setMessage("Ocurrio un error en methodo "+Thread.currentThread().getStackTrace()+" : "+e.getMessage());
+            response.setStatus(-2);
+            return response;
         }
     }
 
@@ -195,6 +221,62 @@ public class AuthService implements IAuthService {
         catch (Exception e)
         {
             return new AuthResponse("An error ocurred while getting the user: "+e.getMessage());
+        }
+    }
+
+    @Override
+    public AuthResponse loginFixed(String email, String password) {
+        try {
+            AuthResponse response = new AuthResponse();
+            User getUser = userRepository.findByEmail(email)
+                    .orElseThrow(()->new ResourceNotFoundException("user","email",email));
+            if(getUser.getPassword().equals(password)){
+                Person getPerson = getUser.getPerson();
+                AuthenticatedOutput authenticatedOutput =new AuthenticatedOutput(
+                        getUser.getEmail());
+                int roleId=0;
+                if(getPerson.getPersonType()==1)
+                    roleId = getPerson.getCustomer().getId();
+                if(getPerson.getPersonType()==2)
+                    roleId = getPerson.getDriver().getId();
+
+                String secretKey = "mySecretKey";
+                List<GrantedAuthority> grantedAuthorities = AuthorityUtils
+                        .commaSeparatedStringToAuthorityList("ROLE_USER");
+
+                String token = Jwts.builder().setId("softtekJWT").setSubject(authenticatedOutput.getEmail())
+                        .claim("authorities", grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                        .claim("id", getUser.getId())
+                        .claim("email", getUser.getEmail())
+                        .claim("firstName", getPerson.getFirstName())
+                        .claim("lastName", getPerson.getLastName())
+                        .claim("role", getPerson.getPersonType())
+                        .claim("roleId", roleId)
+                        .setIssuedAt(new Date(System.currentTimeMillis()))
+                        .setExpiration(new Date(System.currentTimeMillis() + 600000))
+                        .signWith(SignatureAlgorithm.HS512,
+                                secretKey.getBytes()).compact();
+
+                String r = "Bearer "+token;
+                authenticatedOutput.setToken(r);
+                response.setResource(authenticatedOutput);
+                response.setMessage("Success");
+                response.setStatus(1);
+                return response;
+            }
+            else {
+                response.setMessage("Correo o contraseña incorrectos");
+                response.setStatus(-2);
+                return response;
+            }
+            
+        }
+        catch (Exception e)
+        {
+            AuthResponse response = new AuthResponse();
+            response.setMessage("Ocurrio un error en methodo "+Thread.currentThread().getStackTrace()+" : "+e.getMessage());
+            response.setStatus(-2);
+            return response;
         }
     }
 
