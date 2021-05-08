@@ -56,7 +56,7 @@ public class AuthenticationController {
         responseHeaders.add("Auth-Token", result.getResource().getToken());
 
         //if(!result.success)
-            //return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+            //return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);;
         return new ResponseEntity<>(result, responseHeaders,HttpStatus.OK);
     }
 
