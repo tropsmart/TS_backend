@@ -82,4 +82,21 @@ public class DriverService implements IDriverService {
             return new DriverResponse("An error ocurred while getting driver list: "+e.getMessage());
         }
     }
+
+    @Override
+    public DriverResponse findDriversByName(String name){
+        try{
+            List<User> users = userRepository.findDriverByName(name);
+            List<DriverOutput> driverOutputList = new ArrayList<>();
+            for (User getUser:users) {
+                driverOutputList.add(new DriverOutput(getUser.getPerson().getDriver().getPerson().getUser().getId(),getUser.getPerson().getDriver().getPerson().getFirstName(),getUser.getPerson().getDriver().getPerson().getLastName(),getUser.getPerson().getDriver().getLicense(),getUser.getPerson().getDriver().getPerson().getUser().getEmail(),getUser.getPerson().getDriver().getPerson().getPersonType(),getUser.getPerson().getDriver().getId()));
+            }
+            return new DriverResponse(driverOutputList);
+        }
+        catch (Exception e)
+        {
+            return new DriverResponse("An error ocurred while getting driver list: "+e.getMessage());
+        }
+    }
+
 }

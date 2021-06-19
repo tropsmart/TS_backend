@@ -114,12 +114,12 @@ public class CargoService implements ICargoService {
             newCargo = cargoRepository.save(newCargo);
 
             Location newLocation = new Location();
-            newLocation.setArrivalAltitude(1.0);
-            newLocation.setArrivalLatitude(2.0);
-            newLocation.setArrivalLongitude(3.0);
-            newLocation.setDepartureAltitude(4.0);
-            newLocation.setDepartureLatitude(5.0);
-            newLocation.setDepartureLongitude(6.0);
+            newLocation.setArrivalAltitude(cargoInput.getArrivalAltitude()!=null ? cargoInput.getArrivalAltitude(): 1.0);
+            newLocation.setArrivalLatitude(cargoInput.getArrivalLatitude()!=null ? cargoInput.getArrivalLatitude(): 2.0);;
+            newLocation.setArrivalLongitude(cargoInput.getArrivalLatitude()!=null ? cargoInput.getArrivalLatitude(): 3.0);;
+            newLocation.setDepartureAltitude(cargoInput.getDepartureAltitude()!=null ? cargoInput.getDepartureAltitude(): 4.0);
+            newLocation.setDepartureLatitude(cargoInput.getDepartureLatitude()!=null ? cargoInput.getDepartureLatitude(): 5.0);
+            newLocation.setDepartureLongitude(cargoInput.getDepartureLongitude()!=null ? cargoInput.getDepartureLongitude(): 6.0);
             newLocation.setRoute(getService.getRoute());
             newLocation.setCargo(newCargo);
             newLocation = locationRepository.save(newLocation);

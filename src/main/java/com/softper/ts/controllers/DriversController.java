@@ -49,4 +49,12 @@ public class DriversController {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
+    @GetMapping("/param/{name}")
+    public ResponseEntity<DriverResponse> findDriversByName(@PathVariable(value = "name")String name)
+    {
+        DriverResponse result = driverService.findDriversByName(name);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

@@ -8,4 +8,5 @@ public interface IDriverService extends ICrudService<Driver> {
     DriverResponse findNearDrivers(Location location);
     DriverResponse findDriverById(int driverId);
     DriverResponse findAllDrivers();
+    DriverResponse findDriversByName(String name);
 }

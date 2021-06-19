@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,4 +24,8 @@ public interface IUserRepository extends JpaRepository<User, Integer> {
 
     @Query("select s from User s where s.configuration.id = (:uid)")
     Optional<User> findUserByConfigurationId(@Param("uid")int configurationId);
+
+    
+    @Query("SELECT s FROM User s WHERE s.person.firstName LIKE CONCAT('%',:dname,'%') AND s.person.personType = 2")
+    List<User> findDriverByName(@Param("dname") String name);
 }
