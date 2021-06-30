@@ -1,6 +1,6 @@
 package com.softper.ts.controllers;
 
-import com.softper.ts.resources.comunications.VehicleResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.VehicleInput;
 import com.softper.ts.servicesImp.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +17,9 @@ public class VehiclesController {
     private VehicleService vehicleService;
 
     @GetMapping
-    public ResponseEntity<VehicleResponse> findAllVehicles()
+    public ResponseEntity<BaseResponse> findAllVehicles()
     {
-        VehicleResponse result = vehicleService.findAllVehicles();
+        BaseResponse result = vehicleService.findAllVehicles();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
@@ -28,9 +28,9 @@ public class VehiclesController {
     }
 
     @GetMapping("/{vehicleId}")
-    public ResponseEntity<VehicleResponse> findVehicleById(@PathVariable(value = "vehicleId")int vehicleId)
+    public ResponseEntity<BaseResponse> findVehicleById(@PathVariable(value = "vehicleId")int vehicleId)
     {
-        VehicleResponse result = vehicleService.findVehicleById(vehicleId);
+        BaseResponse result = vehicleService.findVehicleById(vehicleId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
@@ -39,9 +39,9 @@ public class VehiclesController {
     }
 
     @PostMapping("/drivers/{driverId}")
-    public ResponseEntity<VehicleResponse> addVehicleByUserId(@PathVariable(value = "driverId")int driverId, @RequestBody VehicleInput vehicleInput)
+    public ResponseEntity<BaseResponse> addVehicleByUserId(@PathVariable(value = "driverId")int driverId, @RequestBody VehicleInput vehicleInput)
     {
-        VehicleResponse result = vehicleService.addVehicleByUserId(driverId, vehicleInput);
+        BaseResponse result = vehicleService.addVehicleByUserId(driverId, vehicleInput);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
@@ -50,9 +50,9 @@ public class VehiclesController {
     }
 
     @GetMapping("/drivers/{driverId}")
-    public ResponseEntity<VehicleResponse> findVehiclesByDriverId(@PathVariable(value = "driverId")int driverId)
+    public ResponseEntity<BaseResponse> findVehiclesByDriverId(@PathVariable(value = "driverId")int driverId)
     {
-        VehicleResponse result = vehicleService.findVehiclesByDriverId(driverId);
+        BaseResponse result = vehicleService.findVehiclesByDriverId(driverId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);

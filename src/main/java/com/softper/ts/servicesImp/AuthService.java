@@ -4,7 +4,7 @@ import com.google.common.base.Strings;
 import com.softper.ts.exception.ResourceNotFoundException;
 import com.softper.ts.models.*;
 import com.softper.ts.repositories.*;
-import com.softper.ts.resources.comunications.AuthResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.RefreshInput;
 import com.softper.ts.resources.inputs.SignUp;
 import com.softper.ts.resources.outputs.AuthenticatedOutput;
@@ -77,16 +77,15 @@ public class AuthService implements IAuthService {
 
 
     @Override
-    public AuthResponse registerComplete(SignUp signUp) {
+    public BaseResponse registerComplete(SignUp signUp) {
+        BaseResponse response = new BaseResponse();
         try
         {
-            AuthResponse response = new AuthResponse();
             logger.info("signUp");
             Optional<User> result = userRepository.findByEmail(signUp.getEmail());
             if(result.isPresent()) {
+                response = new BaseResponse("registerComplete", "El correo ya se encuentra registrado", 0);
                 logger.info("Correo registrado : "+result.get().getEmail());
-                response.setMessage("El correo ya se encuentra registrado");
-                response.setStatus(0);
                 return response;
             } else {
                 logger.info("Correo no registrado");
@@ -150,9 +149,8 @@ public class AuthService implements IAuthService {
                     driverRepository.save(newDriver);
                 }
     
-                response.setResource(new AuthenticatedOutput(user.getId(),user.getEmail(),user.getPassword(),signUp.getFirstName(),signUp.getLastName(),signUp.getDiscriminator()));
-                response.setStatus(1);
-                
+                response = new BaseResponse("registerComplete", "success", 1);
+                response.setAuthenticatedOutput(new AuthenticatedOutput(user.getId(),user.getEmail(),user.getPassword(),signUp.getFirstName(),signUp.getLastName(),signUp.getDiscriminator()));
                 return response;
             }
             //NestedFactory nestedFactory = new NestedFactory();
@@ -162,15 +160,13 @@ public class AuthService implements IAuthService {
            }
         catch (Exception e)
         {
-            AuthResponse response = new AuthResponse();
-            response.setMessage("Ocurrio un error en methodo "+Thread.currentThread().getStackTrace()+" : "+e.getMessage());
-            response.setStatus(-2);
-            return response;
+            return new BaseResponse("registerComplete", "Ocurrio un error : "+e.getMessage(), -2);
         }
     }
 
     @Override
-    public AuthResponse login(String email, String password) {
+    public BaseResponse login(String email, String password) {
+        BaseResponse response = new BaseResponse();
         try {
             User getUser = userRepository.findByEmail(email)
                     .orElseThrow(()->new ResourceNotFoundException("user","email",email));
@@ -216,18 +212,20 @@ public class AuthService implements IAuthService {
 
             String r = "Bearer "+token;
             authenticatedOutput.setToken(r);
-            return new AuthResponse(authenticatedOutput);
+            response = new BaseResponse("login","success",1);
+            response.setAuthenticatedOutput(authenticatedOutput);
+            return response;
         }
         catch (Exception e)
         {
-            return new AuthResponse("An error ocurred while getting the user: "+e.getMessage());
+            return new BaseResponse("login","An error ocurred while getting the user: "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public AuthResponse loginFixed(String email, String password) {
+    public BaseResponse loginFixed(String email, String password) {
+        BaseResponse response = new BaseResponse();
         try {
-            AuthResponse response = new AuthResponse();
             User getUser = userRepository.findByEmail(email)
                     .orElseThrow(()->new ResourceNotFoundException("user","email",email));
             if(getUser.getPassword().equals(password)){
@@ -259,30 +257,24 @@ public class AuthService implements IAuthService {
 
                 String r = "Bearer "+token;
                 authenticatedOutput.setToken(r);
-                response.setResource(authenticatedOutput);
-                response.setMessage("Success");
-                response.setStatus(1);
+                response = new BaseResponse("loginfixed","success",1);
+                response.setAuthenticatedOutput(authenticatedOutput);
                 return response;
             }
             else {
-                response.setMessage("Correo o contraseña incorrectos");
-                response.setStatus(-2);
-                return response;
+                return new BaseResponse("loginfixed","Correo o contraseña incorrectos",0);
             }
             
         }
         catch (Exception e)
         {
-            AuthResponse response = new AuthResponse();
-            response.setMessage("Ocurrio un error en methodo "+Thread.currentThread().getStackTrace()+" : "+e.getMessage());
-            response.setStatus(-2);
-            return response;
+            return new BaseResponse("loginfixed","Ocurrio un error : "+e.getMessage(),-2);
         }
     }
 
     /*
     @Override
-    public AuthResponse refresh(RefreshInput refreshInput) throws Exception {
+    public BaseResponse refresh(RefreshInput refreshInput) throws Exception {
         RefreshToken refreshToken = refreshTokenService.findById(refreshInput.getRefreshToken()).get();
         String tokenId = jwtProvider.getJwtTokenId(refreshInput.getToken());
 
@@ -292,7 +284,7 @@ public class AuthService implements IAuthService {
             refreshTokenService.save(refreshToken);
             return login(user.getEmail(), user.getPassword());
         }
-        return new AuthResponse("Can't validate token");
+        return new BaseResponse("Can't validate token");
     }
      */
 }

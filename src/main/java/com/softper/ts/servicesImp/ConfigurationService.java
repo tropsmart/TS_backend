@@ -8,7 +8,7 @@ import com.softper.ts.repositories.IConfigurationRepository;
 import com.softper.ts.repositories.IPaymentMethodRepository;
 import com.softper.ts.repositories.IPersonRepository;
 import com.softper.ts.repositories.IUserRepository;
-import com.softper.ts.resources.comunications.ConfigurationResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.ConfigurationInput;
 import com.softper.ts.resources.inputs.PaymentMethodInput;
 import com.softper.ts.resources.outputs.ConfigurationOutput;
@@ -40,7 +40,8 @@ public class ConfigurationService implements IConfigurationService {
 
 
     @Override
-    public ConfigurationResponse addPaymentMethod(int userId, PaymentMethodInput paymentMethodInput) {
+    public BaseResponse addPaymentMethod(int userId, PaymentMethodInput paymentMethodInput) {
+        BaseResponse response = new BaseResponse();
         try
         {
             User getUser = userRepository.findById(userId).get();
@@ -59,17 +60,21 @@ public class ConfigurationService implements IConfigurationService {
             getConfigurationOutput.setLanguage(getUser.getConfiguration().getLanguage().toString());
             getConfigurationOutput.setPaymentCurrency(getUser.getConfiguration().getPaymentCurrency().toString());
             getConfigurationOutput.setPhone(getUser.getPerson().getPhone());
-            return new ConfigurationResponse(getConfigurationOutput);
+
+            response = new BaseResponse("addPaymentMethod","success",1);
+            response.setConfigurationOutput(getConfigurationOutput);
+            return response;
         }
         catch (Exception e)
         {
-            return new ConfigurationResponse("An error ocurred while getting a configuration");
+            return new BaseResponse("addPaymentMethod","An error ocurred while getting a configuration"+e.getMessage(),-2);
         }
     }
 
 
     @Override
-    public ConfigurationResponse findAllConfigurations() {
+    public BaseResponse findAllConfigurations() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Configuration> configurationList = configurationRepository.findAll();
@@ -84,17 +89,21 @@ public class ConfigurationService implements IConfigurationService {
                 newConfigurationOutput.setPaymentCurrency(c.getPaymentCurrency().toString());
                 configurationOutputList.add(newConfigurationOutput);
             }
-            return new ConfigurationResponse(configurationOutputList);
+            
+            response = new BaseResponse("findAllConfigurations","success",1);
+            response.setConfigurationOutputList(configurationOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new ConfigurationResponse("An error ocurred while getting a configuration list: "+e.getMessage());
+            return new BaseResponse("findAllConfigurations","An error ocurred while getting a configuration"+e.getMessage(),-2);
         }
     }
 
 
     @Override
-    public ConfigurationResponse findConfigurationByUserId(int userId) {
+    public BaseResponse findConfigurationByUserId(int userId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             User getUser = userRepository.findById(userId).get();
@@ -104,16 +113,20 @@ public class ConfigurationService implements IConfigurationService {
             newConfigurationOutput.setPaymentCurrency(getUser.getConfiguration().getPaymentCurrency().toString());
             newConfigurationOutput.setLanguage(getUser.getConfiguration().getLanguage().toString());
             newConfigurationOutput.setPhone(getUser.getPerson().getPhone());
-            return new ConfigurationResponse(newConfigurationOutput);
+
+            response = new BaseResponse("findConfigurationByUserId","success",1);
+            response.setConfigurationOutput(newConfigurationOutput);
+            return response;
         }
         catch (Exception e)
         {
-            return new ConfigurationResponse("An error ocurred while getting a configuration");
+            return new BaseResponse("findConfigurationByUserId","An error ocurred while getting a configuration"+e.getMessage(),-2);
         }
     }
 
     @Override
-    public ConfigurationResponse updateConfiguration(int userId, ConfigurationInput configurationInput) {
+    public BaseResponse updateConfiguration(int userId, ConfigurationInput configurationInput) {
+        BaseResponse response = new BaseResponse();
         try
         {
             User getUser = userRepository.findById(userId).get();
@@ -134,16 +147,19 @@ public class ConfigurationService implements IConfigurationService {
             newConfigurationOutput.setFirstName(getConfiguration.getUser().getPerson().getFirstName());
             newConfigurationOutput.setLastName(getConfiguration.getUser().getPerson().getLastName());
 
-            return new ConfigurationResponse(newConfigurationOutput);
+            response = new BaseResponse("updateConfiguration","success",1);
+            response.setConfigurationOutput(newConfigurationOutput);
+            return response;
         }
         catch (Exception e)
         {
-            return new ConfigurationResponse("An error ocurred while getting a configuration");
+            return new BaseResponse("updateConfiguration","An error ocurred while getting a configuration"+e.getMessage(),-2);
         }
     }
 
     @Override
-    public ConfigurationResponse generateConfiguration(int userId) {
+    public BaseResponse generateConfiguration(int userId) {
+        BaseResponse response = new BaseResponse();
         try{
             User getUser = userRepository.findById(userId).get();
             if(getUser.getConfiguration()== null)
@@ -163,7 +179,9 @@ public class ConfigurationService implements IConfigurationService {
                 newConfigurationOutput.setPhone(newConfiguration.getUser().getPerson().getPhone());
                 newConfigurationOutput.setFirstName(newConfiguration.getUser().getPerson().getFirstName());
                 newConfigurationOutput.setLastName(newConfiguration.getUser().getPerson().getLastName());
-                return new ConfigurationResponse(newConfigurationOutput);
+                response = new BaseResponse("generateConfiguration","success",1);
+                response.setConfigurationOutput(newConfigurationOutput);
+                return response;
 
             }
             else{
@@ -175,11 +193,13 @@ public class ConfigurationService implements IConfigurationService {
                 newConfigurationOutput.setFirstName(getConfiguration.getUser().getPerson().getFirstName());
                 newConfigurationOutput.setLastName(getConfiguration.getUser().getPerson().getLastName());
 
-                return new ConfigurationResponse(newConfigurationOutput);
+                response = new BaseResponse("generateConfiguration","success",1);
+                response.setConfigurationOutput(newConfigurationOutput);
+                return response;
             }
         }catch (Exception e)
         {
-            return new ConfigurationResponse("An error ocurred while getting a configuration");
+            return new BaseResponse("generateConfiguration","An error ocurred while getting a configuration"+e.getMessage(),-2);
         }
     }
 

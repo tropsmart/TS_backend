@@ -1,13 +1,13 @@
 package com.softper.ts.services;
 
 import com.softper.ts.models.Customer;
-import com.softper.ts.resources.comunications.CustomerResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface ICustomerService extends ICrudService<Customer>{
-    CustomerResponse findCustomerById(int customerId);
-    CustomerResponse findAllCustomers();
-    CustomerResponse rechargeCreditsByCustomerId(int customerId, double creditUnits);
+    BaseResponse findCustomerById(int customerId);
+    BaseResponse findAllCustomers();
+    BaseResponse rechargeCreditsByCustomerId(int customerId, double creditUnits);
 
 }

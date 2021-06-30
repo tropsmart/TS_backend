@@ -2,7 +2,7 @@ package com.softper.ts.servicesImp;
 
 import com.softper.ts.models.Price;
 import com.softper.ts.repositories.IPriceRepository;
-import com.softper.ts.resources.comunications.PriceResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.outputs.PriceOutput;
 import com.softper.ts.services.IPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +39,12 @@ public class PriceService implements IPriceService {
     }
 
     @Override
-    public PriceResponse findAllPrices() {
+    public BaseResponse findAllPrices() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Price> prices = priceRepository.findAll();
-            List<PriceOutput> priceResponsesList = new ArrayList<>();
+            List<PriceOutput> priceOutputList = new ArrayList<>();
             for (Price p:prices) {
                 PriceOutput newPriceOutput = new PriceOutput();
                 newPriceOutput.setTotalPrice(p.getTotalPrice());
@@ -52,20 +53,21 @@ public class PriceService implements IPriceService {
                     newPriceOutput.setPriceFrom("Subscription");
                 if(p.getPriceType()==2)
                     newPriceOutput.setPriceFrom("Cargo");
-                priceResponsesList.add(newPriceOutput);
+                priceOutputList.add(newPriceOutput);
             }
-            return new PriceResponse(priceResponsesList);
+            response = new BaseResponse("findAllPrices", "success", 1);
+            response.setPriceOutputList(priceOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new PriceResponse("An error ocurred while getting the price list : "+e.getMessage());
-
+            return new BaseResponse("findAllPrices","An error ocurred while getting the price list : "+e.getMessage(),-2);
         }
-
     }
 
     @Override
-    public PriceResponse findPriceById(int priceId) {
+    public BaseResponse findPriceById(int priceId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Price getPrice = priceRepository.findById(priceId).get();
@@ -77,21 +79,24 @@ public class PriceService implements IPriceService {
             if(getPrice.getPriceType()==2)
                 newPriceOutput.setPriceFrom("Cargo");
 
-            return new PriceResponse(newPriceOutput);
+            response = new BaseResponse("findPriceById", "success", 1);
+            response.setPriceOutput(newPriceOutput);
+            return response;
         }
         catch (Exception e)
         {
-            return new PriceResponse("An error ocurred while getting the price : "+e.getMessage());
+            return new BaseResponse("findPriceById","An error ocurred while getting the price list : "+e.getMessage(),-2);
         }
 
     }
 
     @Override
-    public PriceResponse findPricesByPriceType(int priceType) {
+    public BaseResponse findPricesByPriceType(int priceType) {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Price> prices = priceRepository.findPricesByType(priceType);
-            List<PriceOutput> priceResponsesList = new ArrayList<>();
+            List<PriceOutput> priceOutputList = new ArrayList<>();
             for (Price p:prices) {
                 PriceOutput newPriceOutput = new PriceOutput();
                 newPriceOutput.setTotalPrice(p.getTotalPrice());
@@ -100,13 +105,15 @@ public class PriceService implements IPriceService {
                     newPriceOutput.setPriceFrom("Subscription");
                 if(p.getPriceType()==2)
                     newPriceOutput.setPriceFrom("Cargo");
-                priceResponsesList.add(newPriceOutput);
+                priceOutputList.add(newPriceOutput);
             }
-            return new PriceResponse(priceResponsesList);
+            response = new BaseResponse("findPricesByPriceType", "success", 1);
+            response.setPriceOutputList(priceOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new PriceResponse("An error ocurred while getting the price list : "+e.getMessage());
+            return new BaseResponse("findPricesByPriceType","An error ocurred while getting the price list : "+e.getMessage(),-2);
         }
 
     }

@@ -1,7 +1,6 @@
 package com.softper.ts.stepDefinition;
 
-import com.softper.ts.resources.comunications.BalanceResponse;
-import com.softper.ts.resources.comunications.UserResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.BalanceService;
 import com.softper.ts.servicesImp.UserService;
 import io.cucumber.java.en.Given;
@@ -22,9 +21,9 @@ public class VisualizeTransactions {
     private String port;
     private RestTemplate restTemplate = new RestTemplate();
 
-    UserResponse user;
+    BaseResponse user;
     UserService userService = new UserService();
-    BalanceResponse balance;
+    BaseResponse balance;
     BalanceService balanceService = new BalanceService();
 
 
@@ -40,7 +39,7 @@ public class VisualizeTransactions {
 
     @Then("the money transaction window will open")
     public void the_money_transaction_window_will_open() {
-        if(balance.success)
+        if(balance.status == 1)
             System.out.println("VisualizeTransactions scenario 1 test success");
         else
             System.out.println("VisualizeTransaction scenario 1 test failed");
@@ -51,12 +50,12 @@ public class VisualizeTransactions {
     public void you_select_the_option_See_transactions_but_you_not_have_done_one_yet() {
 
         balance = balanceService.findBalanceById(2);
-        balance = new BalanceResponse("You dont have any transaction");
+        balance = new BaseResponse("findBalanceById", "You dont have any transaction",1);
     }
 
     @Then("the money transaction window will open with a message saying You have not made any transactions")
     public void the_money_transaction_window_will_open_with_a_message_saying_You_have_not_made_any_transactions() {
-        if(balance.success)
+        if(balance.status == 1)
             System.out.println("VisualizeTransactions scenario 1 test success");
         else
             System.out.println("VisualizeTransaction scenario 1 test failed");
@@ -66,7 +65,7 @@ public class VisualizeTransactions {
     @Then("the window error while viewing transactions, loss of connection to the application.")
     public void the_window_error_while_viewing_transactions_loss_of_connection_to_the_application() {
         System.out.println("Frontend lost connection with the user device");
-        balance = new BalanceResponse("Conection lost");
+        balance = new BaseResponse("Conection lost");
     }
 
 

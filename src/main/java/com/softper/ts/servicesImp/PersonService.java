@@ -4,7 +4,7 @@ import com.softper.ts.models.Person;
 import com.softper.ts.models.User;
 import com.softper.ts.repositories.IPersonRepository;
 import com.softper.ts.repositories.IUserRepository;
-import com.softper.ts.resources.comunications.PersonResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.outputs.PersonOutput;
 import com.softper.ts.services.IPersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,8 @@ public class PersonService implements IPersonService {
 
 
     @Override
-    public PersonResponse findPeopleById(int id) {
+    public BaseResponse findPeopleById(int id) {
+        BaseResponse response = new BaseResponse();
         try
         {
             User getUser = userRepository.findUserByPersonId(id).get();
@@ -58,18 +59,20 @@ public class PersonService implements IPersonService {
                 newPersonOutput.setUserType("Customer");
             if(getPerson.getPersonType()==2)
                 newPersonOutput.setUserType("Driver");
-            return new PersonResponse(newPersonOutput);
+            
+            response = new BaseResponse("findPeopleById","success",1);
+            response.setPersonOutput(newPersonOutput);
+            return response;
         }
         catch (Exception e)
         {
-            return new PersonResponse("An error ocurred while getting the person: "+e.getMessage());
-
+            return new BaseResponse("findPeopleById", "An error ocurred while getting the person: "+e.getMessage(),-2);
         }
-
     }
 
     @Override
-    public PersonResponse findAllPersons() {
+    public BaseResponse findAllPersons() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Person> personList = personRepository.findAll();
@@ -86,11 +89,13 @@ public class PersonService implements IPersonService {
                     newPersonOutput.setUserType("Driver");
                 personOutputList.add(newPersonOutput);
             }
-            return new PersonResponse(personOutputList);
+            response = new BaseResponse("findAllPersons","success",1);
+            response.setPersonOutputList(personOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new PersonResponse("An error ocurred while getting the person list: "+e.getMessage());
+            return new BaseResponse("findAllPersons", "An error ocurred while getting the person: "+e.getMessage(),-2);
         }
 
     }

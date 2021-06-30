@@ -1,7 +1,7 @@
 package com.softper.ts.controllers;
 
 import com.softper.ts.models.ServiceRequest;
-import com.softper.ts.resources.comunications.ServiceResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.ServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,9 @@ public class ServicesController {
     private ServiceService serviceService;
 
     @GetMapping
-    public ResponseEntity<ServiceResponse> findAllServices()
+    public ResponseEntity<BaseResponse> findAllServices()
     {
-        ServiceResponse result = serviceService.findAllServices();
+        BaseResponse result = serviceService.findAllServices();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -27,9 +27,9 @@ public class ServicesController {
     }
 
     @PostMapping("/drivers/{driverId}")
-    public ResponseEntity<ServiceResponse> addServiceByDriverId(@PathVariable(value = "driverId")int driverId)
+    public ResponseEntity<BaseResponse> addServiceByDriverId(@PathVariable(value = "driverId")int driverId)
     {
-        ServiceResponse result = serviceService.createService(driverId);
+        BaseResponse result = serviceService.createService(driverId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -38,17 +38,17 @@ public class ServicesController {
     }
 
     @GetMapping("/drivers/{driverId}/some")
-    public ResponseEntity<ServiceResponse> findServiceByDriverId(@PathVariable(value = "driverId")int driverId)
+    public ResponseEntity<BaseResponse> findServiceByDriverId(@PathVariable(value = "driverId")int driverId)
     {
-        ServiceResponse result = serviceService.findSomeServiceByDriverId(driverId);
+        BaseResponse result = serviceService.findSomeServiceByDriverId(driverId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/drivers/{driverId}")
-    public ResponseEntity<ServiceResponse> findServicesByDriverId(@PathVariable(value = "driverId")int driverId)
+    public ResponseEntity<BaseResponse> findServicesByDriverId(@PathVariable(value = "driverId")int driverId)
     {
-        ServiceResponse result = serviceService.findServicesByDriverId(driverId);
+        BaseResponse result = serviceService.findServicesByDriverId(driverId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);

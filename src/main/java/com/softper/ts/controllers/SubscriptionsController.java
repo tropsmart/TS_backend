@@ -1,6 +1,6 @@
 package com.softper.ts.controllers;
 
-import com.softper.ts.resources.comunications.SubscriptionResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +15,9 @@ public class SubscriptionsController {
     private SubscriptionService subscriptionService;
 
     @GetMapping
-    public ResponseEntity<SubscriptionResponse> findAllSubscriptions()
+    public ResponseEntity<BaseResponse> findAllSubscriptions()
     {
-        SubscriptionResponse result = subscriptionService.findAllSubscriptions();
+        BaseResponse result = subscriptionService.findAllSubscriptions();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
@@ -26,9 +26,9 @@ public class SubscriptionsController {
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<SubscriptionResponse> findSubscriptionsByUserId(@PathVariable(value = "userId")int userId)
+    public ResponseEntity<BaseResponse> findSubscriptionsByUserId(@PathVariable(value = "userId")int userId)
     {
-        SubscriptionResponse result = subscriptionService.findSubscriptionsByUserId(userId);
+        BaseResponse result = subscriptionService.findSubscriptionsByUserId(userId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.EXPECTATION_FAILED);
@@ -38,9 +38,9 @@ public class SubscriptionsController {
 
 
     @PostMapping("/users/{userId}/plans/{planId}")
-    public ResponseEntity<SubscriptionResponse> subscribeDriver(@PathVariable(value = "userId")int userId, @PathVariable(value = "planId")int planId)
+    public ResponseEntity<BaseResponse> subscribeDriver(@PathVariable(value = "userId")int userId, @PathVariable(value = "planId")int planId)
     {
-        SubscriptionResponse result = subscriptionService.subscribe(userId, planId);
+        BaseResponse result = subscriptionService.subscribe(userId, planId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -49,9 +49,9 @@ public class SubscriptionsController {
     }
 
     @PutMapping("{subscriptionId}/disable")
-    public ResponseEntity<SubscriptionResponse> cancelSubscription(@PathVariable(value = "subscriptionId")int subscriptionId)
+    public ResponseEntity<BaseResponse> cancelSubscription(@PathVariable(value = "subscriptionId")int subscriptionId)
     {
-        SubscriptionResponse result = subscriptionService.cancelSubscription(subscriptionId);
+        BaseResponse result = subscriptionService.cancelSubscription(subscriptionId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -60,17 +60,17 @@ public class SubscriptionsController {
     }
 
     @PutMapping("{subscriptionId}/enable")
-    public ResponseEntity<SubscriptionResponse> enableSubscription(@PathVariable(value = "subscriptionId")int subscriptionId)
+    public ResponseEntity<BaseResponse> enableSubscription(@PathVariable(value = "subscriptionId")int subscriptionId)
     {
-        SubscriptionResponse result = subscriptionService.enableSubscriptionById(subscriptionId);
+        BaseResponse result = subscriptionService.enableSubscriptionById(subscriptionId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("{subscriptionId}")
-    public ResponseEntity<SubscriptionResponse> deleteSubscriptionBySubscriptionId(@PathVariable(value = "subscriptionId")int subscriptionId)
+    public ResponseEntity<BaseResponse> deleteSubscriptionBySubscriptionId(@PathVariable(value = "subscriptionId")int subscriptionId)
     {
-        SubscriptionResponse result = subscriptionService.deleteSubscriptionBySubscriptionId(subscriptionId);
+        BaseResponse result = subscriptionService.deleteSubscriptionBySubscriptionId(subscriptionId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

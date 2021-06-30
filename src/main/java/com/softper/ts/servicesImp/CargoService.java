@@ -3,14 +3,15 @@ package com.softper.ts.servicesImp;
 import com.softper.ts.exception.ResourceNotFoundException;
 import com.softper.ts.models.*;
 import com.softper.ts.repositories.*;
-import com.softper.ts.resources.comunications.CargoResponse;
-import com.softper.ts.resources.comunications.CargoResponseFixed;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.CargoInput;
 import com.softper.ts.resources.outputs.CargoOutput;
 import com.softper.ts.resources.outputs.CargoOutputFixed;
 import com.softper.ts.services.ICargoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import io.swagger.models.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,8 @@ public class CargoService implements ICargoService {
 
 
     @Override
-    public CargoResponse findCargoesByCustomerId(int customerId) {
+    public BaseResponse findCargoesByCustomerId(int customerId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Cargo> cargoes = cargoRepository.findCargoesByCustomerId(customerId);
@@ -70,17 +72,19 @@ public class CargoService implements ICargoService {
             for (Cargo c:cargoes) {
                 cargoOutputList.add(toCargoOutput(c));
             }
-            return new CargoResponse(cargoOutputList);
+            response = new BaseResponse("findCargoesByCustomerId","success",1);
+            response.setCargoOutputList(cargoOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while getting cargo list: "+e.getMessage());
+            return new BaseResponse("findCargoesByCustomerId","An error ocurred while getting cargo list: "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public CargoResponse addCargoByCustomerId(int customerId, CargoInput cargoInput) {
-
+    public BaseResponse addCargoByCustomerId(int customerId, CargoInput cargoInput) {
+        BaseResponse response = new BaseResponse();
         try
         {
             com.softper.ts.models.Service getService = serviceRepository.findById(cargoInput.getServiceId()).get();
@@ -91,7 +95,8 @@ public class CargoService implements ICargoService {
 
             Balance getBalance = getUser.getBalance();
             if(getCustomer.getCredits() - cargoInput.getServicePrice()<0)
-                return new CargoResponse("You dont have enough credits");
+                return new BaseResponse("addCargoByCustomerId","You dont have enough credits",0);
+            
             Price newPrice = new Price();
             newPrice.setTotalPrice((double) cargoInput.getServicePrice());
             newPrice.setTax(((double) cargoInput.getServicePrice()) * 0.19);
@@ -124,33 +129,36 @@ public class CargoService implements ICargoService {
             newLocation.setCargo(newCargo);
             newLocation = locationRepository.save(newLocation);
 
-            return new CargoResponse(toCargoOutput(newCargo));
+            response = new BaseResponse("addCargoByCustomerId","success",1);
+            response.setCargoOutput(toCargoOutput(newCargo));
+            return response;
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while registering a cargo: "+e.getMessage());
+            return new BaseResponse("addCargoByCustomerId","An error ocurred while registering a cargo: "+e.getMessage(),-2);
         }
 
     }
 
     @Override
-    public CargoResponse findCargoById(int cargoId) {
+    public BaseResponse findCargoById(int cargoId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Cargo getCargo = cargoRepository.findById(cargoId).get();
-
-            return new CargoResponse(toCargoOutput(getCargo));
+            response = new BaseResponse("findCargoById","success",1);
+            response.setCargoOutput(toCargoOutput(getCargo));
+            return response;
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while getting a cargo: "+e.getMessage());
+            return new BaseResponse("findCargoById","An error ocurred while getting a cargo: "+e.getMessage(),-2);
         }
-
-
     }
 
     @Override
-    public CargoResponse findAllCargoes() {
+    public BaseResponse findAllCargoes() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Cargo> cargoes = cargoRepository.findAll();
@@ -158,16 +166,19 @@ public class CargoService implements ICargoService {
             for (Cargo c:cargoes) {
                 cargoOutputList.add(toCargoOutput(c));
             }
-            return new CargoResponse(cargoOutputList);
+            response = new BaseResponse("findAllCargoes","success",1);
+            response.setCargoOutputList(cargoOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while getting the cargo list: "+e.getMessage());
+            return new BaseResponse("findAllCargoes","An error ocurred while getting the cargo list: "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public CargoResponse findAllCargoesFixed() {
+    public BaseResponse findAllCargoesFixed() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Cargo> cargoes = cargoRepository.findAll();
@@ -175,16 +186,19 @@ public class CargoService implements ICargoService {
             for (Cargo c:cargoes) {
                 cargoOutputList.add(toCargoOutput(c));
             }
-            return new CargoResponse(cargoOutputList);
+            response = new BaseResponse("findAllCargoesFixed","success",1);
+            response.setCargoOutputList(cargoOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while getting the cargo list: "+e.getMessage());
+            return new BaseResponse("findAllCargoesFixed","An error ocurred while getting the cargo list: "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public CargoResponse setCargoDelivered(int cargoId) {
+    public BaseResponse setCargoDelivered(int cargoId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Cargo getCargo = cargoRepository.findById(cargoId).get();
@@ -196,17 +210,20 @@ public class CargoService implements ICargoService {
             getCargo.setCargoStatus("Done");
             getCargo = cargoRepository.save(getCargo);
 
-            return new CargoResponse(toCargoOutput(getCargo));
+            response = new BaseResponse("setCargoDelivered","success",1);
+            response.setCargoOutput(toCargoOutput(getCargo));
+            return response;
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while getting the cargo list: "+e.getMessage());
+            return new BaseResponse("setCargoDelivered","An error ocurred while getting the cargo list: "+e.getMessage(),-2);
         }
     }
 
 
     @Override
-    public CargoResponse findCargoesByDriverId(int driverId) {
+    public BaseResponse findCargoesByDriverId(int driverId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             ServiceRequest getServiceRequest = serviceRequestRepository.findServiceByDriverId(driverId);
@@ -218,16 +235,19 @@ public class CargoService implements ICargoService {
                     cargoOutputList.add(toCargoOutput(c));
                 }
             }
-            return new CargoResponse(cargoOutputList);
+            response = new BaseResponse("findCargoesByDriverId","success",1);
+            response.setCargoOutputList(cargoOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while getting the cargo list : "+e.getMessage());
+            return new BaseResponse("findCargoesByDriverId","An error ocurred while getting the cargo list : "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public CargoResponse findRequestedCargoesByDriverId(int driverId) {
+    public BaseResponse findRequestedCargoesByDriverId(int driverId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             ServiceRequest getServiceRequest = serviceRequestRepository.findServiceByDriverId(driverId);
@@ -240,19 +260,21 @@ public class CargoService implements ICargoService {
                     {
                         cargoOutputList.add(toCargoOutput(c));
                     }
-
                 }
             }
-            return new CargoResponse(cargoOutputList);
+            response = new BaseResponse("findRequestedCargoesByDriverId","success",1);
+            response.setCargoOutputList(cargoOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while getting the cargo list : "+e.getMessage());
+            return new BaseResponse("findRequestedCargoesByDriverId","An error ocurred while getting the cargo list : "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public CargoResponse findConfirmedCargoesByDriverId(int driverId) {
+    public BaseResponse findConfirmedCargoesByDriverId(int driverId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             ServiceRequest getServiceRequest = serviceRequestRepository.findServiceByDriverId(driverId);
@@ -267,16 +289,19 @@ public class CargoService implements ICargoService {
                     }
                 }
             }
-            return new CargoResponse(cargoOutputList);
+            response = new BaseResponse("findConfirmedCargoesByDriverId","success",1);
+            response.setCargoOutputList(cargoOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while getting the cargo list : "+e.getMessage());
+            return new BaseResponse("findConfirmedCargoesByDriverId","An error ocurred while getting the cargo list : "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public CargoResponse findFinishedCargoesByDriverId(int driverId) {
+    public BaseResponse findFinishedCargoesByDriverId(int driverId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             ServiceRequest getServiceRequest = serviceRequestRepository.findServiceByDriverId(driverId);
@@ -291,18 +316,21 @@ public class CargoService implements ICargoService {
                     }
                 }
             }
-            return new CargoResponse(cargoOutputList);
+            response = new BaseResponse("findFinishedCargoesByDriverId","success",1);
+            response.setCargoOutputList(cargoOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while getting the cargo list : "+e.getMessage());
+            return new BaseResponse("findFinishedCargoesByDriverId","An error ocurred while getting the cargo list : "+e.getMessage(),-2);
         }
     }
 
 
 
     @Override
-    public CargoResponse confirmCargoRequest(int cargoId) {
+    public BaseResponse confirmCargoRequest(int cargoId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Cargo getCargo = cargoRepository.findById(cargoId).get();
@@ -313,16 +341,19 @@ public class CargoService implements ICargoService {
             getCargo.setCargoStatus("In process");
             getCargo = cargoRepository.save(getCargo);
 
-            return new CargoResponse(toCargoOutput(getCargo));
+            response = new BaseResponse("confirmCargoRequest","success",1);
+            response.setCargoOutput(toCargoOutput(getCargo));
+            return response;
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while getting the cargo list: "+e.getMessage());
+            return new BaseResponse("confirmCargoRequest","An error ocurred while getting the cargo list : "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public CargoResponse rejectCargoById(int cargoId) {
+    public BaseResponse rejectCargoById(int cargoId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Cargo getCargo = cargoRepository.findById(cargoId).get();
@@ -333,16 +364,19 @@ public class CargoService implements ICargoService {
             getCargo.setCargoStatus("Rejected");
             getCargo = cargoRepository.save(getCargo);
 
-            return new CargoResponse(toCargoOutput(getCargo));
+            response = new BaseResponse("rejectCargoById","success",1);
+            response.setCargoOutput(toCargoOutput(getCargo));
+            return response;
         }
         catch (Exception e)
         {
-            return new CargoResponse("An error ocurred while getting the cargo list: "+e.getMessage());
+            return new BaseResponse("rejectCargoById","An error ocurred while getting the cargo list : "+e.getMessage(),-2);
         }
     }
 
 
     public CargoOutput toCargoOutput(Cargo cargo){
+        BaseResponse response = new BaseResponse();
         CargoOutput newCargoOutput = new CargoOutput();
         newCargoOutput.setId(cargo.getId());
         newCargoOutput.setWeight(cargo.getWeight());

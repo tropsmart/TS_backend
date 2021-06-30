@@ -6,7 +6,7 @@ import com.softper.ts.models.Location;
 import com.softper.ts.models.User;
 import com.softper.ts.repositories.IDriverRepository;
 import com.softper.ts.repositories.IUserRepository;
-import com.softper.ts.resources.comunications.DriverResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.outputs.DriverOutput;
 import com.softper.ts.services.IDriverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,26 +48,30 @@ public class DriverService implements IDriverService {
 
 
     @Override
-    public DriverResponse findNearDrivers(Location location) {
+    public BaseResponse findNearDrivers(Location location) {
         return null;
     }
 
     @Override
-    public DriverResponse findDriverById(int driverId) {
+    public BaseResponse findDriverById(int driverId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Driver getDriver = driverRepository.findById(driverId).get();
-            return new DriverResponse(new DriverOutput(getDriver.getPerson().getUser().getId(),getDriver.getPerson().getFirstName(),getDriver.getPerson().getLastName(),getDriver.getLicense(),getDriver.getPerson().getUser().getEmail(),getDriver.getPerson().getPersonType(),getDriver.getId()));
+            response = new BaseResponse("findDriverById","success",1);
+            response.setDriverOutput(new DriverOutput(getDriver.getPerson().getUser().getId(),getDriver.getPerson().getFirstName(),getDriver.getPerson().getLastName(),getDriver.getLicense(),getDriver.getPerson().getUser().getEmail(),getDriver.getPerson().getPersonType(),getDriver.getId()));
+            return response;
         }
         catch (Exception e)
         {
-            return new DriverResponse("An error ocurred while getting driver: "+e.getMessage());
+            return new BaseResponse("findDriverById","An error ocurred while getting driver: "+e.getMessage(),-2);
         }
     }
 
 
     @Override
-    public DriverResponse findAllDrivers() {
+    public BaseResponse findAllDrivers() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Driver> drivers = driverRepository.findAll();
@@ -75,27 +79,31 @@ public class DriverService implements IDriverService {
             for (Driver getDriver:drivers) {
                 driverOutputList.add(new DriverOutput(getDriver.getPerson().getUser().getId(),getDriver.getPerson().getFirstName(),getDriver.getPerson().getLastName(),getDriver.getLicense(),getDriver.getPerson().getUser().getEmail(),getDriver.getPerson().getPersonType(),getDriver.getId()));
             }
-            return new DriverResponse(driverOutputList);
-        }
+            response = new BaseResponse("findAllDrivers","success",1);
+            response.setDriverOutputList(driverOutputList);
+            return response;        }
         catch (Exception e)
         {
-            return new DriverResponse("An error ocurred while getting driver list: "+e.getMessage());
+            return new BaseResponse("findAllDrivers","An error ocurred while getting driver: "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public DriverResponse findDriversByName(String name){
+    public BaseResponse findDriversByName(String name){
+        BaseResponse response = new BaseResponse();
         try{
             List<User> users = userRepository.findDriverByName(name);
             List<DriverOutput> driverOutputList = new ArrayList<>();
             for (User getUser:users) {
                 driverOutputList.add(new DriverOutput(getUser.getPerson().getDriver().getPerson().getUser().getId(),getUser.getPerson().getDriver().getPerson().getFirstName(),getUser.getPerson().getDriver().getPerson().getLastName(),getUser.getPerson().getDriver().getLicense(),getUser.getPerson().getDriver().getPerson().getUser().getEmail(),getUser.getPerson().getDriver().getPerson().getPersonType(),getUser.getPerson().getDriver().getId()));
             }
-            return new DriverResponse(driverOutputList);
+            response = new BaseResponse("findDriversByName","success",1);
+            response.setDriverOutputList(driverOutputList);
+            return response;        
         }
         catch (Exception e)
         {
-            return new DriverResponse("An error ocurred while getting driver list: "+e.getMessage());
+            return new BaseResponse("findDriversByName","An error ocurred while getting driver: "+e.getMessage(),-2);
         }
     }
 

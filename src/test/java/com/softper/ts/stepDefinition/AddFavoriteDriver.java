@@ -1,7 +1,6 @@
 package com.softper.ts.stepDefinition;
 
-import com.softper.ts.resources.comunications.FavoriteResponse;
-import com.softper.ts.resources.comunications.UserResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.UserService;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -20,10 +19,10 @@ public class AddFavoriteDriver {
     private String port;
     private RestTemplate restTemplate = new RestTemplate();
 
-    UserResponse user;
-    UserResponse favourite;
+    BaseResponse user;
+    BaseResponse favourite;
     UserService userService = new UserService();
-    FavoriteResponse favouriteResponse = new FavoriteResponse();
+    BaseResponse favouriteResponse = new BaseResponse();
 
     @When("you select the “Add to Favorites” option")
     public void you_select_the_Add_to_Favorites_option() {
@@ -35,7 +34,7 @@ public class AddFavoriteDriver {
     @Then("the carrier is added to the customer's favorites list and the message “Added to favorites” is displayed")
     public void the_carrier_is_added_to_the_customer_s_favorites_list_and_the_message_Added_to_favorites_is_displayed() {
         favouriteResponse = userService.findFavoriteByUserIdAndFavoriteId(1,3);
-        if(favouriteResponse.success)
+        if(favouriteResponse.getStatus() == 1)
             System.out.println("AddFavouriteDriver scenario1 test success");
         else
             System.out.println("AddFavouriteDriver scenario1 test failed");
@@ -49,7 +48,7 @@ public class AddFavoriteDriver {
     @Then("the carrier is not added to the customer's favorites list,")
     public void the_carrier_is_not_added_to_the_customer_s_favorites_list() {
         favouriteResponse = userService.findFavoriteByUserIdAndFavoriteId(1,3);
-        if(favouriteResponse.success)
+        if(favouriteResponse.getStatus() == 1)
             System.out.println("AddFavouriteDriver scenario1 test success");
         else
             System.out.println("AddFavouriteDriver scenario1 test failed");

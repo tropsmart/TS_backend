@@ -5,7 +5,7 @@ import com.softper.ts.models.PaymentMethod;
 import com.softper.ts.models.User;
 import com.softper.ts.repositories.IPaymentMethodRepository;
 import com.softper.ts.repositories.IUserRepository;
-import com.softper.ts.resources.comunications.PaymentMethodResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.PaymentMethodInput;
 import com.softper.ts.resources.outputs.PaymentMethodOutput;
 import com.softper.ts.services.IPaymentMethodService;
@@ -25,7 +25,8 @@ public class PaymentMethodService implements IPaymentMethodService {
     IUserRepository userRepository;
 
     @Override
-    public PaymentMethodResponse findAllPaymentMethod() {
+    public BaseResponse findAllPaymentMethod() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<PaymentMethod> paymentMethodList = paymentMethodRepository.findAll();
@@ -34,33 +35,38 @@ public class PaymentMethodService implements IPaymentMethodService {
                 paymentMethodOutputList.add(new PaymentMethodOutput(p.getBankName(),
                         p.getSwiftCode(),p.getAccountNumber()));
             }
-            return new PaymentMethodResponse(paymentMethodOutputList);
+            response = new BaseResponse("findAllPaymentMethod","success",1);
+            response.setPaymentMethodOutputList(paymentMethodOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new PaymentMethodResponse("An error ocurred while getting paymentMethod: "+e.getMessage());
+            return new BaseResponse("findAllPaymentMethod","An error ocurred while getting paymentMethod: "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public PaymentMethodResponse findPaymentMethodById(int paymentMethodId) {
+    public BaseResponse findPaymentMethodById(int paymentMethodId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             PaymentMethod getPaymentMethod = paymentMethodRepository.findById(paymentMethodId)
                     .orElseThrow(()->new ResourceNotFoundException("paymentMethod","id",paymentMethodId));
+            response = new BaseResponse("findPaymentMethodById","success",1);
 
-            return new PaymentMethodResponse(new PaymentMethodOutput(getPaymentMethod.getBankName(),
+            response.setPaymentMethodOutput(new PaymentMethodOutput(getPaymentMethod.getBankName(),
                     getPaymentMethod.getSwiftCode(),getPaymentMethod.getAccountNumber()));
-
+            return response;
         }
         catch (Exception e)
         {
-            return new PaymentMethodResponse("An error ocurred while getting paymentMethod: "+e.getMessage());
+            return new BaseResponse("findPaymentMethodById","An error ocurred while getting paymentMethod: "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public PaymentMethodResponse findPaymentMethodByUserId(int userId) {
+    public BaseResponse findPaymentMethodByUserId(int userId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<PaymentMethod> paymentMethodList = paymentMethodRepository.findPaymentMethodByUserId(userId);
@@ -70,16 +76,19 @@ public class PaymentMethodService implements IPaymentMethodService {
                         p.getSwiftCode(),p.getAccountNumber()));
             }
 
-            return new PaymentMethodResponse(paymentMethodOutputList);
+            response = new BaseResponse("findPaymentMethodByUserId","success",1);
+            response.setPaymentMethodOutputList(paymentMethodOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new PaymentMethodResponse("An error ocurred while getting paymentMethod: "+e.getMessage());
+            return new BaseResponse("findPaymentMethodByUserId","An error ocurred while getting paymentMethod: "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public PaymentMethodResponse addPaymentMethodByUserId(int userId, PaymentMethodInput paymentMethodInput) {
+    public BaseResponse addPaymentMethodByUserId(int userId, PaymentMethodInput paymentMethodInput) {
+        BaseResponse response = new BaseResponse();
         try{
             User getUser = userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("id","user",userId));
             PaymentMethod newPaymentMethod = new PaymentMethod();
@@ -91,11 +100,13 @@ public class PaymentMethodService implements IPaymentMethodService {
 
             newPaymentMethod = paymentMethodRepository.save(newPaymentMethod);
 
-            return new PaymentMethodResponse(toPaymentMethodOutput(newPaymentMethod));
+            response = new BaseResponse("addPaymentMethodByUserId","success",1);
+            response.setPaymentMethodOutput(toPaymentMethodOutput(newPaymentMethod));
+            return response;
         }
         catch (Exception e)
         {
-            return new PaymentMethodResponse("An error ocurred while getting paymentMethod: "+e.getMessage());
+            return new BaseResponse("addPaymentMethodByUserId","An error ocurred while getting paymentMethod: "+e.getMessage(),-2);
         }
     }
 

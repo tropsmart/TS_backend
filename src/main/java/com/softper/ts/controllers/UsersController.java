@@ -1,6 +1,6 @@
 package com.softper.ts.controllers;
 
-import com.softper.ts.resources.comunications.*;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.CustomerService;
 import com.softper.ts.servicesImp.DriverService;
 import com.softper.ts.servicesImp.UserService;
@@ -17,9 +17,9 @@ public class UsersController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<UserResponse> findAllUsers()
+    public ResponseEntity<BaseResponse> findAllUsers()
     {
-        UserResponse result = userService.findAllUsers();
+        BaseResponse result = userService.findAllUsers();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -28,9 +28,9 @@ public class UsersController {
     }
 
     @PostMapping("{userId}/favorites/{userfavoritedId}")
-    public ResponseEntity<FavoriteResponse> setUserFavorited(@PathVariable(value = "userId")int userId, @PathVariable(value = "userfavoritedId")int userFavouritedId)
+    public ResponseEntity<BaseResponse> setUserFavorited(@PathVariable(value = "userId")int userId, @PathVariable(value = "userfavoritedId")int userFavouritedId)
     {
-        FavoriteResponse result = userService.setFavourited(userId, userFavouritedId);
+        BaseResponse result = userService.setFavourited(userId, userFavouritedId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -39,9 +39,9 @@ public class UsersController {
     }
 
     @PostMapping("/{userId}/blockeds/{userBlockedId}")
-    public ResponseEntity<BlockedResponse> setUserBlocked(@PathVariable(value = "userId")int userId, @PathVariable(value = "userBlockedId")int userBlockedId)
+    public ResponseEntity<BaseResponse> setUserBlocked(@PathVariable(value = "userId")int userId, @PathVariable(value = "userBlockedId")int userBlockedId)
     {
-        BlockedResponse result = userService.setBlocked(userId, userBlockedId);
+        BaseResponse result = userService.setBlocked(userId, userBlockedId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -50,9 +50,9 @@ public class UsersController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponse> findUserById(@PathVariable(value = "userId")int userId)
+    public ResponseEntity<BaseResponse> findUserById(@PathVariable(value = "userId")int userId)
     {
-        UserResponse result = userService.findUserById(userId);
+        BaseResponse result = userService.findUserById(userId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -60,9 +60,9 @@ public class UsersController {
     //========================================================================
 
     @GetMapping("/{userId}/favorites")
-    public ResponseEntity<FavoriteResponse> findFavoritesByUserId(@PathVariable(value = "userId")int userId)
+    public ResponseEntity<BaseResponse> findFavoritesByUserId(@PathVariable(value = "userId")int userId)
     {
-        FavoriteResponse result = userService.findFavoritesByUserId(userId);
+        BaseResponse result = userService.findFavoritesByUserId(userId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -71,9 +71,9 @@ public class UsersController {
     }
 
     @GetMapping("/{userId}/blockeds")
-    public ResponseEntity<BlockedResponse> findBlockedsByUserId(@PathVariable(value = "userId")int userId)
+    public ResponseEntity<BaseResponse> findBlockedsByUserId(@PathVariable(value = "userId")int userId)
     {
-        BlockedResponse result = userService.findBlockedsByUserId(userId);
+        BaseResponse result = userService.findBlockedsByUserId(userId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -82,9 +82,9 @@ public class UsersController {
     }
 
     @GetMapping("/favorites")
-    public ResponseEntity<FavoriteResponse> findAllFavourites()
+    public ResponseEntity<BaseResponse> findAllFavourites()
     {
-        FavoriteResponse result = userService.findAllFavourites();
+        BaseResponse result = userService.findAllFavourites();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -93,9 +93,9 @@ public class UsersController {
     }
 
     @GetMapping("/blockeds")
-    public ResponseEntity<BlockedResponse> findAllBlockeds()
+    public ResponseEntity<BaseResponse> findAllBlockeds()
     {
-        BlockedResponse result = userService.findAllBlockeds();
+        BaseResponse result = userService.findAllBlockeds();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -104,25 +104,25 @@ public class UsersController {
     }
 
     @GetMapping("/{userId}/customers")
-    public ResponseEntity<CustomerResponse> findCustomerByUserId(@PathVariable(value = "userId")int userId)
+    public ResponseEntity<BaseResponse> findCustomerByUserId(@PathVariable(value = "userId")int userId)
     {
-        CustomerResponse result = userService.findCustomerByUserId(userId);
+        BaseResponse result = userService.findCustomerByUserId(userId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/drivers")
-    public ResponseEntity<DriverResponse> findDriverByUserId(@PathVariable(value = "userId")int userId)
+    public ResponseEntity<BaseResponse> findDriverByUserId(@PathVariable(value = "userId")int userId)
     {
-        DriverResponse result = userService.findDriverByUserId(userId);
+        BaseResponse result = userService.findDriverByUserId(userId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/type/{userType}")
-    public ResponseEntity<UserResponse> findUsersTypeCustomers(@PathVariable(value="userType")int userType)
+    public ResponseEntity<BaseResponse> findUsersTypeCustomers(@PathVariable(value="userType")int userType)
     {
-        UserResponse result = userService.findAllUsersByType(userType);
+        BaseResponse result = userService.findAllUsersByType(userType);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -130,18 +130,18 @@ public class UsersController {
     //====================================================================
 
     @DeleteMapping("{userId}/favorites/{userFavoritedId}")
-    public ResponseEntity<FavoriteResponse> deleteFavoriteByUserIdAndUserFavoritedId(@PathVariable(value="userId")int userId, @PathVariable(value = "userFavorited")int userFavoritedId)
+    public ResponseEntity<BaseResponse> deleteFavoriteByUserIdAndUserFavoritedId(@PathVariable(value="userId")int userId, @PathVariable(value = "userFavorited")int userFavoritedId)
     {
-        FavoriteResponse result = userService.deleteFavoriteByUserIdAndFavoriteId(userId, userFavoritedId);
+        BaseResponse result = userService.deleteFavoriteByUserIdAndFavoriteId(userId, userFavoritedId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
 
     @DeleteMapping("{userId}/blockeds/{userBlockedId}")
-    public ResponseEntity<BlockedResponse> deleteBlockedByUserIdAndBlockedId(@PathVariable(value = "userId")int userId, @PathVariable(value = "userBlockedId")int userBlockedId)
+    public ResponseEntity<BaseResponse> deleteBlockedByUserIdAndBlockedId(@PathVariable(value = "userId")int userId, @PathVariable(value = "userBlockedId")int userBlockedId)
     {
-        BlockedResponse result = userService.deleteBlockByUserIdAndBlockId(userId, userBlockedId);
+        BaseResponse result = userService.deleteBlockByUserIdAndBlockId(userId, userBlockedId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

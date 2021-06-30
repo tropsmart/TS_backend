@@ -7,7 +7,7 @@ import com.softper.ts.repositories.IDriverRepository;
 import com.softper.ts.repositories.IRouteRepository;
 import com.softper.ts.repositories.IServiceRepository;
 import com.softper.ts.repositories.IServiceRequestRepository;
-import com.softper.ts.resources.comunications.ServiceResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.outputs.ServiceOutput;
 import com.softper.ts.services.IServiceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,8 @@ public class ServiceService implements IServiceService {
 
 
     @Override
-    public ServiceResponse findSomeServiceByDriverId(int driverId) {
+    public BaseResponse findSomeServiceByDriverId(int driverId) {
+        BaseResponse response = new BaseResponse();
         try{
             List<com.softper.ts.models.Service> services = serviceRepository.findServicesByDriverId(driverId);
             if(services.size()==0)
@@ -51,17 +52,21 @@ public class ServiceService implements IServiceService {
                 newServiceOutput.setStartedTime(services.get(0).getStartTime());
                 newServiceOutput.setFinishTime(services.get(0).getFinishTime());
                 newServiceOutput.setServiceState(services.get(0).getServiceState());
-                return new ServiceResponse(newServiceOutput);
+
+                response = new BaseResponse("findSomeServiceByDriverId","success",1);
+                response.setServiceOutput(newServiceOutput);
+                return response;
             }
         }
         catch (Exception e)
         {
-            return new ServiceResponse("An error ocurred while getting the service list : "+e.getMessage());
+            return new BaseResponse("findSomeServiceByDriverId","An error ocurred while getting the service list : "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public ServiceResponse findServicesByDriverId(int driverId) {
+    public BaseResponse findServicesByDriverId(int driverId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<com.softper.ts.models.Service> services = serviceRepository.findServicesByDriverId(driverId);
@@ -76,17 +81,20 @@ public class ServiceService implements IServiceService {
                 newServiceOutput.setServiceState(s.getServiceState());
                 serviceOutputList.add(newServiceOutput);
             }
-            return new ServiceResponse(serviceOutputList);
+            response = new BaseResponse("findServicesByDriverId","success",1);
+            response.setServiceOutputList(serviceOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new ServiceResponse("An error ocurred while getting the service list : "+e.getMessage());
+            return new BaseResponse("findServicesByDriverId","An error ocurred while getting the service list : "+e.getMessage(),-2);
         }
 
     }
 
     @Override
-    public ServiceResponse findAllServices() {
+    public BaseResponse findAllServices() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<com.softper.ts.models.Service> services = serviceRepository.findAll();
@@ -101,18 +109,21 @@ public class ServiceService implements IServiceService {
                 newServiceOutput.setServiceState(s.getServiceState());
                 serviceOutputList.add(newServiceOutput);
             }
-            return new ServiceResponse(serviceOutputList);
+            response = new BaseResponse("findAllServices","success",1);
+            response.setServiceOutputList(serviceOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new ServiceResponse("An error ocurred while getting the service list : "+e.getMessage());
+            return new BaseResponse("findAllServices","An error ocurred while getting the service list : "+e.getMessage(),-2);
 
         }
 
     }
 
     @Override
-    public ServiceResponse createService(int driverId) {
+    public BaseResponse createService(int driverId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Driver getDriver = driverRepository.findById(driverId).get();
@@ -139,13 +150,14 @@ public class ServiceService implements IServiceService {
             newServiceOutput.setFinishTime(newService.getFinishTime());
             newServiceOutput.setServiceState(newService.getServiceState());
 
-            return new ServiceResponse(newServiceOutput);
+            response = new BaseResponse("createService","success",1);
+            response.setServiceOutput(newServiceOutput);
+            return response;        
         }
         catch (Exception e)
         {
-            return new ServiceResponse("An error ocurred while registering the service : "+e.getMessage());
+            return new BaseResponse("createService","An error ocurred while getting the service list : "+e.getMessage(),-2);
         }
-
     }
 
     @Override

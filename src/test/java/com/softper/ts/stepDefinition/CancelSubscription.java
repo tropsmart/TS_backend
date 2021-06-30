@@ -1,7 +1,6 @@
 package com.softper.ts.stepDefinition;
 
-import com.softper.ts.resources.comunications.DriverResponse;
-import com.softper.ts.resources.comunications.SubscriptionResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.DriverService;
 import com.softper.ts.servicesImp.SubscriptionService;
 import io.cucumber.java.en.Given;
@@ -22,9 +21,9 @@ public class CancelSubscription {
     private String port;
     private RestTemplate restTemplate = new RestTemplate();
 
-    DriverResponse driverResponse;
+    BaseResponse driverResponse;
     DriverService driverService = new DriverService();
-    SubscriptionResponse subscription;
+    BaseResponse subscription;
     SubscriptionService subscriptionService = new SubscriptionService();
 
     @Given("that the driver is in the confirmation window")
@@ -42,7 +41,7 @@ public class CancelSubscription {
     @Then("the driver's subscription is canceled and the message Subscription canceled is displayed")
     public void the_driver_s_subscription_is_canceled_and_the_message_Subscription_canceled_is_displayed() {
         subscription = subscriptionService.findSubscriptionById(2);
-        if(subscription.success)
+        if(subscription.getStatus() == 1)
             System.out.println("CancelSubscription scenario 1 test success");
         else
             System.out.println("CalcelSubscription scenario 1 test failed");
@@ -56,7 +55,7 @@ public class CancelSubscription {
     @Then("the driver's subscription is not canceled and the confirmation window closes")
     public void the_driver_s_subscription_is_not_canceled_and_the_confirmation_window_closes() {
 
-        SubscriptionResponse response = new SubscriptionResponse("Subscription cancel");
+        BaseResponse response = new BaseResponse("cancelsubscription","success",1);
         System.out.println("In the frontend returning to the main menu");
     }
 

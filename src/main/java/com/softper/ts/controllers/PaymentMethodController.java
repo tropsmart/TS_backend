@@ -1,7 +1,7 @@
 package com.softper.ts.controllers;
 
 import com.softper.ts.models.PaymentMethod;
-import com.softper.ts.resources.comunications.PaymentMethodResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.PaymentMethodInput;
 import com.softper.ts.servicesImp.PaymentMethodService;
 import io.swagger.models.Response;
@@ -20,23 +20,23 @@ public class PaymentMethodController {
     private PaymentMethodService paymentMethodService;
 
     @GetMapping
-    public ResponseEntity<PaymentMethodResponse> findAllPaymentMethods()
+    public ResponseEntity<BaseResponse> findAllPaymentMethods()
     {
-        PaymentMethodResponse result = paymentMethodService.findAllPaymentMethod();
+        BaseResponse result = paymentMethodService.findAllPaymentMethod();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("users/{userId}")
-    public ResponseEntity<PaymentMethodResponse> findPaymentMethodsByUser(@PathVariable(value = "userId")int userId)
+    public ResponseEntity<BaseResponse> findPaymentMethodsByUser(@PathVariable(value = "userId")int userId)
     {
-        PaymentMethodResponse result = paymentMethodService.findPaymentMethodByUserId(userId);
+        BaseResponse result = paymentMethodService.findPaymentMethodByUserId(userId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping("users/{userId}")
-    public ResponseEntity<PaymentMethodResponse> addPaymentMethod(@PathVariable(value = "userId")int userId, @Valid @RequestBody PaymentMethodInput paymentMethodInput)
+    public ResponseEntity<BaseResponse> addPaymentMethod(@PathVariable(value = "userId")int userId, @Valid @RequestBody PaymentMethodInput paymentMethodInput)
     {
-        PaymentMethodResponse result = paymentMethodService.addPaymentMethodByUserId(userId, paymentMethodInput);
+        BaseResponse result = paymentMethodService.addPaymentMethodByUserId(userId, paymentMethodInput);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

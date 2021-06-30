@@ -7,7 +7,7 @@ import com.softper.ts.models.User;
 import com.softper.ts.repositories.IPlanRepository;
 import com.softper.ts.repositories.ISubscriptionRepository;
 import com.softper.ts.repositories.IUserRepository;
-import com.softper.ts.resources.comunications.SubscriptionResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.outputs.BlockedOutput;
 import com.softper.ts.resources.outputs.SubscriptionOutput;
 import com.softper.ts.services.ISubscriptionService;
@@ -31,20 +31,24 @@ public class SubscriptionService implements ISubscriptionService {
     private IPlanRepository planRepository;
 
     @Override
-    public SubscriptionResponse findSubscriptionById(int subscriptionId) {
+    public BaseResponse findSubscriptionById(int subscriptionId) {
+        BaseResponse response = new BaseResponse();
         try{
             Subscription getSubscription = subscriptionRepository.findById(subscriptionId).get();
-            return new SubscriptionResponse(toSubscriptionOutput(getSubscription));
+            response = new BaseResponse("findSubscriptionById","success",1);
+            response.setSubscriptionOutput(toSubscriptionOutput(getSubscription));
+            return response;
         }
         catch (Exception e)
         {
-            return new SubscriptionResponse("An error ocurred while getting the subscription : "+e.getMessage());
+            return new BaseResponse("findSubscriptionById", "An error ocurred while getting the subscription : "+e.getMessage(), -2);
         }
 
     }
 
     @Override
-    public SubscriptionResponse subscribe(int userId, int planId) {
+    public BaseResponse subscribe(int userId, int planId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Plan getPlan = planRepository.findById(planId).get();
@@ -66,41 +70,48 @@ public class SubscriptionService implements ISubscriptionService {
             subscriptionRepository.saveAll(subscriptionList);
             newSubscription = subscriptionRepository.save(newSubscription);
 
-            return new SubscriptionResponse(toSubscriptionOutput(newSubscription));
+            response = new BaseResponse("subscribe","success",1);
+            response.setSubscriptionOutput(toSubscriptionOutput(newSubscription));
+            return response;
 
         }
         catch (Exception e)
         {
-            return new SubscriptionResponse("An error ocurred while registering the subscription : "+e.getMessage());
+            return new BaseResponse("subscribe", "An error ocurred while getting the subscription : "+e.getMessage(), -2);
         }
 
     }
 
     @Override
-    public SubscriptionResponse findSubscriptionsByUserId(int userId) {
+    public BaseResponse findSubscriptionsByUserId(int userId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             User getUser = userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("user","id",userId));
             if(getUser.getPerson().getPersonType() == 1)
-                return new SubscriptionResponse("Subscriptions are only available to drivers");
+                return new BaseResponse("findSubscriptionsByUserId", "Subscriptions solo están disponibles para los conductores", 0);
             List<Subscription> subscriptionList = subscriptionRepository.getSubscriptionsByUserId(userId);
             System.out.print("subscription list : "+ subscriptionList.size());
             List<SubscriptionOutput> subscriptionOutputList = new ArrayList<>();
             for (Subscription s:subscriptionList) {
                 subscriptionOutputList.add(toSubscriptionOutput(s));
             }
-            return new SubscriptionResponse(subscriptionOutputList);
+
+            response = new BaseResponse("findSubscriptionsByUserId", "success",1);
+            response.setSubscriptionOutputList(subscriptionOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new SubscriptionResponse("An error ocurred while getting the subscription list : "+e.getMessage());
+            return new BaseResponse("findSubscriptionsByUserId", "An error ocurred while getting the subscription list : "+e.getMessage(), -2);
 
         }
 
     }
 
     @Override
-    public SubscriptionResponse findAllSubscriptions() {
+    public BaseResponse findAllSubscriptions() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Subscription> subscriptionList = subscriptionRepository.findAll();
@@ -108,16 +119,19 @@ public class SubscriptionService implements ISubscriptionService {
             for (Subscription s:subscriptionList) {
                 subscriptionOutputList.add(toSubscriptionOutput(s));
             }
-            return new SubscriptionResponse(subscriptionOutputList);
+            response = new BaseResponse("findAllSubscriptions", "success",1);
+            response.setSubscriptionOutputList(subscriptionOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new SubscriptionResponse("An error ocurred while getting the subscription list : "+e.getMessage());
+            return new BaseResponse("findAllSubscriptions", "An error ocurred while getting the subscription list : "+e.getMessage(), -2);
         }
     }
 
     @Override
-    public SubscriptionResponse cancelSubscription(int subscriptionId) {
+    public BaseResponse cancelSubscription(int subscriptionId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Subscription getSubscription = subscriptionRepository.findById(subscriptionId)
@@ -125,16 +139,19 @@ public class SubscriptionService implements ISubscriptionService {
             getSubscription.setSubscriptionState("Canceled");
             getSubscription = subscriptionRepository.save(getSubscription);
 
-            return new SubscriptionResponse(toSubscriptionOutput(getSubscription));
+            response = new BaseResponse("cancelSubscription","success",1);
+            response.setSubscriptionOutput(toSubscriptionOutput(getSubscription));
+            return response;        
         }
         catch (Exception e)
         {
-            return new SubscriptionResponse("An error ocurred while getting the subscription : "+e.getMessage());
+            return new BaseResponse("cancelSubscription", "An error ocurred while getting the subscription list : "+e.getMessage(), -2);
         }
     }
 
     @Override
-    public SubscriptionResponse enableSubscriptionById(int subscriptionId) {
+    public BaseResponse enableSubscriptionById(int subscriptionId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Subscription getSubscription = subscriptionRepository.findById(subscriptionId)
@@ -149,26 +166,31 @@ public class SubscriptionService implements ISubscriptionService {
                 s = subscriptionRepository.save(s);
             }
 
-            return new SubscriptionResponse(toSubscriptionOutput(getSubscription));
+            response = new BaseResponse("enableSubscriptionById","success",1);
+            response.setSubscriptionOutput(toSubscriptionOutput(getSubscription));
+            return response;      
 
         }
         catch (Exception e)
         {
-            return new SubscriptionResponse("An error ocurred while getting the subscription : "+e.getMessage());
+            return new BaseResponse("enableSubscriptionById", "An error ocurred while getting the subscription list : "+e.getMessage(), -2);
         }
     }
 
     @Override
-    public SubscriptionResponse deleteSubscriptionBySubscriptionId(int subscriptionId) {
+    public BaseResponse deleteSubscriptionBySubscriptionId(int subscriptionId) {
+        BaseResponse response = new BaseResponse();
         try{
             Subscription getSubscription = subscriptionRepository.findById(subscriptionId)
                     .orElseThrow(()-> new ResourceNotFoundException("Id","subscription",subscriptionId));
             subscriptionRepository.deleteById(subscriptionId);
-            return new SubscriptionResponse(toSubscriptionOutput(getSubscription));
+            response = new BaseResponse("deleteSubscriptionBySubscriptionId","success",1);
+            response.setSubscriptionOutput(toSubscriptionOutput(getSubscription));
+            return response;              
         }
         catch (Exception e)
         {
-            return new SubscriptionResponse("An error ocurred while getting the subscription : "+e.getMessage());
+            return new BaseResponse("deleteSubscriptionBySubscriptionId", "An error ocurred while getting the subscription list : "+e.getMessage(), -2);
         }
     }
 

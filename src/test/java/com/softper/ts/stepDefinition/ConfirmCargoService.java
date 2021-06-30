@@ -1,7 +1,6 @@
 package com.softper.ts.stepDefinition;
 
-import com.softper.ts.resources.comunications.CargoResponse;
-import com.softper.ts.resources.comunications.DriverResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.CargoService;
 import com.softper.ts.servicesImp.DriverService;
 import io.cucumber.java.en.Given;
@@ -22,8 +21,8 @@ public class ConfirmCargoService {
     private String port;
     private RestTemplate restTemplate = new RestTemplate();
 
-    DriverResponse driver;
-    CargoResponse cargo;
+    BaseResponse driver;
+    BaseResponse cargo;
     DriverService driverService = new DriverService();
     CargoService cargoService = new CargoService();
 

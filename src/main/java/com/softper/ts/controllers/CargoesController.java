@@ -1,7 +1,6 @@
 package com.softper.ts.controllers;
 
-import com.softper.ts.resources.comunications.CargoResponse;
-import com.softper.ts.resources.comunications.CargoResponseFixed;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.CargoInput;
 import com.softper.ts.services.ICargoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,9 @@ public class CargoesController {
     private ICargoService cargoService;
 
     @GetMapping
-    public ResponseEntity<CargoResponse> findAllCargoes()
+    public ResponseEntity<BaseResponse> findAllCargoes()
     {
-        CargoResponse result = cargoService.findAllCargoes();
+        BaseResponse result = cargoService.findAllCargoes();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -31,9 +30,9 @@ public class CargoesController {
     }
 
     @GetMapping("/fixed")
-    public ResponseEntity<CargoResponse> findAllCargoesFixed()
+    public ResponseEntity<BaseResponse> findAllCargoesFixed()
     {
-        CargoResponse result = cargoService.findAllCargoesFixed();
+        BaseResponse result = cargoService.findAllCargoesFixed();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -42,9 +41,9 @@ public class CargoesController {
     }
 
     @GetMapping("/{cargoId}")
-    public ResponseEntity<CargoResponse> findCargoById(@PathVariable(value = "cargoId")int cargoId)
+    public ResponseEntity<BaseResponse> findCargoById(@PathVariable(value = "cargoId")int cargoId)
     {
-        CargoResponse result = cargoService.findCargoById(cargoId);
+        BaseResponse result = cargoService.findCargoById(cargoId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
@@ -53,9 +52,9 @@ public class CargoesController {
     }
 
     @GetMapping("customers/{customerId}")
-    public ResponseEntity<CargoResponse> findCargoesByCustomerId(@PathVariable(value="customerId")int customerId)
+    public ResponseEntity<BaseResponse> findCargoesByCustomerId(@PathVariable(value="customerId")int customerId)
     {
-        CargoResponse result = cargoService.findCargoesByCustomerId(customerId);
+        BaseResponse result = cargoService.findCargoesByCustomerId(customerId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
@@ -64,25 +63,25 @@ public class CargoesController {
     }
 
     @GetMapping("drivers/{driverId}")
-    public ResponseEntity<CargoResponse> findCargoesByDriverId(@PathVariable(value="driverId")int driverId)
+    public ResponseEntity<BaseResponse> findCargoesByDriverId(@PathVariable(value="driverId")int driverId)
     {
-        CargoResponse result = cargoService.findCargoesByDriverId(driverId);
+        BaseResponse result = cargoService.findCargoesByDriverId(driverId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PutMapping("{cargoId}/confirms")
-    public ResponseEntity<CargoResponse> setCargoConfirmed(@PathVariable(value = "cargoId")int cargoId)
+    public ResponseEntity<BaseResponse> setCargoConfirmed(@PathVariable(value = "cargoId")int cargoId)
     {
-        CargoResponse result = cargoService.confirmCargoRequest(cargoId);
+        BaseResponse result = cargoService.confirmCargoRequest(cargoId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PutMapping("{cargoId}/deliver")
-    public ResponseEntity<CargoResponse> setCargoDelivered(@PathVariable(value="cargoId")int cargoId)
+    public ResponseEntity<BaseResponse> setCargoDelivered(@PathVariable(value="cargoId")int cargoId)
     {
-        CargoResponse result = cargoService.setCargoDelivered(cargoId);
+        BaseResponse result = cargoService.setCargoDelivered(cargoId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
@@ -91,17 +90,17 @@ public class CargoesController {
     }
 
     @PutMapping("{cargoId}/reject")
-    public ResponseEntity<CargoResponse> setCargoRejected(@PathVariable(value = "cargoId")int cargoId)
+    public ResponseEntity<BaseResponse> setCargoRejected(@PathVariable(value = "cargoId")int cargoId)
     {
-        CargoResponse result = cargoService.rejectCargoById(cargoId);
+        BaseResponse result = cargoService.rejectCargoById(cargoId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping("/customers/{customerId}")
-    public ResponseEntity<CargoResponse> postCargo(@PathVariable(value = "customerId")int customerId, @RequestBody CargoInput cargoInput)
+    public ResponseEntity<BaseResponse> postCargo(@PathVariable(value = "customerId")int customerId, @RequestBody CargoInput cargoInput)
     {
-        CargoResponse result = cargoService.addCargoByCustomerId(customerId,cargoInput);
+        BaseResponse result = cargoService.addCargoByCustomerId(customerId,cargoInput);
         //if(!result.success)
         //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
 

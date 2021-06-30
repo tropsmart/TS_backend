@@ -1,7 +1,6 @@
 package com.softper.ts.controllers;
 
-import com.softper.ts.resources.comunications.CargoResponse;
-import com.softper.ts.resources.comunications.CustomerResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.CargoService;
 import com.softper.ts.servicesImp.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +20,9 @@ public class CustomersController {
     private CargoService cargoService;
 
     @GetMapping
-    public ResponseEntity<CustomerResponse> findAllCustomers()
+    public ResponseEntity<BaseResponse> findAllCustomers()
     {
-        CustomerResponse result = customerService.findAllCustomers();
+        BaseResponse result = customerService.findAllCustomers();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -32,9 +31,9 @@ public class CustomersController {
     }
 
     @GetMapping("/{cargoId}")
-    public ResponseEntity<CustomerResponse> findCustomersById(@PathVariable(value = "cargoId") int cargoId)
+    public ResponseEntity<BaseResponse> findCustomersById(@PathVariable(value = "cargoId") int cargoId)
     {
-        CustomerResponse result = customerService.findCustomerById(cargoId);
+        BaseResponse result = customerService.findCustomerById(cargoId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -44,17 +43,17 @@ public class CustomersController {
 
 
     @GetMapping("/{customerId}/cargoes")
-    public ResponseEntity<CargoResponse> getCargoesByCustomerId(@PathVariable(value = "customerId")int customerId)
+    public ResponseEntity<BaseResponse> getCargoesByCustomerId(@PathVariable(value = "customerId")int customerId)
     {
-        CargoResponse result = cargoService.findCargoesByCustomerId(customerId);
+        BaseResponse result = cargoService.findCargoesByCustomerId(customerId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PutMapping("/{customerId}/credits/{credits}")
-    public ResponseEntity<CustomerResponse> rechargeCreditsByCustomer(@PathVariable(value = "customerId")int customerId, @PathVariable(value = "credits")double credits)
+    public ResponseEntity<BaseResponse> rechargeCreditsByCustomer(@PathVariable(value = "customerId")int customerId, @PathVariable(value = "credits")double credits)
     {
-        CustomerResponse result = customerService.rechargeCreditsByCustomerId(customerId, credits);
+        BaseResponse result = customerService.rechargeCreditsByCustomerId(customerId, credits);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);

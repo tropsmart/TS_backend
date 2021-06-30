@@ -1,25 +1,25 @@
 package com.softper.ts.services;
 
 import com.softper.ts.models.User;
-import com.softper.ts.resources.comunications.*;
+import com.softper.ts.resources.comunications.BaseResponse;
 
 public interface IUserService extends ICrudService<User>{
-    FavoriteResponse setFavourited(int userId, int favoriteId);
-    BlockedResponse setBlocked(int userId, int blockedId);
-    UserResponse findAllUsers();
-    UserResponse findAllUsersByType(int userType);
-    FavoriteResponse findFavoritesByUserId(int userId);
-    BlockedResponse findBlockedsByUserId(int userId);
-    FavoriteResponse findAllFavourites();
-    BlockedResponse findAllBlockeds();
-    UserResponse findUserByEmail(String email);
-    UserResponse findUserById(int userId);
-    FavoriteResponse findFavoriteByUserIdAndFavoriteId(int userId, int favouriteId);
-    BlockedResponse findBlockByUserIdAndBlockedId(int userId, int blockedId);
-    FavoriteResponse deleteFavoriteByUserIdAndFavoriteId(int userId, int favoriteId);
-    BlockedResponse deleteBlockByUserIdAndBlockId(int userId, int blockedId);
+    BaseResponse setFavourited(int userId, int favoriteId);
+    BaseResponse setBlocked(int userId, int blockedId);
+    BaseResponse findAllUsers();
+    BaseResponse findAllUsersByType(int userType);
+    BaseResponse findFavoritesByUserId(int userId);
+    BaseResponse findBlockedsByUserId(int userId);
+    BaseResponse findAllFavourites();
+    BaseResponse findAllBlockeds();
+    BaseResponse findUserByEmail(String email);
+    BaseResponse findUserById(int userId);
+    BaseResponse findFavoriteByUserIdAndFavoriteId(int userId, int favouriteId);
+    BaseResponse findBlockByUserIdAndBlockedId(int userId, int blockedId);
+    BaseResponse deleteFavoriteByUserIdAndFavoriteId(int userId, int favoriteId);
+    BaseResponse deleteBlockByUserIdAndBlockId(int userId, int blockedId);
 
-    CustomerResponse findCustomerByUserId(int userId);
-    DriverResponse findDriverByUserId(int userId);
+    BaseResponse findCustomerByUserId(int userId);
+    BaseResponse findDriverByUserId(int userId);
 
 }

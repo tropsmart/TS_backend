@@ -6,7 +6,7 @@ import com.softper.ts.models.User;
 import com.softper.ts.repositories.IBalanceRepository;
 import com.softper.ts.repositories.ICustomerRepository;
 import com.softper.ts.repositories.IUserRepository;
-import com.softper.ts.resources.comunications.BalanceResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.outputs.BalanceOutput;
 import com.softper.ts.services.IBalanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,23 +28,26 @@ public class BalanceService implements IBalanceService {
     private ICustomerRepository customerRepository;
 
     @Override
-    public BalanceResponse findBalanceById(int balanceId) {
+    public BaseResponse findBalanceById(int balanceId) {
+        BaseResponse response = new BaseResponse();
         try {
             User getUser = userRepository.findUserByBalanceId(balanceId)
                     .orElseThrow(()-> new ResourceNotFoundException("user","id",balanceId));
 
             Balance getBalance = getUser.getBalance();
-
-            return new BalanceResponse(new BalanceOutput(getUser.getPerson().getFirstName()+" "+getUser.getPerson().getLastName(),getUser.getEmail(),getUser.getPerson().getCustomer().getCredits(),getBalance.getAddedMoney(),getBalance.getSpentMoney()));
+            response = new BaseResponse("findBalanceById","success",1);
+            response.setBalanceOutput(new BalanceOutput(getUser.getPerson().getFirstName()+" "+getUser.getPerson().getLastName(),getUser.getEmail(),getUser.getPerson().getCustomer().getCredits(),getBalance.getAddedMoney(),getBalance.getSpentMoney()));
+            return response;
         }
         catch(Exception e)
         {
-            return new BalanceResponse("An error ocurred while getting balance: "+e.getMessage());
+            return new BaseResponse("findBalanceById","An error ocurred while getting balance: "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public BalanceResponse findAllBalances() {
+    public BaseResponse findAllBalances() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Balance> balanceList = balanceRepository.findAll();
@@ -54,11 +57,13 @@ public class BalanceService implements IBalanceService {
                         .orElseThrow(()-> new ResourceNotFoundException("user","id",b.getId()));
                 balanceOutputList.add(new BalanceOutput(getUser.getPerson().getFirstName()+" "+getUser.getPerson().getLastName(),getUser.getEmail(),getUser.getPerson().getCustomer().getCredits(),b.getAddedMoney(),b.getSpentMoney()));
             }
-            return new BalanceResponse(balanceOutputList);
+            response = new BaseResponse("findAllBalances","success",1);
+            response.setBalanceOutputList(balanceOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new BalanceResponse("An error ocurred while getting balance list: "+e.getMessage());
+            return new BaseResponse("findAllBalances","An error ocurred while getting balance list: "+e.getMessage(),-2);
         }
     }
 

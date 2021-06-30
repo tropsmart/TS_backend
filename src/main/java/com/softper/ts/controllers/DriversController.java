@@ -1,7 +1,6 @@
 package com.softper.ts.controllers;
 
-import com.softper.ts.resources.comunications.DriverResponse;
-import com.softper.ts.resources.comunications.ReviewResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.DriverService;
 import com.softper.ts.servicesImp.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +20,9 @@ public class DriversController {
     private ReviewService reviewService;
 
     @GetMapping
-    public ResponseEntity<DriverResponse> findAllDrivers()
+    public ResponseEntity<BaseResponse> findAllDrivers()
     {
-        DriverResponse result = driverService.findAllDrivers();
+        BaseResponse result = driverService.findAllDrivers();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -32,9 +31,9 @@ public class DriversController {
     }
 
     @GetMapping("/{driverId}")
-    public ResponseEntity<DriverResponse> findDriverById(@PathVariable(value = "driverId") int driverId)
+    public ResponseEntity<BaseResponse> findDriverById(@PathVariable(value = "driverId") int driverId)
     {
-        DriverResponse result = driverService.findDriverById(driverId);
+        BaseResponse result = driverService.findDriverById(driverId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -43,17 +42,17 @@ public class DriversController {
     }
 
     @GetMapping("/{driverId}/reviews")
-    public ResponseEntity<ReviewResponse> findReviewsByDriverId(@PathVariable(value = "driverId")int driverId)
+    public ResponseEntity<BaseResponse> findReviewsByDriverId(@PathVariable(value = "driverId")int driverId)
     {
-        ReviewResponse result = reviewService.findReviewsByDriverId(driverId);
+        BaseResponse result = reviewService.findReviewsByDriverId(driverId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/param/{name}")
-    public ResponseEntity<DriverResponse> findDriversByName(@PathVariable(value = "name")String name)
+    public ResponseEntity<BaseResponse> findDriversByName(@PathVariable(value = "name")String name)
     {
-        DriverResponse result = driverService.findDriversByName(name);
+        BaseResponse result = driverService.findDriversByName(name);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

@@ -1,6 +1,6 @@
 package com.softper.ts.controllers;
 
-import com.softper.ts.resources.comunications.BalanceResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.services.IBalanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,9 @@ public class BalanceController {
     private IBalanceService balanceService;
 
     @GetMapping()
-    public ResponseEntity<BalanceResponse> findAllBalances()
+    public ResponseEntity<BaseResponse> findAllBalances()
     {
-        BalanceResponse result = balanceService.findAllBalances();
+        BaseResponse result = balanceService.findAllBalances();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -27,9 +27,9 @@ public class BalanceController {
     }
 
     @GetMapping("/{balanceId}")
-    public ResponseEntity<BalanceResponse> findBalanceById(@PathVariable(value = "balanceId")int balanceId)
+    public ResponseEntity<BaseResponse> findBalanceById(@PathVariable(value = "balanceId")int balanceId)
     {
-        BalanceResponse result =  balanceService.findBalanceById(balanceId);
+        BaseResponse result =  balanceService.findBalanceById(balanceId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);

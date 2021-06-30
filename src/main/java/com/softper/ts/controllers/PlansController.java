@@ -1,6 +1,6 @@
 package com.softper.ts.controllers;
 
-import com.softper.ts.resources.comunications.PlanResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.PlanInput;
 import com.softper.ts.servicesImp.PlanService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,9 @@ public class PlansController {
     private PlanService planService;
 
     @GetMapping
-    public ResponseEntity<PlanResponse> findAllPlans()
+    public ResponseEntity<BaseResponse> findAllPlans()
     {
-        PlanResponse result =  planService.findAllPlans();
+        BaseResponse result =  planService.findAllPlans();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -30,9 +30,9 @@ public class PlansController {
     }
 
     @PostMapping
-    public ResponseEntity<PlanResponse> addNewPlan(@Valid @RequestBody PlanInput planInput)
+    public ResponseEntity<BaseResponse> addNewPlan(@Valid @RequestBody PlanInput planInput)
     {
-        PlanResponse result = planService.registerPlan(planInput);
+        BaseResponse result = planService.registerPlan(planInput);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -41,45 +41,33 @@ public class PlansController {
     }
 
     @GetMapping("/{planId}")
-    public ResponseEntity<PlanResponse> findPlanById(@PathVariable(value = "planId") int planId)
+    public ResponseEntity<BaseResponse> findPlanById(@PathVariable(value = "planId") int planId)
     {
-        PlanResponse result = planService.findPlanById(planId);
-
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        BaseResponse result = planService.findPlanById(planId);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
     @GetMapping("/{priceValue}/more")
-    public ResponseEntity<PlanResponse> findPlansHigherThan(@PathVariable(value = "priceValue")double priceValue)
+    public ResponseEntity<BaseResponse> findPlansHigherThan(@PathVariable(value = "priceValue")double priceValue)
     {
-        PlanResponse result =  planService.findPlansHigherThan(priceValue);
-
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        BaseResponse result =  planService.findPlansHigherThan(priceValue);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
     @GetMapping("/{priceValue}/less")
-    public ResponseEntity<PlanResponse> findPlansLessThan(@PathVariable(value = "priceValue")double priceValue)
+    public ResponseEntity<BaseResponse> findPlansLessThan(@PathVariable(value = "priceValue")double priceValue)
     {
-        PlanResponse result = planService.findPlansLessThan(priceValue);
-
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        BaseResponse result = planService.findPlansLessThan(priceValue);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
 
     @GetMapping("/{priceValue}")
-    public ResponseEntity<PlanResponse> findByPrice(@PathVariable(value = "priceValue")double priceValue)
+    public ResponseEntity<BaseResponse> findByPrice(@PathVariable(value = "priceValue")double priceValue)
     {
-        PlanResponse result = planService.findPlansByPrice(priceValue);
-
-        if(!result.success)
-            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        BaseResponse result = planService.findPlansByPrice(priceValue);
 
         return new ResponseEntity<>(result,HttpStatus.OK);
 

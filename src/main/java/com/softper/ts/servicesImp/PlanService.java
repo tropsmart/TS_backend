@@ -4,7 +4,7 @@ import com.softper.ts.models.Plan;
 import com.softper.ts.models.Price;
 import com.softper.ts.repositories.IPlanRepository;
 import com.softper.ts.repositories.IPriceRepository;
-import com.softper.ts.resources.comunications.PlanResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.PlanInput;
 import com.softper.ts.resources.outputs.PlanOutput;
 import com.softper.ts.services.IPlanService;
@@ -26,7 +26,8 @@ public class PlanService implements IPlanService {
 
 
     @Override
-    public PlanResponse findPlansByPrice(double priceValue) {
+    public BaseResponse findPlansByPrice(double priceValue) {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Plan> plans = planRepository.findPlansByPriceValue(priceValue);
@@ -40,17 +41,20 @@ public class PlanService implements IPlanService {
                 newPlanOutput.setPlanName(p.getName());
                 planOutputList.add(newPlanOutput);
             }
-            return new PlanResponse(planOutputList);
+            response = new BaseResponse("findPlansByPrice", "success", 1);
+            response.setPlanOutputList(planOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new PlanResponse("An error ocurred while getting the plan list: "+e.getMessage());
+            return new BaseResponse("findPlansByPrice", "An error ocurred while getting the plan list: "+e.getMessage(),-2);
         }
 
     }
 
     @Override
-    public PlanResponse findPlansHigherThan(double priceValue) {
+    public BaseResponse findPlansHigherThan(double priceValue) {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Plan> plans = planRepository.findPlansHigherThanPriceValue(priceValue);
@@ -64,17 +68,20 @@ public class PlanService implements IPlanService {
                 newPlanOutput.setPlanName(p.getName());
                 planOutputList.add(newPlanOutput);
             }
-            return new PlanResponse(planOutputList);
+            response = new BaseResponse("findPlansHigherThan", "success", 1);
+            response.setPlanOutputList(planOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new PlanResponse("An error ocurred while getting the plan list: "+e.getMessage());
+            return new BaseResponse("findPlansHigherThan", "An error ocurred while getting the plan list: "+e.getMessage(),-2);
         }
 
     }
 
     @Override
-    public PlanResponse findPlansLessThan(double priceValue) {
+    public BaseResponse findPlansLessThan(double priceValue) {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Plan> plans = planRepository.findPlansLessThanPriceValue(priceValue);
@@ -88,17 +95,20 @@ public class PlanService implements IPlanService {
                 newPlanOutput.setPlanName(p.getName());
                 planOutputList.add(newPlanOutput);
             }
-            return new PlanResponse(planOutputList);
+            response = new BaseResponse("findPlansLessThan", "success", 1);
+            response.setPlanOutputList(planOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new PlanResponse("An error ocurred while getting the plan list: "+e.getMessage());
+            return new BaseResponse("findPlansLessThan", "An error ocurred while getting the plan list: "+e.getMessage(),-2);
         }
 
     }
 
     @Override
-    public PlanResponse findAllPlans() {
+    public BaseResponse findAllPlans() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Plan> plans = planRepository.findAll();
@@ -112,17 +122,20 @@ public class PlanService implements IPlanService {
                 newPlanOutput.setPlanName(p.getName());
                 planOutputList.add(newPlanOutput);
             }
-            return new PlanResponse(planOutputList);
+            response = new BaseResponse("findAllPlans", "success", 1);
+            response.setPlanOutputList(planOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new PlanResponse("An error ocurred while getting the plan list: "+e.getMessage());
+            return new BaseResponse("findAllPlans", "An error ocurred while getting the plan list: "+e.getMessage(),-2);
         }
 
     }
 
     @Override
-    public PlanResponse registerPlan(PlanInput planInput) {
+    public BaseResponse registerPlan(PlanInput planInput) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Price newPrice = new Price();
@@ -144,16 +157,19 @@ public class PlanService implements IPlanService {
             newPlanOutput.setPrice(newPrice.getTotalPrice());
             newPlanOutput.setTax(newPrice.getTax());
 
-            return new PlanResponse(newPlanOutput);
+            response = new BaseResponse("registerPlan", "success", 1);
+            response.setPlanOutput(newPlanOutput);
+            return response;
         }
         catch (Exception e)
         {
-            return new PlanResponse("An error ocurred while registering the plan : "+e.getMessage());
+            return new BaseResponse("registerPlan", "An error ocurred while getting the plan list: "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public PlanResponse findPlanById(int planId) {
+    public BaseResponse findPlanById(int planId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Plan getPlan = planRepository.findById(planId).get();
@@ -164,17 +180,19 @@ public class PlanService implements IPlanService {
             newPlanOutput.setTax(getPlan.getPrice().getTax());
             newPlanOutput.setPlanName(getPlan.getName());
 
-            return new PlanResponse(newPlanOutput);
+            response = new BaseResponse("findPlanById", "success", 1);
+            response.setPlanOutput(newPlanOutput);
+            return response;        
         }
         catch (Exception e)
         {
-            return new PlanResponse("An error ocurred while getting the plan : "+e.getMessage());
+            return new BaseResponse("findPlanById", "An error ocurred while getting the plan list: "+e.getMessage(),-2);
         }
 
     }
 
     @Override
-    public PlanResponse deletePlanById(int planId) {
+    public BaseResponse deletePlanById(int planId) {
         return null;
     }
 

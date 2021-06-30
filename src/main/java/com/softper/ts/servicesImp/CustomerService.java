@@ -9,7 +9,7 @@ import com.softper.ts.repositories.IBalanceRepository;
 import com.softper.ts.repositories.ICustomerRepository;
 import com.softper.ts.repositories.IPersonRepository;
 import com.softper.ts.repositories.IUserRepository;
-import com.softper.ts.resources.comunications.CustomerResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.outputs.CustomerOutput;
 import com.softper.ts.services.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,21 +55,25 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public CustomerResponse findCustomerById(int customerId) {
+    public BaseResponse findCustomerById(int customerId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Customer getCustomer = customerRepository.findById(customerId).get();
-            return new CustomerResponse(new CustomerOutput(getCustomer.getPerson().getUser().getId(),getCustomer.getPerson().getFirstName(),getCustomer.getPerson().getLastName(),getCustomer.getCredits(),getCustomer.getPerson().getUser().getEmail(), getCustomer.getPerson().getPersonType(),getCustomer.getId()));
+            response = new BaseResponse("findCustomerById","success",-1);
+            response.setCustomerOutput(new CustomerOutput(getCustomer.getPerson().getUser().getId(),getCustomer.getPerson().getFirstName(),getCustomer.getPerson().getLastName(),getCustomer.getCredits(),getCustomer.getPerson().getUser().getEmail(), getCustomer.getPerson().getPersonType(),getCustomer.getId()));
+            return response;
         }
         catch (Exception e)
         {
-            return new CustomerResponse("An error ocurred while getting customer: "+e.getMessage());
+            return new BaseResponse("findCustomerById","An error ocurred while getting customer: "+e.getMessage(),-2);
         }
 
     }
 
     @Override
-    public CustomerResponse findAllCustomers() {
+    public BaseResponse findAllCustomers() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Customer> customerList = customerRepository.findAll();
@@ -78,17 +82,20 @@ public class CustomerService implements ICustomerService {
                 Person getPerson = personRepository.findById(getCustomer.getId()).get();
                 customerOutputList.add(new CustomerOutput(getCustomer.getPerson().getUser().getId(),getPerson.getFirstName(),getPerson.getLastName(),getCustomer.getCredits(),getCustomer.getPerson().getUser().getEmail(), getCustomer.getPerson().getPersonType(),getCustomer.getId()));
             }
-            return new CustomerResponse(customerOutputList);
+            response = new BaseResponse("findAllCustomers","success",-1);
+            response.setCustomerOutputList(customerOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new CustomerResponse("An error ocurred while getting customer list: "+e.getMessage());
+            return new BaseResponse("findAllCustomers","An error ocurred while getting customer: "+e.getMessage(),-2);
         }
 
     }
 
     @Override
-    public CustomerResponse rechargeCreditsByCustomerId(int customerId, double creditUnits) {
+    public BaseResponse rechargeCreditsByCustomerId(int customerId, double creditUnits) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Customer getCustomer = customerRepository.findById(customerId)
@@ -105,12 +112,13 @@ public class CustomerService implements ICustomerService {
 
             getCustomer = customerRepository.save(getCustomer);
 
-            return new CustomerResponse(new CustomerOutput(getCustomer.getPerson().getUser().getId(),getCustomer.getPerson().getFirstName(),getCustomer.getPerson().getLastName(),getCustomer.getCredits(),getCustomer.getPerson().getUser().getEmail(), getCustomer.getPerson().getPersonType(),getCustomer.getId()));
-
+            response = new BaseResponse("findCustomerById","success",-1);
+            response.setCustomerOutput(new CustomerOutput(getCustomer.getPerson().getUser().getId(),getCustomer.getPerson().getFirstName(),getCustomer.getPerson().getLastName(),getCustomer.getCredits(),getCustomer.getPerson().getUser().getEmail(), getCustomer.getPerson().getPersonType(),getCustomer.getId()));
+            return response;
         }
         catch (Exception e)
         {
-            return new CustomerResponse("An error ocurred while rechart credits on user"+e.getMessage());
+            return new BaseResponse("rechargeCreditsByCustomerId","An error ocurred while getting customer: "+e.getMessage(),-2);
         }
     }
 

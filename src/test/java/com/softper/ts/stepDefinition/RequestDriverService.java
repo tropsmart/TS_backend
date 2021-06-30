@@ -1,8 +1,6 @@
 package com.softper.ts.stepDefinition;
 
-import com.softper.ts.resources.comunications.CargoResponse;
-import com.softper.ts.resources.comunications.CustomerResponse;
-import com.softper.ts.resources.comunications.DriverResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.CargoInput;
 import com.softper.ts.servicesImp.CargoService;
 import com.softper.ts.servicesImp.CustomerService;
@@ -25,10 +23,10 @@ public class RequestDriverService {
     private String port;
     private RestTemplate restTemplate = new RestTemplate();
 
-    CustomerResponse customer;
+    BaseResponse customer;
     CargoInput cargoInput;
-    CargoResponse cargoResponse;
-    DriverResponse driverResponse;
+    BaseResponse cargoResponse;
+    BaseResponse driverResponse;
     CustomerService customerService = new CustomerService();
     DriverService driverService = new DriverService();
     CargoService cargoService = new CargoService();

@@ -1,7 +1,6 @@
 package com.softper.ts.stepDefinition;
 
-import com.softper.ts.resources.comunications.DriverResponse;
-import com.softper.ts.resources.comunications.PaymentMethodResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.PaymentMethodInput;
 import com.softper.ts.servicesImp.ConfigurationService;
 import com.softper.ts.servicesImp.DriverService;
@@ -24,12 +23,12 @@ public class AddPaymentMethod {
     private String port;
     private RestTemplate restTemplate = new RestTemplate();
 
-    DriverResponse driver;
+    BaseResponse driver;
     DriverService driverService = new DriverService();
     ConfigurationService configurationService = new ConfigurationService();
     PaymentMethodService paymentMethodService = new PaymentMethodService();
     PaymentMethodInput paymentMethodInput;
-    PaymentMethodResponse paymentMethodResponse;
+    BaseResponse paymentMethodResponse;
 
     @Given("the driver is in the add collection method window")
     public void the_driver_is_in_the_add_collection_method_window() {
@@ -50,7 +49,7 @@ public class AddPaymentMethod {
     @Then("the new collection method is added and the message Added successfully is displayed")
     public void the_new_collection_method_is_added_and_the_message_Added_successfully_is_displayed() {
         paymentMethodResponse = paymentMethodService.findPaymentMethodByUserId(2);
-        if(!paymentMethodResponse.success)
+        if(paymentMethodResponse.getStatus() == 1)
             System.out.println("AddPaymentMethod scenario 1 test success");
         else
             System.out.println("AddPaymentMethod scenario 1 test failed");
@@ -76,7 +75,7 @@ public class AddPaymentMethod {
     @Then("the collection method is not added and the message Enter collection method information is displayed")
     public void the_collection_method_is_not_added_and_the_message_Enter_collection_method_information_is_displayed() {
         paymentMethodResponse = paymentMethodService.findPaymentMethodByUserId(2);
-        if(paymentMethodResponse.success)
+        if(paymentMethodResponse.getStatus() == 1)
             System.out.println("AddPaymentMethod scenario 1 test success");
         else
             System.out.println("AddPaymentMethod scenario 1 test failed");

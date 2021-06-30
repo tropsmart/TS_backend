@@ -1,6 +1,6 @@
 package com.softper.ts.controllers;
 
-import com.softper.ts.resources.comunications.ReviewResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.ReviewInput;
 import com.softper.ts.services.IReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +19,9 @@ public class ReviewsController {
     private IReviewService reviewService;
 
     @GetMapping
-    public ResponseEntity<ReviewResponse> findAllReviews()
+    public ResponseEntity<BaseResponse> findAllReviews()
     {
-        ReviewResponse result = reviewService.findAllReviews();
+        BaseResponse result = reviewService.findAllReviews();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -30,9 +30,9 @@ public class ReviewsController {
     }
 
     @GetMapping("/customers/{customerId}")
-    public ResponseEntity<ReviewResponse> findReviewsByCustomerId(@PathVariable(value = "customerId")int customerId)
+    public ResponseEntity<BaseResponse> findReviewsByCustomerId(@PathVariable(value = "customerId")int customerId)
     {
-        ReviewResponse result = reviewService.findReviewsByCustomerId(customerId);
+        BaseResponse result = reviewService.findReviewsByCustomerId(customerId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -41,9 +41,9 @@ public class ReviewsController {
     }
 
     @GetMapping("/drivers/{driverId}")
-    public ResponseEntity<ReviewResponse> findReviewsByDriverId(@PathVariable(value = "driverId")int driverId)
+    public ResponseEntity<BaseResponse> findReviewsByDriverId(@PathVariable(value = "driverId")int driverId)
     {
-        ReviewResponse result = reviewService.findReviewsByDriverId(driverId);
+        BaseResponse result = reviewService.findReviewsByDriverId(driverId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -52,9 +52,9 @@ public class ReviewsController {
     }
 
     @GetMapping("/{reviewId}")
-    public ResponseEntity<ReviewResponse> findReviewById(@PathVariable(value = "reviewId")int reviewId)
+    public ResponseEntity<BaseResponse> findReviewById(@PathVariable(value = "reviewId")int reviewId)
     {
-        ReviewResponse result = reviewService.findReviewById(reviewId);
+        BaseResponse result = reviewService.findReviewById(reviewId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -63,9 +63,9 @@ public class ReviewsController {
     }
 
     @PostMapping("/cargoes/{cargoId}")
-    public ResponseEntity<ReviewResponse> addReviewByCargoId(@PathVariable(value = "cargoId")int cargoId, @Valid @RequestBody ReviewInput reviewInput)
+    public ResponseEntity<BaseResponse> addReviewByCargoId(@PathVariable(value = "cargoId")int cargoId, @Valid @RequestBody ReviewInput reviewInput)
     {
-        ReviewResponse result = reviewService.addReviewByCargoId(cargoId, reviewInput);
+        BaseResponse result = reviewService.addReviewByCargoId(cargoId, reviewInput);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);

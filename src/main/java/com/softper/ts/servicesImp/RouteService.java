@@ -5,7 +5,7 @@ import com.softper.ts.models.Route;
 import com.softper.ts.repositories.ICargoRepository;
 import com.softper.ts.repositories.ILocationRepository;
 import com.softper.ts.repositories.IRouteRepository;
-import com.softper.ts.resources.comunications.RouteResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.outputs.RouteOutput;
 import com.softper.ts.services.IRouteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,8 @@ public class RouteService implements IRouteService {
     ILocationRepository locationRepository;
 
     @Override
-    public RouteResponse getRouteInfo(int cargoId) {
+    public BaseResponse getRouteInfo(int cargoId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Location getLocation = locationRepository.findLocationByCargoId(cargoId);
@@ -47,16 +48,19 @@ public class RouteService implements IRouteService {
             newRouteOutput.setDistance(distance);
             newRouteOutput.setEstimedTime(drivingTime);
 
-            return new RouteResponse(newRouteOutput);
+            response = new BaseResponse("getRouteInfo","success",1);
+            response.setRouteOutput(newRouteOutput);
+            return response;
         }
         catch (Exception e)
         {
-            return new RouteResponse("An error ocurred while getting the route info : "+e.getMessage());
+            return new BaseResponse("getRouteInfo", "An error ocurred while getting the route info : "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public RouteResponse findAllRoutes() {
+    public BaseResponse findAllRoutes() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Route> routeList = routeRepository.findAll();
@@ -81,16 +85,19 @@ public class RouteService implements IRouteService {
 
                 routeOutputList.add(newRouteOutput);
             }
-            return new RouteResponse(routeOutputList);
+            response = new BaseResponse("findAllRoutes","success",1);
+            response.setRouteOutputList(routeOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new RouteResponse("An error ocurred while getting the route list : "+e.getMessage());
+            return new BaseResponse("findAllRoutes", "An error ocurred while getting the route info : "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public RouteResponse findRouteById(int routeId) {
+    public BaseResponse findRouteById(int routeId) {
+        BaseResponse response = new BaseResponse();
         try {
             Route getRoute = routeRepository.findById(routeId).get();
             Location getLocation = locationRepository.findLocationByRouteId(getRoute.getId());
@@ -108,11 +115,12 @@ public class RouteService implements IRouteService {
             newRouteOutput.setDistance(distance);
             newRouteOutput.setEstimedTime(drivingTime);
 
-            return new RouteResponse(newRouteOutput);
-        }
+            response = new BaseResponse("findRouteById","success",1);
+            response.setRouteOutput(newRouteOutput);
+            return response;        }
         catch (Exception e)
         {
-            return new RouteResponse("An error ocurred while getting the route list : "+e.getMessage());
+            return new BaseResponse("findRouteById", "An error ocurred while getting the route info : "+e.getMessage(),-2);
         }
     }
 

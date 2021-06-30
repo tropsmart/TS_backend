@@ -7,7 +7,7 @@ import com.softper.ts.models.Vehicle;
 import com.softper.ts.repositories.IDriverRepository;
 import com.softper.ts.repositories.ISoatRepository;
 import com.softper.ts.repositories.IVehicleRepository;
-import com.softper.ts.resources.comunications.VehicleResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.VehicleInput;
 import com.softper.ts.resources.outputs.VehicleOutput;
 import com.softper.ts.services.IVehicleService;
@@ -55,7 +55,8 @@ public class VehicleService implements IVehicleService {
 
 
     @Override
-    public VehicleResponse findVehiclesByDriverId(int driverId) {
+    public BaseResponse findVehiclesByDriverId(int driverId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Vehicle> vehicles = vehicleRepository.getVehiclesByDriverId(driverId);
@@ -68,16 +69,20 @@ public class VehicleService implements IVehicleService {
                 newVehicleOutput.setLoadingCapacity(v.getLoadingCapacity());
                 vehicleOutputList.add(newVehicleOutput);
             }
-            return new VehicleResponse(vehicleOutputList);
+
+            response = new BaseResponse("findVehiclesByDriverId","success",1);
+            response.setVehicleOutputList(vehicleOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new VehicleResponse("An error ocurred while getting the vehicle list : "+e.getMessage());
+            return new BaseResponse("findVehiclesByDriverId", "An error ocurred while getting the vehicle list : "+e.getMessage(), -2);
         }
     }
 
     @Override
-    public VehicleResponse addVehicleByUserId(int driverId, VehicleInput vehicleInput) {
+    public BaseResponse addVehicleByUserId(int driverId, VehicleInput vehicleInput) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Driver getDriver = driverRepository.findById(driverId)
@@ -109,17 +114,20 @@ public class VehicleService implements IVehicleService {
             newVehicleOutput.setBrand(newVehicle.getBrand());
             newVehicleOutput.setModel(newVehicle.getModel());
 
-            return new VehicleResponse(newVehicleOutput);
+            response = new BaseResponse("addVehicleByUserId","success",1);
+            response.setVehicleOutput(newVehicleOutput);
+            return response;
         }
         catch (Exception e)
         {
-            return new VehicleResponse("An error ocurred while saving the vehicle : "+e.getMessage());
+            return new BaseResponse("addVehicleByUserId", "An error ocurred while getting the vehicle list : "+e.getMessage(), -2);
         }
 
     }
 
     @Override
-    public VehicleResponse findAllVehicles() {
+    public BaseResponse findAllVehicles() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Vehicle> vehicles = vehicleRepository.findAll();
@@ -132,16 +140,20 @@ public class VehicleService implements IVehicleService {
                 newVehicleOutput.setLoadingCapacity(v.getLoadingCapacity());
                 vehicleOutputList.add(newVehicleOutput);
             }
-            return new VehicleResponse(vehicleOutputList);
+
+            response = new BaseResponse("findAllVehicles","success",1);
+            response.setVehicleOutputList(vehicleOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new VehicleResponse("An error ocurred while getting the vehicles list : "+e.getMessage());
+            return new BaseResponse("findAllVehicles", "An error ocurred while getting the vehicle list : "+e.getMessage(), -2);
         }
     }
 
     @Override
-    public VehicleResponse findVehicleById(int vehicleId) {
+    public BaseResponse findVehicleById(int vehicleId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Vehicle getVehicle = vehicleRepository.findById(vehicleId).get();
@@ -150,11 +162,14 @@ public class VehicleService implements IVehicleService {
             newVehicleOutput.setModel(getVehicle.getModel());
             newVehicleOutput.setBrand(getVehicle.getBrand());
             newVehicleOutput.setLoadingCapacity(getVehicle.getLoadingCapacity());
-            return new VehicleResponse(newVehicleOutput);
+            
+            response = new BaseResponse("findVehicleById","success",1);
+            response.setVehicleOutput(newVehicleOutput);
+            return response;
         }
         catch (Exception e)
         {
-            return new VehicleResponse("An error ocurred while getting the vehicle : "+e.getMessage());
+            return new BaseResponse("findVehicleById", "An error ocurred while getting the vehicle list : "+e.getMessage(), -2);
         }
     }
 }

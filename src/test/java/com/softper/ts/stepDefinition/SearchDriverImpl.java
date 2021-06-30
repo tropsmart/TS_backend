@@ -1,7 +1,6 @@
 package com.softper.ts.stepDefinition;
 
-import com.softper.ts.resources.comunications.CustomerResponse;
-import com.softper.ts.resources.comunications.DriverResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.CustomerService;
 import com.softper.ts.servicesImp.DriverService;
 import io.cucumber.java.en.Given;
@@ -22,8 +21,8 @@ public class SearchDriverImpl {
     private String port;
     private RestTemplate restTemplate = new RestTemplate();
 
-    DriverResponse driver;
-    CustomerResponse customer;
+    BaseResponse driver;
+    BaseResponse customer;
     DriverService driverService = new DriverService();
     CustomerService customerService  = new CustomerService();
 

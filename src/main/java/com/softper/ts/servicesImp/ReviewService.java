@@ -6,7 +6,7 @@ import com.softper.ts.models.Review;
 import com.softper.ts.repositories.ICargoRepository;
 import com.softper.ts.repositories.IQualificationRepository;
 import com.softper.ts.repositories.IReviewRepository;
-import com.softper.ts.resources.comunications.ReviewResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.ReviewInput;
 import com.softper.ts.resources.outputs.ReviewOutput;
 import com.softper.ts.services.IReviewService;
@@ -27,7 +27,8 @@ public class ReviewService implements IReviewService {
     private IQualificationRepository qualificationRepository;
 
     @Override
-    public ReviewResponse findAllReviews() {
+    public BaseResponse findAllReviews() {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Review> reviews = reviewRepository.findAll();
@@ -41,17 +42,20 @@ public class ReviewService implements IReviewService {
                 newReviewOutput.setCalification(r.getCalification());
                 reviewOutputList.add(newReviewOutput);
             }
-            return new ReviewResponse(reviewOutputList);
+            response = new BaseResponse("findAllReviews","success",1);
+            response.setReviewOutputList(reviewOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new ReviewResponse("An error ocurred while getting the review list : "+e.getMessage());
+            return new BaseResponse("findAllReviews","An error ocurred while getting the review list : "+e.getMessage(),-2);
         }
     }
 
 
     @Override
-    public ReviewResponse findReviewsByCustomerId(int customerId) {
+    public BaseResponse findReviewsByCustomerId(int customerId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Review> reviews = reviewRepository.findReviewsByCustomerId(customerId);
@@ -65,16 +69,19 @@ public class ReviewService implements IReviewService {
                 newReviewOutput.setCalification(r.getCalification());
                 reviewOutputList.add(newReviewOutput);
             }
-            return new ReviewResponse(reviewOutputList);
+            response = new BaseResponse("findReviewsByCustomerId","success",1);
+            response.setReviewOutputList(reviewOutputList);
+            return response;
         }
         catch (Exception e)
         {
-            return new ReviewResponse("An error ocurred while getting the review list : "+e.getMessage());
+            return new BaseResponse("findReviewsByCustomerId","An error ocurred while getting the review list : "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public ReviewResponse findReviewsByDriverId(int driverId) {
+    public BaseResponse findReviewsByDriverId(int driverId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             List<Review> reviews = reviewRepository.findReviewsByDriverId(driverId);
@@ -88,16 +95,19 @@ public class ReviewService implements IReviewService {
                 newReviewOutput.setCalification(r.getCalification());
                 reviewOutputList.add(newReviewOutput);
             }
-            return new ReviewResponse(reviewOutputList);
+            response = new BaseResponse("findReviewsByDriverId","success",1);
+            response.setReviewOutputList(reviewOutputList);
+            return response;        
         }
         catch (Exception e)
         {
-            return new ReviewResponse("An error ocurred while getting the review list : "+e.getMessage());
+            return new BaseResponse("findReviewsByDriverId","An error ocurred while getting the review list : "+e.getMessage(),-2);
         }
     }
 
     @Override
-    public ReviewResponse findReviewById(int reviewId) {
+    public BaseResponse findReviewById(int reviewId) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Review getReview = reviewRepository.findById(reviewId).get();
@@ -107,18 +117,22 @@ public class ReviewService implements IReviewService {
             newReviewOutput.setCargo(getReview.getCargo().getDescription());
             newReviewOutput.setCommentary(getReview.getCommentary());
             newReviewOutput.setCalification(getReview.getCalification());
-            return new ReviewResponse(newReviewOutput);
+            
+            response = new BaseResponse("findReviewById","success",1);
+            response.setReviewOutput(newReviewOutput);
+            return response;
         }
         catch (Exception e)
         {
-            return new ReviewResponse("An error ocurred while getting the review : "+e.getMessage());
+            return new BaseResponse("findReviewById","An error ocurred while getting the review list : "+e.getMessage(),-2);
 
         }
 
     }
 
     @Override
-    public ReviewResponse addReviewByCargoId(int cargoId, ReviewInput reviewInput) {
+    public BaseResponse addReviewByCargoId(int cargoId, ReviewInput reviewInput) {
+        BaseResponse response = new BaseResponse();
         try
         {
             Cargo getCargo = cargoRepository.findById(cargoId).get();
@@ -137,11 +151,14 @@ public class ReviewService implements IReviewService {
             newReviewOutput.setCargo(newReview.getCargo().getDescription());
             newReviewOutput.setCommentary(newReview.getCommentary());
             newReviewOutput.setCalification(newReview.getCalification());
-            return new ReviewResponse(newReviewOutput);
+
+            response = new BaseResponse("addReviewByCargoId","success",1);
+            response.setReviewOutput(newReviewOutput);
+            return response;
         }
         catch (Exception e)
         {
-            return new ReviewResponse("An error ocurred while registering the review : "+e.getMessage());
+            return new BaseResponse("addReviewByCargoId","An error ocurred while getting the review list : "+e.getMessage(),-2);
         }
     }
 

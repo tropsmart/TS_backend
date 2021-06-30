@@ -1,6 +1,6 @@
 package com.softper.ts.stepDefinition;
 
-import com.softper.ts.resources.comunications.UserResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.SignIn;
 import com.softper.ts.servicesImp.AuthService;
 import com.softper.ts.servicesImp.UserService;
@@ -44,9 +44,9 @@ public class SignInImpl {
 
         authService.login(signIn.getEmail(),signIn.getPassword());
 
-        UserResponse getUser = userService.findUserByEmail("customer1@gmail.com");
+        BaseResponse getUser = userService.findUserByEmail("customer1@gmail.com");
 
-        if(getUser.success)
+        if(getUser.status == 1)
             System.out.println("SignUp1 test failed");
         else
             System.out.println("SignUp1 test success");
@@ -66,9 +66,9 @@ public class SignInImpl {
     public void you_not_access_in_the_application() {
         authService.login(signIn.getEmail(),signIn.getPassword());
 
-        UserResponse getUser = userService.findUserByEmail("customer1@gmail.com");
+        BaseResponse getUser = userService.findUserByEmail("customer1@gmail.com");
 
-        if(!getUser.success)
+        if(getUser.status != 1)
             System.out.println("SignUp1 test failed");
         else
             System.out.println("SignUp1 test success");

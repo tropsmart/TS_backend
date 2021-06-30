@@ -1,7 +1,6 @@
 package com.softper.ts.controllers;
 
-import com.softper.ts.resources.comunications.ConfigurationResponse;
-import com.softper.ts.resources.comunications.PaymentMethodResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.resources.inputs.ConfigurationInput;
 import com.softper.ts.resources.inputs.PaymentMethodInput;
 import com.softper.ts.servicesImp.ConfigurationService;
@@ -25,9 +24,9 @@ public class ConfigurationsController {
     private PaymentMethodService paymentMethodService;
 
     @GetMapping
-    public ResponseEntity<ConfigurationResponse> findAllConfigurations()
+    public ResponseEntity<BaseResponse> findAllConfigurations()
     {
-        ConfigurationResponse result = configurationService.findAllConfigurations();
+        BaseResponse result = configurationService.findAllConfigurations();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -37,9 +36,9 @@ public class ConfigurationsController {
 
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<ConfigurationResponse> findConfigurationByUserId(@PathVariable(value = "userId") int userId)
+    public ResponseEntity<BaseResponse> findConfigurationByUserId(@PathVariable(value = "userId") int userId)
     {
-        ConfigurationResponse result = configurationService.findConfigurationByUserId(userId);
+        BaseResponse result = configurationService.findConfigurationByUserId(userId);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
@@ -48,17 +47,17 @@ public class ConfigurationsController {
     }
 
     @GetMapping("/users/{userId}/payment-method")
-    public ResponseEntity<PaymentMethodResponse> findPaymentMethodsByUserId(@PathVariable(value = "userId")int userId)
+    public ResponseEntity<BaseResponse> findPaymentMethodsByUserId(@PathVariable(value = "userId")int userId)
     {
-        PaymentMethodResponse result = paymentMethodService.findPaymentMethodByUserId(userId);
+        BaseResponse result = paymentMethodService.findPaymentMethodByUserId(userId);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping("/users/{userId}/payment-method")
-    public ResponseEntity<ConfigurationResponse> addPaymentMethod(@PathVariable(value="userId")int userId, @Valid @RequestBody PaymentMethodInput paymentMethodInput)
+    public ResponseEntity<BaseResponse> addPaymentMethod(@PathVariable(value="userId")int userId, @Valid @RequestBody PaymentMethodInput paymentMethodInput)
     {
-        ConfigurationResponse result = configurationService.addPaymentMethod(userId, paymentMethodInput);
+        BaseResponse result = configurationService.addPaymentMethod(userId, paymentMethodInput);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
@@ -67,9 +66,9 @@ public class ConfigurationsController {
     }
 
     @PutMapping("/users/{userId}")
-    public ResponseEntity<ConfigurationResponse> updateConfiguration(@PathVariable(value="userId")int userId, @Valid @RequestBody ConfigurationInput configurationInput)
+    public ResponseEntity<BaseResponse> updateConfiguration(@PathVariable(value="userId")int userId, @Valid @RequestBody ConfigurationInput configurationInput)
     {
-        ConfigurationResponse result = configurationService.updateConfiguration(userId, configurationInput);
+        BaseResponse result = configurationService.updateConfiguration(userId, configurationInput);
 
         //if(!result.success)
         //    return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);

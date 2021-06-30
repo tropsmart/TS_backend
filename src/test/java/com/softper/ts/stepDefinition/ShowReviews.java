@@ -1,7 +1,6 @@
 package com.softper.ts.stepDefinition;
 
-import com.softper.ts.resources.comunications.ReviewResponse;
-import com.softper.ts.resources.comunications.UserResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.ReviewService;
 import com.softper.ts.servicesImp.UserService;
 import io.cucumber.java.en.Given;
@@ -22,9 +21,9 @@ public class ShowReviews {
     private String port;
     private RestTemplate restTemplate = new RestTemplate();
 
-    UserResponse userCustomer;
-    UserResponse userDriver;
-    ReviewResponse reviewResponse;
+    BaseResponse userCustomer;
+    BaseResponse userDriver;
+    BaseResponse reviewResponse;
     UserService userService = new UserService();
     ReviewService reviewService = new ReviewService();
 
@@ -43,7 +42,7 @@ public class ShowReviews {
 
     @Then("the selected review is displayed")
     public void the_selected_review_is_displayed() {
-        if(reviewResponse.success)
+        if(reviewResponse.status == 1)
             System.out.println("ShowReviews scenario 1 test success");
         else
             System.out.println("ShowReviews scenario 1 test failed");
@@ -57,7 +56,7 @@ public class ShowReviews {
 
     @Then("the message “The driver has no reviews” is displayed")
     public void the_message_The_driver_has_no_reviews_is_displayed() {
-        if(reviewResponse.success)
+        if(reviewResponse.status == 1)
             System.out.println("ShowReviews scenario 1 test success");
         else
             System.out.println("ShowReviews scenario 1 test failed");

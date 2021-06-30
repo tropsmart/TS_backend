@@ -1,6 +1,6 @@
 package com.softper.ts.controllers;
 
-import com.softper.ts.resources.comunications.PersonResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,9 +15,9 @@ public class PeopleController {
     private PersonService personService;
 
     @GetMapping
-    public ResponseEntity<PersonResponse> findAllPersons()
+    public ResponseEntity<BaseResponse> findAllPersons()
     {
-        PersonResponse result = personService.findAllPersons();
+        BaseResponse result = personService.findAllPersons();
 
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
@@ -26,9 +26,9 @@ public class PeopleController {
     }
 
     @GetMapping("{personId}")
-    public ResponseEntity<PersonResponse> findPersonById(@PathVariable(value = "personId")int personId)
+    public ResponseEntity<BaseResponse> findPersonById(@PathVariable(value = "personId")int personId)
     {
-        PersonResponse result = personService.findPeopleById(personId);
+        BaseResponse result = personService.findPeopleById(personId);
         //if(!result.success)
         //    return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
 

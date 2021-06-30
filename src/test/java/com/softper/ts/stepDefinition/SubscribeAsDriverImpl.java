@@ -1,7 +1,6 @@
 package com.softper.ts.stepDefinition;
 
-import com.softper.ts.resources.comunications.DriverResponse;
-import com.softper.ts.resources.comunications.SubscriptionResponse;
+import com.softper.ts.resources.comunications.BaseResponse;
 import com.softper.ts.servicesImp.DriverService;
 import com.softper.ts.servicesImp.SubscriptionService;
 import io.cucumber.java.en.Given;
@@ -22,7 +21,7 @@ public class SubscribeAsDriverImpl {
     private String port;
     private RestTemplate restTemplate = new RestTemplate();
 
-    DriverResponse driver;
+    BaseResponse driver;
     DriverService driverService = new DriverService();
     SubscriptionService subscriptionService = new SubscriptionService();
 
@@ -39,7 +38,7 @@ public class SubscribeAsDriverImpl {
 
     @Then("the driver suscribe to the service")
     public void the_driver_suscribe_to_the_service() {
-        SubscriptionResponse subscription = subscriptionService.findSubscriptionById(1);
+        BaseResponse subscription = subscriptionService.findSubscriptionById(1);
         if(subscription!=null)
             System.out.println("SuscribeAsDriver test success");
         else
@@ -58,7 +57,7 @@ public class SubscribeAsDriverImpl {
     @Then("the driver does not subscribe to the service")
     public void the_driver_does_not_subscribe_to_the_service() {
 
-        SubscriptionResponse subscription = subscriptionService.findSubscriptionById(1);
+        BaseResponse subscription = subscriptionService.findSubscriptionById(1);
         if(subscription==null)
             System.out.println("SuscribeAsDriver test success");
         else
