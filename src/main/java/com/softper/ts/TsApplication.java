@@ -43,11 +43,10 @@ public class TsApplication {
     * 2.- heroku create <APP NAME>
     * 3.- inicializar git
     * 4.- git remote add heroku <HEROKU APP REPOSITORY>
-    * 5.- git add .
-    * 6.- git commit -m "n version"
-    * 7.- git push heroku master
-    * 8.- heroku config:set DATABASE_URL='mysql://ueu35yi8gtvogkeu:LNOJKsZvSOqNhAcfJA4t@bqhh75ibqyxemcgdz60f-mysql.services.clever-cloud.com:3306/bqhh75ibqyxemcgdz60f'
-
+    * 5.- heroku config:set DATABASE_URL='mysql://ueu35yi8gtvogkeu:LNOJKsZvSOqNhAcfJA4t@bqhh75ibqyxemcgdz60f-mysql.services.clever-cloud.com:3306/bqhh75ibqyxemcgdz60f'
+    * 6.- git add .
+    * 7.- git commit -m "n version"
+    * 8.- git push heroku master
     *
     *a
     * Se utilizo servicio de clevercloud para Base de datos MySql
