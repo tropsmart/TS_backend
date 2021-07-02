@@ -70,7 +70,7 @@ public class SubscriptionService implements ISubscriptionService {
             subscriptionRepository.saveAll(subscriptionList);
             newSubscription = subscriptionRepository.save(newSubscription);
 
-            response = new BaseResponse("subscribe","success",1);
+            response = new BaseResponse("subscribe","Se subscribió al plan satisfactoriamente",1);
             response.setSubscriptionOutput(toSubscriptionOutput(newSubscription));
             return response;
 
@@ -136,10 +136,10 @@ public class SubscriptionService implements ISubscriptionService {
         {
             Subscription getSubscription = subscriptionRepository.findById(subscriptionId)
                     .orElseThrow(()->new ResourceNotFoundException("subscription","id",subscriptionId));
-            getSubscription.setSubscriptionState("Canceled");
+            getSubscription.setSubscriptionState("Desactivado");
             getSubscription = subscriptionRepository.save(getSubscription);
 
-            response = new BaseResponse("cancelSubscription","success",1);
+            response = new BaseResponse("cancelSubscription","Se ha desactivado la subscripción satisfactoriamente",1);
             response.setSubscriptionOutput(toSubscriptionOutput(getSubscription));
             return response;        
         }
@@ -160,13 +160,13 @@ public class SubscriptionService implements ISubscriptionService {
             List<Subscription> subscriptionList = subscriptionRepository.getSubscriptionsByUserId(getSubscription.getUser().getId());
             for (Subscription s: subscriptionList) {
                 if(s.getId()!=subscriptionId)
-                    s.setSubscriptionState("Disabled");
+                    s.setSubscriptionState("Desactivado");
                 else
-                    s.setSubscriptionState("Actived");
+                    s.setSubscriptionState("Activado");
                 s = subscriptionRepository.save(s);
             }
 
-            response = new BaseResponse("enableSubscriptionById","success",1);
+            response = new BaseResponse("enableSubscriptionById","Se ha activado la suscripción satisfactoriamente",1);
             response.setSubscriptionOutput(toSubscriptionOutput(getSubscription));
             return response;      
 
@@ -176,6 +176,21 @@ public class SubscriptionService implements ISubscriptionService {
             return new BaseResponse("enableSubscriptionById", "An error ocurred while getting the subscription list : "+e.getMessage(), -2);
         }
     }
+    @Override
+    public BaseResponse disableSubscriptionById(int subscriptionId){
+        BaseResponse response = new BaseResponse();
+        try {
+            Subscription getSubscription = subscriptionRepository.findById(subscriptionId)
+                    .orElseThrow(()->new ResourceNotFoundException("Id","subscription", subscriptionId));
+            getSubscription.setSubscriptionState("Desactivado");
+            response = new BaseResponse("enableSubscriptionById","Se ha desactivado la subscripción satisfactoriamente",1);
+            response.setSubscriptionOutput(toSubscriptionOutput(getSubscription));
+            return response;      
+        }catch(Exception e) {
+            return new BaseResponse("disableSubscriptionById", "An error ocurred while getting the subscription list : "+e.getMessage(), -2);
+        }
+    }
+
 
     @Override
     public BaseResponse deleteSubscriptionBySubscriptionId(int subscriptionId) {

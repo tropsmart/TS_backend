@@ -10,5 +10,6 @@ public interface ISubscriptionService extends ICrudService<Subscription> {
     BaseResponse findAllSubscriptions();
     BaseResponse cancelSubscription(int subscriptionId);
     BaseResponse enableSubscriptionById(int subscriptionId);
+    BaseResponse disableSubscriptionById(int subscriptionId);
     BaseResponse deleteSubscriptionBySubscriptionId(int subscriptionId);
 }

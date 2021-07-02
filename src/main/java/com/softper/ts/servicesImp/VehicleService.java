@@ -62,12 +62,7 @@ public class VehicleService implements IVehicleService {
             List<Vehicle> vehicles = vehicleRepository.getVehiclesByDriverId(driverId);
             List<VehicleOutput> vehicleOutputList = new ArrayList<>();
             for (Vehicle v:vehicles) {
-                VehicleOutput newVehicleOutput = new VehicleOutput();
-                newVehicleOutput.setDriver(v.getDriver().getPerson().getFirstName()+" "+v.getDriver().getPerson().getLastName());
-                newVehicleOutput.setModel(v.getModel());
-                newVehicleOutput.setBrand(v.getBrand());
-                newVehicleOutput.setLoadingCapacity(v.getLoadingCapacity());
-                vehicleOutputList.add(newVehicleOutput);
+                vehicleOutputList.add(toVehicleOutput(v));
             }
 
             response = new BaseResponse("findVehiclesByDriverId","success",1);
@@ -93,6 +88,7 @@ public class VehicleService implements IVehicleService {
             newSoat.setEmissionDate(Calendar.getInstance().getTime());
             newSoat.setExpireDate(Calendar.getInstance().getTime());
             newSoat.setServiceType("Servicio de carga");
+            
 
             newSoat = soatRepository.save(newSoat);
 
@@ -102,6 +98,7 @@ public class VehicleService implements IVehicleService {
             newVehicle.setModel(vehicleInput.getModel());
             newVehicle.setFabricationYear(Calendar.getInstance().getTime());
             newVehicle.setOwnershipCard(vehicleInput.getOwnershipCard());
+            newVehicle.setState("Desactivado");
 
             newVehicle.setDriver(getDriver);
             newVehicle.setSoat(newSoat);
@@ -133,12 +130,7 @@ public class VehicleService implements IVehicleService {
             List<Vehicle> vehicles = vehicleRepository.findAll();
             List<VehicleOutput> vehicleOutputList = new ArrayList<>();
             for (Vehicle v:vehicles) {
-                VehicleOutput newVehicleOutput = new VehicleOutput();
-                newVehicleOutput.setDriver(v.getDriver().getPerson().getFirstName()+" "+v.getDriver().getPerson().getLastName());
-                newVehicleOutput.setModel(v.getModel());
-                newVehicleOutput.setBrand(v.getBrand());
-                newVehicleOutput.setLoadingCapacity(v.getLoadingCapacity());
-                vehicleOutputList.add(newVehicleOutput);
+                vehicleOutputList.add(toVehicleOutput(v));
             }
 
             response = new BaseResponse("findAllVehicles","success",1);
@@ -157,14 +149,9 @@ public class VehicleService implements IVehicleService {
         try
         {
             Vehicle getVehicle = vehicleRepository.findById(vehicleId).get();
-            VehicleOutput newVehicleOutput = new VehicleOutput();
-            newVehicleOutput.setDriver(getVehicle.getDriver().getPerson().getFirstName()+" "+getVehicle.getDriver().getPerson().getLastName());
-            newVehicleOutput.setModel(getVehicle.getModel());
-            newVehicleOutput.setBrand(getVehicle.getBrand());
-            newVehicleOutput.setLoadingCapacity(getVehicle.getLoadingCapacity());
             
             response = new BaseResponse("findVehicleById","success",1);
-            response.setVehicleOutput(newVehicleOutput);
+            response.setVehicleOutput(toVehicleOutput(getVehicle));
             return response;
         }
         catch (Exception e)
@@ -172,4 +159,64 @@ public class VehicleService implements IVehicleService {
             return new BaseResponse("findVehicleById", "An error ocurred while getting the vehicle list : "+e.getMessage(), -2);
         }
     }
+
+    @Override
+    public BaseResponse assignVehicle(int vehicleId)
+    {
+        BaseResponse response = new BaseResponse();
+        try{
+            Vehicle getVehicle = vehicleRepository.findById(vehicleId).get();
+            getVehicle.setState("Activado");
+
+            List<Vehicle> getVehicleList = vehicleRepository.getVehiclesByDriverId(getVehicle.getDriver().getId());
+            for (Vehicle v:getVehicleList) {
+                v.setState("Desactivado");
+            }
+
+            vehicleRepository.saveAll(getVehicleList);
+
+            getVehicle.setState("Activado");
+
+            getVehicle = vehicleRepository.save(getVehicle);
+            
+            response = new BaseResponse("assignVehicle","success",1);
+            response.setVehicleOutput(toVehicleOutput(getVehicle));
+            return response;
+        } catch (Exception e){
+            return new BaseResponse("assignVehicle", "An error ocurred while getting the vehicle list : "+e.getMessage(), -2);
+        }
+    }
+
+    @Override
+    public BaseResponse revokeVehicle(int vehicleId)
+    {
+        BaseResponse response = new BaseResponse();
+        try{
+            Vehicle getVehicle = vehicleRepository.findById(vehicleId).get();
+            getVehicle.setState("Desactivado");
+
+            getVehicle = vehicleRepository.save(getVehicle);
+
+            response = new BaseResponse("revokeVehicle","success",1);
+            response.setVehicleOutput(toVehicleOutput(getVehicle));
+            return response;
+        } catch(Exception e){
+            return new BaseResponse("revokeVehicle", "An error ocurred while getting the vehicle list : "+e.getMessage(), -2);
+
+        }
+
+    }
+
+    private VehicleOutput toVehicleOutput(Vehicle v) {
+        VehicleOutput newVehicleOutput = new VehicleOutput();
+        newVehicleOutput.setId(v.getId());
+        newVehicleOutput.setDriver(v.getDriver().getPerson().getFirstName()+" "+v.getDriver().getPerson().getLastName());
+        newVehicleOutput.setModel(v.getModel());
+        newVehicleOutput.setBrand(v.getBrand());
+        newVehicleOutput.setLoadingCapacity(v.getLoadingCapacity());
+        newVehicleOutput.setState(v.getState());
+
+        return newVehicleOutput;
+    }
+
 }

@@ -59,4 +59,20 @@ public class VehiclesController {
 
         return new ResponseEntity<>(result,HttpStatus.OK);
     }
+
+    @PutMapping("/{vehicleId}/assign")
+    public ResponseEntity<BaseResponse> assignVehicle(@PathVariable(value = "vehicleId")int vehicleId)
+    {
+        BaseResponse result = vehicleService.assignVehicle(vehicleId);
+
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
+
+    @PutMapping("/{vehicleId}/revoke")
+    public ResponseEntity<BaseResponse> revokeVehicle(@PathVariable(value = "vehicleId")int vehicleId)
+    {
+        BaseResponse result = vehicleService.revokeVehicle(vehicleId);
+
+        return new ResponseEntity<>(result,HttpStatus.OK);
+    }
 }

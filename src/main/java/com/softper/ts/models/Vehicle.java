@@ -34,6 +34,9 @@ public class Vehicle {
     @Column(name = "model")
     private String model;
 
+    @Column(name = "state")
+    private String state;
+
     @Column(name = "loading_capacity")
     private Double loadingCapacity;
 

@@ -9,4 +9,6 @@ public interface IVehicleService extends ICrudService<Vehicle> {
     BaseResponse addVehicleByUserId(int driverId, VehicleInput vehicleInput);
     BaseResponse findAllVehicles();
     BaseResponse findVehicleById(int vehicleId);
+    BaseResponse assignVehicle(int vehicleId);
+    BaseResponse revokeVehicle(int vehicleId);
 }
