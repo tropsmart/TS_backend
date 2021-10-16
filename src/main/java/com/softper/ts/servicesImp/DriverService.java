@@ -36,8 +36,14 @@ public class DriverService implements IDriverService {
 
     DataUtils data;
 
-    public DriverService() throws JsonParseException, JsonMappingException, IOException {
-        data = new DataUtils();
+    public DriverService() {
+        try{
+            data = new DataUtils();
+        }
+        catch(IOException e){
+           
+        }
+        
 
     }
 
