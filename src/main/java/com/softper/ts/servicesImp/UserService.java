@@ -81,7 +81,7 @@ public class UserService implements IUserService {
             Block getBlocked = blockRepository.findBlockByUserAndBlockedId(userId, blockedId);
 
             if(getBlocked != null){
-                return new BaseResponse("setFavourited","Ya tiene a este usuario en su lista de bloqueados",0);
+                return new BaseResponse("setBlocked","Ya tiene a este usuario en su lista de bloqueados",0);
             } else {
                 Block newBlock =  new Block();
                 newBlock.setUser(getUser);

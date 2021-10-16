@@ -1,5 +1,7 @@
 package com.softper.ts.resources.outputs;
 
+import java.util.List;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +15,8 @@ public class DriverOutput {
     private String email;
     private int role;
     private int roleId;
+    private List<String> vehicles;
+    private List<String> locations;
 
     public DriverOutput(int id, String firstName, String lastName, String license, String email, int role, int roleId) {
         this.id = id;

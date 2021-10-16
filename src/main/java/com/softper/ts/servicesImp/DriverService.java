@@ -1,5 +1,9 @@
 package com.softper.ts.servicesImp;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.softper.ts.config.DataUtils;
+import com.softper.ts.config.Dataobj;
 import com.softper.ts.exception.ResourceNotFoundException;
 import com.softper.ts.models.Driver;
 import com.softper.ts.models.Location;
@@ -12,9 +16,14 @@ import com.softper.ts.services.IDriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class DriverService implements IDriverService {
@@ -25,6 +34,12 @@ public class DriverService implements IDriverService {
     @Autowired
     IUserRepository userRepository;
 
+    DataUtils data;
+
+    public DriverService() throws JsonParseException, JsonMappingException, IOException {
+        data = new DataUtils();
+
+    }
 
     @Override
     public Driver save(Driver driver) throws Exception {
@@ -71,17 +86,19 @@ public class DriverService implements IDriverService {
 
     @Override
     public BaseResponse findAllDrivers() {
+
         BaseResponse response = new BaseResponse();
         try
         {
             List<Driver> drivers = driverRepository.findAll();
             List<DriverOutput> driverOutputList = new ArrayList<>();
             for (Driver getDriver:drivers) {
-                driverOutputList.add(new DriverOutput(getDriver.getPerson().getUser().getId(),getDriver.getPerson().getFirstName(),getDriver.getPerson().getLastName(),getDriver.getLicense(),getDriver.getPerson().getUser().getEmail(),getDriver.getPerson().getPersonType(),getDriver.getId()));
+                driverOutputList.add(toDriverOutout(getDriver));
             }
             response = new BaseResponse("findAllDrivers","success",1);
             response.setDriverOutputList(driverOutputList);
-            return response;        }
+            return response;        
+        }
         catch (Exception e)
         {
             return new BaseResponse("findAllDrivers","An error ocurred while getting driver: "+e.getMessage(),-2);
@@ -95,7 +112,7 @@ public class DriverService implements IDriverService {
             List<User> users = userRepository.findDriverByName(name);
             List<DriverOutput> driverOutputList = new ArrayList<>();
             for (User getUser:users) {
-                driverOutputList.add(new DriverOutput(getUser.getPerson().getDriver().getPerson().getUser().getId(),getUser.getPerson().getDriver().getPerson().getFirstName(),getUser.getPerson().getDriver().getPerson().getLastName(),getUser.getPerson().getDriver().getLicense(),getUser.getPerson().getDriver().getPerson().getUser().getEmail(),getUser.getPerson().getDriver().getPerson().getPersonType(),getUser.getPerson().getDriver().getId()));
+                driverOutputList.add(toDriverOutout(getUser.getPerson().getDriver()));
             }
             response = new BaseResponse("findDriversByName","success",1);
             response.setDriverOutputList(driverOutputList);
@@ -105,6 +122,32 @@ public class DriverService implements IDriverService {
         {
             return new BaseResponse("findDriversByName","An error ocurred while getting driver: "+e.getMessage(),-2);
         }
+    }
+
+    public DriverOutput toDriverOutout(Driver getDriver) {
+        DriverOutput newDriverOutput = new DriverOutput();
+        newDriverOutput.setId(getDriver.getId());
+        newDriverOutput.setFirstName(getDriver.getPerson().getFirstName());
+        newDriverOutput.setLastName(getDriver.getPerson().getLastName());
+        newDriverOutput.setLicense(getDriver.getLicense());
+        newDriverOutput.setEmail(getDriver.getPerson().getUser().getEmail());
+        newDriverOutput.setRole(getDriver.getPerson().getPersonType());
+        newDriverOutput.setRoleId(getDriver.getId());
+
+        Random rand = new Random(); //instance of random class
+        int n = rand.nextInt(4)+1;
+        List<String> newVehicles = new ArrayList();
+        for (int p = 0; p<n; p++){
+            newVehicles.add(data.getData().getVehicles().get(rand.nextInt(data.getData().getVehicles().size())));
+        }
+        int m = rand.nextInt(4)+1;
+        List<String> newLocations = new ArrayList();
+        for (int r = 0; r<m; r++){
+            newLocations.add(data.getData().getLocations().get(rand.nextInt(data.getData().getLocations().size())));
+        }
+        newDriverOutput.setVehicles(newVehicles.stream().distinct().collect(Collectors.toList()));
+        newDriverOutput.setLocations(newLocations.stream().distinct().collect(Collectors.toList()));
+        return newDriverOutput;
     }
 
 }
