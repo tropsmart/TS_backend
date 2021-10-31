@@ -1,6 +1,7 @@
 package com.softper.ts.servicesImp;
 
 import com.google.common.base.Strings;
+import com.softper.ts.config.DataUtils;
 import com.softper.ts.exception.ResourceNotFoundException;
 import com.softper.ts.models.*;
 import com.softper.ts.repositories.*;
@@ -24,10 +25,14 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 
@@ -62,11 +67,31 @@ public class AuthService implements IAuthService {
     @Autowired
     private IBalanceRepository balanceRepository;
 
+    @Autowired
+    private ISoatRepository soatRepository;
+
+    @Autowired
+    private IVehicleRepository vehicleRepository;
+
+    @Autowired
+    private IDriverLocationRepository driverLocationRepository;
+
     //@Autowired
     //private AuthenticationManager authenticationManager;
 
+    DataUtils data;
+    private static final DecimalFormat df = new DecimalFormat("0.00");
+
     @Autowired
     private JwtProvider jwtProvider;
+
+    public AuthService() {
+        try{
+            data = new DataUtils();
+        } catch(IOException e) {
+
+        }
+    }
 
     //@Autowired
     //private IRefreshTokenService refreshTokenService;
@@ -147,6 +172,48 @@ public class AuthService implements IAuthService {
                     qualificationRepository.save(newQualication);
                     serviceRequestRepository.save(newServiceRequest);
                     driverRepository.save(newDriver);
+
+                    //SOAT
+                    Soat newSoat = new Soat();
+                    newSoat.setAssociateName(newDriver.getPerson().getFirstName()+" "+newDriver.getPerson().getLastName());
+                    newSoat.setEmissionDate(Calendar.getInstance().getTime());
+                    newSoat.setExpireDate(Calendar.getInstance().getTime());
+                    newSoat.setServiceType("Servicio de carga");
+
+                    newSoat = soatRepository.save(newSoat);
+
+                    //VEHICLE
+                    Random rand = new Random();
+                    int n = rand.nextInt(4)+1;
+                    List<Vehicle> newVehicleList = new ArrayList();
+
+                    for (int p = 0; p<n; p++){
+                        Vehicle newVehicle = new Vehicle();
+                        String vstr = data.getData().getVehicles().get(rand.nextInt(data.getData().getVehicles().size()-1));
+                        newVehicle.setBrand(vstr);
+                        newVehicle.setLoadingCapacity(105.5);
+                        newVehicle.setModel(vstr);
+                        newVehicle.setFabricationYear(Calendar.getInstance().getTime());
+                        newVehicle.setOwnershipCard(vstr);
+                        if(p == 0)
+                            newVehicle.setState("Activado");
+                        else
+                            newVehicle.setState("Desactivado");
+                        newVehicle.setDriver(newDriver);
+                        newVehicle.setSoat(newSoat);
+                        newVehicleList.add(newVehicle);
+                    }
+                    
+                    int m = rand.nextInt(4)+1;
+                    List<DriverLocation> driverLocationList = new ArrayList();
+                    for (int r = 0 ; r<m; r++){
+                        DriverLocation newDriverLocation = new DriverLocation();
+                        newDriverLocation.setDriver(newDriver);
+                        newDriverLocation.setLocation(data.getData().getLocations().get(rand.nextInt(data.getData().getLocations().size()-1)));
+                        driverLocationList.add(newDriverLocation);
+                    }
+                    vehicleRepository.saveAll(newVehicleList);
+                    driverLocationRepository.saveAll(driverLocationList);
                 }
     
                 response = new BaseResponse("registerComplete", "success", 1);

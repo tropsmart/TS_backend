@@ -139,18 +139,16 @@ public class DriverService implements IDriverService {
         newDriverOutput.setEmail(getDriver.getPerson().getUser().getEmail());
         newDriverOutput.setRole(getDriver.getPerson().getPersonType());
         newDriverOutput.setRoleId(getDriver.getId());
-
-        Random rand = new Random(); //instance of random class
-        int n = rand.nextInt(4)+1;
+        
         List<String> newVehicles = new ArrayList();
-        for (int p = 0; p<n; p++){
-            newVehicles.add(data.getData().getVehicles().get(rand.nextInt(data.getData().getVehicles().size())));
-        }
-        int m = rand.nextInt(4)+1;
+        getDriver.getVehiclesList().forEach(vehicle -> {
+            newVehicles.add(vehicle.getModel());
+        });
+        
         List<String> newLocations = new ArrayList();
-        for (int r = 0; r<m; r++){
-            newLocations.add(data.getData().getLocations().get(rand.nextInt(data.getData().getLocations().size())));
-        }
+        getDriver.getDriverLocationList().forEach(driverLocation -> {
+            newLocations.add(driverLocation.getLocation());
+        });
         newDriverOutput.setVehicles(newVehicles.stream().distinct().collect(Collectors.toList()));
         newDriverOutput.setLocations(newLocations.stream().distinct().collect(Collectors.toList()));
         return newDriverOutput;

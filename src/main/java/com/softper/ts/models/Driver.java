@@ -29,6 +29,9 @@ public class Driver implements Serializable {
     @OneToMany(mappedBy = "driver")
     private List<Vehicle> vehiclesList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "driver")
+    private List<DriverLocation> driverLocationList = new ArrayList<>();
+
     @OneToOne(mappedBy = "driver")
     private ServiceRequest serviceRequest;
 
