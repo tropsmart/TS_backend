@@ -126,33 +126,40 @@ public class ServiceService implements IServiceService {
         BaseResponse response = new BaseResponse();
         try
         {
-            Driver getDriver = driverRepository.findById(driverId).get();
-            ServiceRequest getServiceRequest = serviceRequestRepository.findServiceByDriverId(driverId);
-
-            Route newRoute = new Route();
-            newRoute.setDistance(200.0);
-            newRoute = routeRepository.save(newRoute);
-
-            com.softper.ts.models.Service newService = new com.softper.ts.models.Service();
-            newService.setServiceState("OnProcess");
-            newService.setServicesRequest(getServiceRequest);
-            newService.setRoute(newRoute);
-            newService.setStartTime(Calendar.getInstance().getTime());
-            newService.setFinishTime(Calendar.getInstance().getTime());
-
-            newService = serviceRepository.save(newService);
-
-            ServiceOutput newServiceOutput = new ServiceOutput();
-            newServiceOutput.setId(newService.getId());
-            newServiceOutput.setFirstName(getDriver.getPerson().getFirstName());
-            newServiceOutput.setLastName(getDriver.getPerson().getLastName());
-            newServiceOutput.setStartedTime(newService.getStartTime());
-            newServiceOutput.setFinishTime(newService.getFinishTime());
-            newServiceOutput.setServiceState(newService.getServiceState());
-
-            response = new BaseResponse("createService","success",1);
-            response.setServiceOutput(newServiceOutput);
-            return response;        
+            List<com.softper.ts.models.Service> getService = serviceRepository.findServicesByDriverId(driverId);
+            if(getService.size()== 0){
+                Driver getDriver = driverRepository.findById(driverId).get();
+                ServiceRequest getServiceRequest = serviceRequestRepository.findServiceByDriverId(driverId);
+    
+                Route newRoute = new Route();
+                newRoute.setDistance(200.0);
+                newRoute = routeRepository.save(newRoute);
+    
+                com.softper.ts.models.Service newService = new com.softper.ts.models.Service();
+                newService.setServiceState("OnProcess");
+                newService.setServicesRequest(getServiceRequest);
+                newService.setRoute(newRoute);
+                newService.setStartTime(Calendar.getInstance().getTime());
+                newService.setFinishTime(Calendar.getInstance().getTime());
+    
+                newService = serviceRepository.save(newService);
+    
+                ServiceOutput newServiceOutput = new ServiceOutput();
+                newServiceOutput.setId(newService.getId());
+                newServiceOutput.setFirstName(getDriver.getPerson().getFirstName());
+                newServiceOutput.setLastName(getDriver.getPerson().getLastName());
+                newServiceOutput.setStartedTime(newService.getStartTime());
+                newServiceOutput.setFinishTime(newService.getFinishTime());
+                newServiceOutput.setServiceState(newService.getServiceState());
+    
+                response = new BaseResponse("createService","success",1);
+                response.setServiceOutput(newServiceOutput);
+                return response;        
+            } else {
+                response = new BaseResponse("createService","El conductor ya posee un servicio asociado",2);
+                return response;
+            }
+            
         }
         catch (Exception e)
         {

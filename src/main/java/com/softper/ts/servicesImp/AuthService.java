@@ -158,29 +158,29 @@ public class AuthService implements IAuthService {
                 }
                 else
                 {
+                    logger.info("Driver newDriver = new Driver();");
                     Driver newDriver = new Driver();
                     newDriver.setLicense("000-123");
                     newDriver.setPerson(newPerson);
                     newPerson.setDriver(newDriver);
-    
+
+                    newDriver = driverRepository.save(newDriver);
+
                     Qualification newQualication = new Qualification();
                     newQualication.setDriver(newDriver);
     
                     ServiceRequest newServiceRequest = new ServiceRequest();
                     newServiceRequest.setDriver(newDriver);
-    
-                    qualificationRepository.save(newQualication);
-                    serviceRequestRepository.save(newServiceRequest);
-                    driverRepository.save(newDriver);
+
 
                     //SOAT
-                    Soat newSoat = new Soat();
-                    newSoat.setAssociateName(newDriver.getPerson().getFirstName()+" "+newDriver.getPerson().getLastName());
+                    /*Soat newSoat = new Soat();
+                    newSoat.setAssociateName(signUp.getFirstName()+" "+signUp.getLastName());
                     newSoat.setEmissionDate(Calendar.getInstance().getTime());
                     newSoat.setExpireDate(Calendar.getInstance().getTime());
                     newSoat.setServiceType("Servicio de carga");
 
-                    newSoat = soatRepository.save(newSoat);
+                    newSoat = soatRepository.save(newSoat);*/
 
                     //VEHICLE
                     Random rand = new Random();
@@ -200,7 +200,7 @@ public class AuthService implements IAuthService {
                         else
                             newVehicle.setState("Desactivado");
                         newVehicle.setDriver(newDriver);
-                        newVehicle.setSoat(newSoat);
+                        newVehicle.setSoat(null);
                         newVehicleList.add(newVehicle);
                     }
                     
@@ -214,6 +214,12 @@ public class AuthService implements IAuthService {
                     }
                     vehicleRepository.saveAll(newVehicleList);
                     driverLocationRepository.saveAll(driverLocationList);
+    
+    
+                    qualificationRepository.save(newQualication);
+                    serviceRequestRepository.save(newServiceRequest);
+
+                 
                 }
     
                 response = new BaseResponse("registerComplete", "success", 1);
